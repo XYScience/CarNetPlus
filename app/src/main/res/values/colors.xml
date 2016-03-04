@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#F44336</color>
+    <color name="colorPrimaryDark">#D32F2F</color>
+    <color name="colorAccent">#FFC107</color>
+    <color name="colorLightPrimary">#FFCDD2</color>
+    <color name="textPrimary">#212121</color>
+    <color name="textSecondary">#727272</color>
+    <color name="colorDivider">#B6B6B6</color>
+    <color name="windowBackground">#EEEEEE</color>
+    <color name="textColor">#FFFFFF</color>
+
+    <!-- swipeRefresh color -->
+    <color name="swipe_blue">#4285f4</color>
+    <color name="swipe_red">#ea4335</color>
+    <color name="swipe_yellow">#fbbc06</color>
+    <color name="swipe_green">#34a853</color>
+</resources>
