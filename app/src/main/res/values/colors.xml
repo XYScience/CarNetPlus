@@ -15,4 +15,8 @@
     <color name="swipe_red">#ea4335</color>
     <color name="swipe_yellow">#fbbc06</color>
     <color name="swipe_green">#34a853</color>
+
+    <!-- 白色背景时的波纹颜色 -->
+    <color name="ripple_white">#585858</color>
+
 </resources>

@@ -1,8 +1,11 @@
 <resources>
-    <string name="app_name">CarNetPlus</string>
+    <string name="app_name"> 车++</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+
+    <!-- MainActivity -->
+    <string name="double_click_quit">再按一次退出车++( ▼-▼ )</string>
 </resources>

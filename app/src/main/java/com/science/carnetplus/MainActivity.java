@@ -3,7 +3,6 @@ package com.science.carnetplus;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -11,15 +10,20 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.science.carnetplus.ui.BaseActivity;
 import com.science.carnetplus.utils.StatusBarCompat;
+import com.science.carnetplus.utils.ToastUtils;
+import com.science.carnetplus.widget.FABToolbar.FABToolbarLayout;
 
 public class MainActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     private Toolbar mToolbar;
     private View mHeaderView;
+    private FABToolbarLayout mFABToolbarLayout;
+    private FloatingActionButton mFABToolbarButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +35,7 @@ public class MainActivity extends BaseActivity
     public void initView() {
         setContentView(R.layout.activity_main);
 
-        mToolbar = setToolbar("CarNetPlus");
+        mToolbar = setToolbar(getString(R.string.app_name));
 
         initDrawerLayout();
         initNavigationView();
@@ -54,14 +58,8 @@ public class MainActivity extends BaseActivity
     }
 
     private void initFab() {
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        mFABToolbarLayout = (FABToolbarLayout) findViewById(R.id.fabtoolbar);
+        mFABToolbarButton = (FloatingActionButton) findViewById(R.id.fabtoolbar_fab);
     }
 
     @Override
@@ -71,16 +69,39 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void initListener() {
+        mFABToolbarButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mFABToolbarLayout.show();
+            }
+        });
+        mFABToolbarButton.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (mFABToolbarLayout.isFab()) {
+                    Toast.makeText(MainActivity.this, "long click!", Toast.LENGTH_SHORT).show();
+                }
+                return true; // true为不加短按,false为加入短按
+            }
+        });
+    }
 
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+
+        }
     }
 
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
+        if (drawer.isDrawerOpen(GravityCompat.START) || mFABToolbarLayout.isToolbar()) {
             drawer.closeDrawer(GravityCompat.START);
+            mFABToolbarLayout.hide();
         } else {
-            super.onBackPressed();
+            doExitApp();
         }
     }
 
@@ -129,5 +150,16 @@ public class MainActivity extends BaseActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private long exitTime = 0;
+
+    private void doExitApp() {
+        if ((System.currentTimeMillis() - exitTime) > 2000) {
+            ToastUtils.showMessage(this, getString(R.string.double_click_quit));
+            exitTime = System.currentTimeMillis();
+        } else {
+            AppManager.getAppManager().AppExit(this);
+        }
     }
 }

@@ -2,6 +2,8 @@ package com.science.carnetplus;
 
 import android.app.Application;
 
+import com.avos.avoscloud.AVOSCloud;
+
 /**
  * @author 幸运Science-陈土燊
  * @description
@@ -19,6 +21,6 @@ public class MyApplication extends Application {
     }
 
     private void init() {
-        
+        AVOSCloud.initialize(this, "xRMhJH081RiDNuG3WYsAMGwq-gzGzoHsz", "IfwcLPmeqpyEvhcJWSg0lW2M");
     }
 }
