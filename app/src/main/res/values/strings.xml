@@ -8,4 +8,27 @@
 
     <!-- MainActivity -->
     <string name="double_click_quit">再按一次退出车++( ▼-▼ )</string>
+
+    <!-- LoginActivity -->
+    <string name="account">账户</string>
+    <string name="password">密码</string>
+    <string name="login">登录</string>
+    <string name="forget_password">忘记密码</string>
+    <string name="quick_register">快速注册</string>
+    <string name="avatar_source">头像来源</string>
+    <string name="camera">拍照</string>
+    <string name="gallery">图库</string>
+    <string name="cancel">取消</string>
+
+    <!-- RegisterActivity -->
+    <string name="register">注册</string>
+    <string name="mobile_phone">手机号</string>
+    <string name="verify_code">验证码</string>
+    <string name="mi">密</string>
+    <string name="kong">空</string>
+    <string name="ma">码</string>
+
+    <!-- ForgetPswActivity -->
+    <string name="forget_psw">忘记密码</string>
+
 </resources>

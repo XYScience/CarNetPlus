@@ -13,7 +13,6 @@ import android.view.View;
  */
 public class SnackbarUtils {
 
-    private static Snackbar mSnackbar;
     private static SnackbarUtils snackbarUtils;
 
     private SnackbarUtils() {
@@ -29,27 +28,13 @@ public class SnackbarUtils {
 
     public static void showSnackbar(View view, String msg) {
 
-        if (mSnackbar == null) {
-            mSnackbar = Snackbar.make(view, msg, Snackbar.LENGTH_LONG);
-        } else {
-            mSnackbar.setText(msg);
-        }
-        mSnackbar.show();
+        Snackbar snackbar = Snackbar.make(view, msg, Snackbar.LENGTH_LONG);
+        snackbar.show();
     }
 
     public static void showSnackbar(View view, String msg, int length) {
 
-        if (mSnackbar == null) {
-            mSnackbar = Snackbar.make(view, msg, length);
-        } else {
-            mSnackbar.setText(msg);
-        }
-        mSnackbar.show();
-    }
-
-    public static void hideSnackbar() {
-        if (mSnackbar != null) {
-            mSnackbar.dismiss();
-        }
+        Snackbar snackbar = Snackbar.make(view, msg, length);
+        snackbar.show();
     }
 }

@@ -19,7 +19,7 @@ import com.science.carnetplus.R;
  */
 public class StatusBarCompat {
     private static final int INVALID_VAL = -1;
-    private static final int COLOR_DEFAULT = Color.parseColor("#22000000");
+    private static final int COLOR_DEFAULT = Color.parseColor("#30000000");
 
     public static void compat(Activity activity, int statusColor) {
 
