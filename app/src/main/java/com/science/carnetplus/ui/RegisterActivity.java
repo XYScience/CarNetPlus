@@ -1,12 +1,16 @@
 package com.science.carnetplus.ui;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -16,7 +20,11 @@ import android.widget.TextView;
 
 import com.science.carnetplus.R;
 import com.science.carnetplus.utils.BottomSheetBehaviorUtils;
+import com.science.carnetplus.utils.CommonDefine;
 import com.science.carnetplus.utils.CommonUtils;
+import com.science.carnetplus.utils.FileUtil;
+
+import java.io.ByteArrayOutputStream;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -29,6 +37,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private String mAvaterUrl;
+    private boolean isTakeAvatar = false;
 
     private CoordinatorLayout mCoordinatorLayout;
     private RelativeLayout mContentLayout;
@@ -43,6 +54,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private BottomSheetBehavior mSheetBehavior;
     private View mBottomSheet;
     private TextView mTextCamera, mTextGallery, mTextCancel;
+    private String mStrAvatarUrl;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,7 +80,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         mBottomSheet = findViewById(R.id.design_bottom_sheet);
         mSheetBehavior = BottomSheetBehavior.from(mBottomSheet);
         mTextCamera = (TextView) findViewById(R.id.text_camera);
-        mTextGallery = (TextView) findViewById(R.id.text_camera);
+        mTextGallery = (TextView) findViewById(R.id.text_gallery);
         mTextCancel = (TextView) findViewById(R.id.text_cancel);
 
         mCommonUtils = CommonUtils.getInstance(RegisterActivity.this);
@@ -155,15 +167,77 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 break;
 
             case R.id.text_camera:
+                getAvaterFormCamera();
                 break;
 
             case R.id.text_gallery:
+                getAvatarFormGallery();
                 break;
 
             case R.id.text_cancel:
                 mSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 break;
         }
+    }
+
+    // 拍照获取头像
+    private void getAvaterFormCamera() {
+        Intent intentTakePhotos = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // 指定调用相机拍照后照片的储存路径
+        intentTakePhotos.putExtra(MediaStore.EXTRA_OUTPUT, FileUtil.getCameraStorageUri());
+        startActivityForResult(intentTakePhotos, CommonDefine.CAMERA_REQUEST_CODE);
+        mSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+    }
+
+    // 图库获取头像
+    private void getAvatarFormGallery() {
+        Intent intentGallery = new Intent(Intent.ACTION_GET_CONTENT);
+        intentGallery.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, CommonDefine.IMAGE_UNSPECIFIED);
+        startActivityForResult(intentGallery, CommonDefine.GALLERY_REQUEST_CODE);
+        mSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        // 拍照
+        if (requestCode == CommonDefine.CAMERA_REQUEST_CODE) {
+
+            FileUtil.startPhotoZoom(FileUtil.getCameraStorageUri(), RegisterActivity.this);
+        }
+        // 图库
+        else if (requestCode == CommonDefine.GALLERY_REQUEST_CODE) {
+            if (data == null) {
+                return;
+            } else {
+                FileUtil.startPhotoZoom(data.getData(), RegisterActivity.this);
+            }
+        }
+        // 裁剪
+        else if (requestCode == CommonDefine.CROP_REQUEST_CODE) {
+            if (data == null) {
+                return;
+            } else {
+                Bundle extras = data.getExtras();
+                if (extras == null) {
+                    return;
+                }
+                Bitmap CropBitmap = extras.getParcelable("data"); // 裁剪得到的bitmap
+                Bitmap avatarBitmap = FileUtil.compressBitmap(CropBitmap); // 压缩后得到的bitmap
+                mImgUserAvatar.setImageBitmap(avatarBitmap);
+                // 保存头像图标，并返回头像地址url
+                mStrAvatarUrl = FileUtil.saveAvatarFile(RegisterActivity.this, CommonDefine.AVATAR_FILE_NAME, avatarBitmap);
+            }
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void setPicToView(Bitmap bm) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.PNG, 60, stream);
+        byte[] bytes = stream.toByteArray();
+        String img = new String(Base64.encodeToString(bytes, Base64.DEFAULT));
     }
 
     @Override

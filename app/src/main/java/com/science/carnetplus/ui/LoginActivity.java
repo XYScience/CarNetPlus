@@ -83,6 +83,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             case R.id.btn_login:
                 Intent intentMain = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intentMain);
+                finish();
                 break;
 
             case R.id.text_forget_password:

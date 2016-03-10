@@ -22,8 +22,8 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/img_circle_user_avatar"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
                 android:layout_gravity="center_horizontal"
                 android:src="@drawable/camera"
                 app:border_color="#fff"
@@ -214,7 +214,6 @@
                 android:layout_height="wrap_content"
                 app:mrl_rippleAlpha="0.2"
                 app:mrl_rippleColor="@color/ripple_white"
-                app:mrl_rippleDelayClick="true"
                 app:mrl_rippleHover="true"
                 app:mrl_rippleOverlay="true">
 
@@ -238,7 +237,6 @@
                 android:layout_height="wrap_content"
                 app:mrl_rippleAlpha="0.2"
                 app:mrl_rippleColor="@color/ripple_white"
-                app:mrl_rippleDelayClick="true"
                 app:mrl_rippleHover="true"
                 app:mrl_rippleOverlay="true">
 
@@ -262,7 +260,6 @@
                 android:layout_height="wrap_content"
                 app:mrl_rippleAlpha="0.2"
                 app:mrl_rippleColor="@color/ripple_white"
-                app:mrl_rippleDelayClick="true"
                 app:mrl_rippleHover="true"
                 app:mrl_rippleOverlay="true">
 
