@@ -1,5 +1,6 @@
 package com.science.carnetplus.ui;
 
+import android.Manifest;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -9,7 +10,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.ViewCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.view.MotionEvent;
 import android.view.View;
@@ -24,6 +24,8 @@ import com.science.carnetplus.utils.CommonDefine;
 import com.science.carnetplus.utils.CommonUtils;
 import com.science.carnetplus.utils.FileUtil;
 import com.science.carnetplus.utils.SnackbarUtils;
+import com.science.carnetplus.utils.StatusBarCompat;
+import com.science.carnetplus.utils.ToastUtils;
 
 import java.io.ByteArrayOutputStream;
 
@@ -37,7 +39,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * @data 2016/3/6
  */
 
-public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
+public class RegisterActivity extends BaseActivity implements View.OnClickListener {
 
     private String mAvaterUrl;
     private boolean isTakeAvatar = false;
@@ -60,15 +62,13 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        StatusBarCompat.compat(RegisterActivity.this, 0);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-        setContentView(R.layout.activity_register);
-
-        initView();
-        initListener();
     }
 
-    private void initView() {
+    @Override
+    public void initView() {
+        setContentView(R.layout.activity_register);
         mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
         mContentLayout = (RelativeLayout) findViewById(R.id.root_layout);
         mDarkenLayout = findViewById(R.id.darken_layout);
@@ -89,7 +89,13 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         mCommonUtils.materialRipple(mBtnGetVerify);
     }
 
-    private void initListener() {
+    @Override
+    public void initData() {
+
+    }
+
+    @Override
+    public void initListener() {
         mImgUserAvatar.setOnClickListener(this);
         mBtnLogin.setOnClickListener(this);
         mBtnGetVerify.setOnClickListener(this);
@@ -169,11 +175,13 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 break;
 
             case R.id.text_camera:
-                getAvaterFormCamera();
+                initPemission(0, getString(R.string.request_camera_write_permission),
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA);
                 break;
 
             case R.id.text_gallery:
-                getAvatarFormGallery();
+                initPemission(1, getString(R.string.request_write_permission),
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE);
                 break;
 
             case R.id.text_cancel:
@@ -181,6 +189,29 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 break;
         }
     }
+
+    private void initPemission(final int type, String permissionTip, String... permission) {
+        performCodeWithPermission(permissionTip, new PermissionCallback() {
+            @Override
+            public void hasPermission() {
+                if (type == 0) {
+                    getAvaterFormCamera();
+                } else {
+                    getAvatarFormGallery();
+                }
+            }
+
+            @Override
+            public void noPermission() {
+                if (type == 0) {
+                    ToastUtils.showMessage(RegisterActivity.this, getString(R.string.must_allow_permission_start_camera));
+                } else {
+                    ToastUtils.showMessage(RegisterActivity.this, getString(R.string.must_allow_permission_read_gallery));
+                }
+            }
+        }, permission);
+    }
+
 
     // 拍照获取头像
     private void getAvaterFormCamera() {

@@ -18,4 +18,7 @@ public class CommonDefine {
     public static final String AVATAR_FILE_DIR = "/CarNetPlus/avatar/";// 头像文件夹
     public static final String AVATAR_FILE = "avatar_file"; // SharedPreferences 头像
     public static final String AVATAR_FILE_PATH = "avatar_file_path"; //  SharedPreferences key:头像路径
+
+    // requestCode
+    public static final int REQUEST_PERMISSION_CODE = 88; // 请求权限
 }

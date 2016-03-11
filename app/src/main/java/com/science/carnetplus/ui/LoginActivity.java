@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +14,7 @@ import android.widget.TextView;
 import com.science.carnetplus.MainActivity;
 import com.science.carnetplus.R;
 import com.science.carnetplus.utils.CommonUtils;
+import com.science.carnetplus.utils.StatusBarCompat;
 
 /**
  * @author 幸运Science-陈土燊
@@ -24,7 +24,7 @@ import com.science.carnetplus.utils.CommonUtils;
  * @data 2016/3/6
  */
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+public class LoginActivity extends BaseActivity implements View.OnClickListener {
 
     private CoordinatorLayout mCoordinatorLayout;
     private RelativeLayout mContentLayout;
@@ -38,15 +38,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        StatusBarCompat.compat(LoginActivity.this, 0);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-        setContentView(R.layout.activity_login);
-
-        initView();
-        initListener();
     }
 
-    private void initView() {
+    @Override
+    public void initView() {
+        setContentView(R.layout.activity_login);
         mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
         mContentLayout = (RelativeLayout) findViewById(R.id.content_layout);
         mEditAccount = (EditText) findViewById(R.id.edit_account);
@@ -59,7 +57,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mCommonUtils.materialRipple(mBtnLogin);
     }
 
-    private void initListener() {
+    @Override
+    public void initData() {
+
+    }
+
+    @Override
+    public void initListener() {
         mBtnLogin.setOnClickListener(this);
         mTextForgetPassword.setOnClickListener(this);
         mTextRegister.setOnClickListener(this);

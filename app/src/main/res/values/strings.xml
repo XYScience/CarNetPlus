@@ -6,6 +6,8 @@
 
     <string name="action_settings">Settings</string>
 
+    <string name="tip">提示</string>
+
     <!-- MainActivity -->
     <string name="double_click_quit">再按一次退出车++( ▼-▼ )</string>
 
@@ -27,6 +29,12 @@
     <string name="mi">密</string>
     <string name="kong">空</string>
     <string name="ma">码</string>
+    <string name="refuse">拒绝</string>
+    <string name="allow">允许</string>
+    <string name="request_camera_write_permission">车++请求访问相机和读写权限！</string>
+    <string name="request_write_permission">车++请求读写权限！</string>
+    <string name="must_allow_permission_start_camera">必须同意权限才能启动相机拍照！</string>
+    <string name="must_allow_permission_read_gallery">必须同意权限才能读取设备照片！</string>
 
     <!-- ForgetPswActivity -->
     <string name="forget_psw">忘记密码</string>
