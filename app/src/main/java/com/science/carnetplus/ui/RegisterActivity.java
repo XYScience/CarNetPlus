@@ -23,6 +23,7 @@ import com.science.carnetplus.utils.BottomSheetBehaviorUtils;
 import com.science.carnetplus.utils.CommonDefine;
 import com.science.carnetplus.utils.CommonUtils;
 import com.science.carnetplus.utils.FileUtil;
+import com.science.carnetplus.utils.SnackbarUtils;
 
 import java.io.ByteArrayOutputStream;
 
@@ -84,7 +85,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         mTextCancel = (TextView) findViewById(R.id.text_cancel);
 
         mCommonUtils = CommonUtils.getInstance(RegisterActivity.this);
-        mCommonUtils.materialRipple(mBtnLogin);
+//        mCommonUtils.materialRipple(mBtnLogin);
         mCommonUtils.materialRipple(mBtnGetVerify);
     }
 
@@ -164,6 +165,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 break;
 
             case R.id.btn_login:
+                SnackbarUtils.showSnackbar(v, "ssssss");
                 break;
 
             case R.id.text_camera:

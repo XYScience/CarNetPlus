@@ -13,19 +13,6 @@ import android.view.View;
  */
 public class SnackbarUtils {
 
-    private static SnackbarUtils snackbarUtils;
-
-    private SnackbarUtils() {
-
-    }
-
-    public static synchronized SnackbarUtils getInstance() {
-        if (snackbarUtils == null) {
-            snackbarUtils = new SnackbarUtils();
-        }
-        return snackbarUtils;
-    }
-
     public static void showSnackbar(View view, String msg) {
 
         Snackbar snackbar = Snackbar.make(view, msg, Snackbar.LENGTH_LONG);
