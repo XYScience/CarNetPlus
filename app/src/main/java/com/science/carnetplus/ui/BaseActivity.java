@@ -12,7 +12,6 @@ import com.science.carnetplus.utils.StatusBarCompat;
  * @author 幸运Science-陈土燊
  * @description 基类
  * @school University of South China
- * @company wiwide.com
  * @email chentushen.science@gmail.com,274240671@qq.com
  * @data 2015/8/27
  */

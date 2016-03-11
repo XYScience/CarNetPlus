@@ -36,6 +36,7 @@ dependencies {
     compile 'com.android.support:design:23.2.0'
 
     compile 'com.balysv:material-ripple:1.0.2'
+    compile 'de.hdodenhof:circleimageview:2.0.0'
 
     //avoscloud-sdk 为 LeanCloud基础包
     compile ('cn.leancloud.android:avoscloud-sdk:v3.+')

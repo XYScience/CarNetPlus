@@ -222,8 +222,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 if (extras == null) {
                     return;
                 }
-                Bitmap CropBitmap = extras.getParcelable("data"); // 裁剪得到的bitmap
-                Bitmap avatarBitmap = FileUtil.compressBitmap(CropBitmap); // 压缩后得到的bitmap
+                Bitmap cropBitmap = extras.getParcelable("data"); // 裁剪得到的bitmap
+                Bitmap avatarBitmap = FileUtil.comp(cropBitmap); // 压缩后得到的bitmap
                 mImgUserAvatar.setImageBitmap(avatarBitmap);
                 // 保存头像图标，并返回头像地址url
                 mStrAvatarUrl = FileUtil.saveAvatarFile(RegisterActivity.this, CommonDefine.AVATAR_FILE_NAME, avatarBitmap);

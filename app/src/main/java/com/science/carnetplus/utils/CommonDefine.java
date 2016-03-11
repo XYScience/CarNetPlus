@@ -14,7 +14,7 @@ public class CommonDefine {
     public static final int GALLERY_REQUEST_CODE = 2; // 缩放
     public static final int CROP_REQUEST_CODE = 3;// 结果
     public static final String IMAGE_UNSPECIFIED = "image/*"; // 手机里的图片类型
-    public static final String AVATAR_FILE_NAME = "avatar.png";// 头像文件名称
+    public static final String AVATAR_FILE_NAME = "avatar.jpg";// 头像文件名称
     public static final String AVATAR_FILE_DIR = "/CarNetPlus/avatar/";// 头像文件夹
     public static final String AVATAR_FILE = "avatar_file"; // SharedPreferences 头像
     public static final String AVATAR_FILE_PATH = "avatar_file_path"; //  SharedPreferences key:头像路径
