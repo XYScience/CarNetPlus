@@ -1,5 +1,6 @@
 package com.science.carnetplus;
 
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -30,7 +31,7 @@ public class MainActivity extends BaseActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        StatusBarCompat.compat(MainActivity.this, 0);
+        StatusBarCompat.compat(MainActivity.this, Color.TRANSPARENT, false);
     }
 
     @Override
@@ -71,7 +72,6 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void initData() {
-
     }
 
     @Override

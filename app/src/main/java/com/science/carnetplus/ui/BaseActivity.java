@@ -39,13 +39,14 @@ public abstract class BaseActivity extends AppCompatActivity {
         AppManager.getAppManager().addActivity(this);
 
         initView();
-        // 状态栏着色 4.4之后加入windowTranslucentStatus的属性之后，也就是我们可以用到状态栏的区域了
-        StatusBarCompat.compat(this);
         initData();
         initListener();
     }
 
     public Toolbar setToolbar(String title) {
+        // 状态栏着色 4.4之后加入windowTranslucentStatus的属性之后，也就是我们可以用到状态栏的区域了
+        StatusBarCompat.compat(this);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(title); // 标题的文字需在setSupportActionBar之前，不然会无效;getSupportActionBar().setTitle("标题");
         setSupportActionBar(toolbar);

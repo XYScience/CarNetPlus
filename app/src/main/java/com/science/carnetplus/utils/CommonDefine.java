@@ -1,5 +1,7 @@
 package com.science.carnetplus.utils;
 
+import android.graphics.Color;
+
 /**
  * @author 幸运Science-陈土燊
  * @description 通用常量相关
@@ -21,4 +23,5 @@ public class CommonDefine {
 
     // requestCode
     public static final int REQUEST_PERMISSION_CODE = 88; // 请求权限
+    public static final int KITKAT_STATUS_COLOR = Color.parseColor("#30000000"); // 请求权限
 }

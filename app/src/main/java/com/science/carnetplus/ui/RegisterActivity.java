@@ -24,7 +24,6 @@ import com.science.carnetplus.utils.CommonDefine;
 import com.science.carnetplus.utils.CommonUtils;
 import com.science.carnetplus.utils.FileUtil;
 import com.science.carnetplus.utils.SnackbarUtils;
-import com.science.carnetplus.utils.StatusBarCompat;
 import com.science.carnetplus.utils.ToastUtils;
 
 import java.io.ByteArrayOutputStream;
@@ -62,7 +61,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        StatusBarCompat.compat(RegisterActivity.this, 0);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
     }
 
@@ -91,7 +89,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     public void initData() {
-
     }
 
     @Override

@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.science.carnetplus.MainActivity;
 import com.science.carnetplus.R;
 import com.science.carnetplus.utils.CommonUtils;
-import com.science.carnetplus.utils.StatusBarCompat;
 
 /**
  * @author 幸运Science-陈土燊
@@ -38,7 +37,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        StatusBarCompat.compat(LoginActivity.this, 0);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
     }
 
@@ -59,7 +57,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     @Override
     public void initData() {
-
     }
 
     @Override
