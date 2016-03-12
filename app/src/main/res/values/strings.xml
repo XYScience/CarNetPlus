@@ -29,7 +29,7 @@
     <string name="mi">密</string>
     <string name="kong">空</string>
     <string name="ma">码</string>
-    <string name="refuse">拒绝</string>
+    <string name="deny">拒绝</string>
     <string name="allow">允许</string>
     <string name="request_camera_write_permission">车++请求访问相机和读写权限！</string>
     <string name="request_write_permission">车++请求读写权限！</string>

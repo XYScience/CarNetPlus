@@ -24,7 +24,6 @@ import com.science.carnetplus.utils.CommonDefine;
 import com.science.carnetplus.utils.CommonUtils;
 import com.science.carnetplus.utils.FileUtil;
 import com.science.carnetplus.utils.SnackbarUtils;
-import com.science.carnetplus.utils.ToastUtils;
 
 import java.io.ByteArrayOutputStream;
 
@@ -43,7 +42,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     private String mAvaterUrl;
     private boolean isTakeAvatar = false;
 
-    private CoordinatorLayout mCoordinatorLayout;
+    private CoordinatorLayout mCoordinatorLayout, mCoordinatorBottom;
     private RelativeLayout mContentLayout;
     private View mDarkenLayout;
     private CircleImageView mImgUserAvatar;
@@ -68,6 +67,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     public void initView() {
         setContentView(R.layout.activity_register);
         mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
+        mCoordinatorBottom = (CoordinatorLayout) findViewById(R.id.container);
         mContentLayout = (RelativeLayout) findViewById(R.id.root_layout);
         mDarkenLayout = findViewById(R.id.darken_layout);
         mImgUserAvatar = (CircleImageView) findViewById(R.id.img_circle_user_avatar);
@@ -168,7 +168,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 break;
 
             case R.id.btn_login:
-                SnackbarUtils.showSnackbar(v, "ssssss");
                 break;
 
             case R.id.text_camera:
@@ -201,14 +200,13 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void noPermission() {
                 if (type == 0) {
-                    ToastUtils.showMessage(RegisterActivity.this, getString(R.string.must_allow_permission_start_camera));
+                    SnackbarUtils.showSnackbar(mCoordinatorBottom, getString(R.string.must_allow_permission_start_camera));
                 } else {
-                    ToastUtils.showMessage(RegisterActivity.this, getString(R.string.must_allow_permission_read_gallery));
+                    SnackbarUtils.showSnackbar(mCoordinatorBottom, getString(R.string.must_allow_permission_read_gallery));
                 }
             }
         }, permission);
     }
-
 
     // 拍照获取头像
     private void getAvaterFormCamera() {
@@ -253,10 +251,10 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     return;
                 }
                 Bitmap cropBitmap = extras.getParcelable("data"); // 裁剪得到的bitmap
-                Bitmap avatarBitmap = FileUtil.comp(cropBitmap); // 压缩后得到的bitmap
-                mImgUserAvatar.setImageBitmap(avatarBitmap);
+                cropBitmap = FileUtil.compressImageSec(FileUtil.compressImage(cropBitmap)); // 压缩后得到的bitmap
+                mImgUserAvatar.setImageBitmap(cropBitmap);
                 // 保存头像图标，并返回头像地址url
-                mStrAvatarUrl = FileUtil.saveAvatarFile(RegisterActivity.this, CommonDefine.AVATAR_FILE_NAME, avatarBitmap);
+                mStrAvatarUrl = FileUtil.saveAvatarFile(RegisterActivity.this, CommonDefine.AVATAR_FILE_NAME, cropBitmap);
             }
         }
 

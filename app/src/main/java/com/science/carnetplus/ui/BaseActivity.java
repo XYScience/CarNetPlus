@@ -84,7 +84,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int which) {
                             ActivityCompat.requestPermissions(BaseActivity.this, permissions, CommonDefine.REQUEST_PERMISSION_CODE);
                         }
-                    }).show();
+                    }).setNegativeButton(getString(R.string.deny), null).show();
         } else {
             ActivityCompat.requestPermissions(BaseActivity.this, permissions, CommonDefine.REQUEST_PERMISSION_CODE);
         }
