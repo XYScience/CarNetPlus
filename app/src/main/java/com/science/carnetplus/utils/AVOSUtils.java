@@ -6,6 +6,7 @@ import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.FindCallback;
+import com.avos.avoscloud.GetDataCallback;
 import com.avos.avoscloud.SaveCallback;
 import com.avos.avoscloud.SignUpCallback;
 
@@ -23,7 +24,7 @@ import java.util.List;
 public class AVOSUtils {
 
     public interface OnGetAvatarListener {
-        void getAvaterListener(String avatarUrl);
+        void getAvaterListener(byte[] avatarBytes);
     }
 
     private OnGetAvatarListener mOnGetAvatarListener = null;
@@ -148,10 +149,15 @@ public class AVOSUtils {
                 }
                 // Retrieving the file
                 AVFile imageFile = (AVFile) gender.get("avatar");
+                imageFile.getDataInBackground(new GetDataCallback() {
+                    @Override
+                    public void done(byte[] bytes, AVException e) {
+                        if (mOnGetAvatarListener != null) {
+                            mOnGetAvatarListener.getAvaterListener(bytes);
+                        }
+                    }
+                });
 
-                if (mOnGetAvatarListener != null) {
-                    mOnGetAvatarListener.getAvaterListener(imageFile.getUrl());
-                }
             }
 
         }).start();

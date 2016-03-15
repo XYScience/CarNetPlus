@@ -15,6 +15,18 @@
     app:showDuration="600"
     app:verticalMargin="@dimen/fab_vertical_margin">
 
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:ellipsize="marquee"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:singleLine="true"
+        android:text="加油！加油！加油！重要的事情说三遍！！！"/>
+
     <RelativeLayout
         android:id="@id/fabtoolbar_container"
         android:layout_width="match_parent"
@@ -33,41 +45,57 @@
     <LinearLayout
         android:id="@id/fabtoolbar_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingBottom="10dp"
+        android:paddingTop="6dp">
 
-        <ImageView
+        <TextView
             android:id="@+id/one"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:scaleType="centerInside"
-            android:src="@android:drawable/ic_delete"/>
+            android:drawableTop="@android:drawable/ic_delete"
+            android:gravity="center_horizontal"
+            android:text="加油"
+            android:textColor="@color/textColor"
+            android:textSize="12sp"/>
 
-        <ImageView
+        <TextView
             android:id="@+id/two"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:scaleType="centerInside"
-            android:src="@android:drawable/ic_menu_save"/>
+            android:drawableTop="@android:drawable/ic_menu_save"
+            android:gravity="center_horizontal"
+            android:text="加油"
+            android:textColor="@color/textColor"
+            android:textSize="12sp"/>
 
-        <ImageView
+        <TextView
             android:id="@+id/three"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:drawableTop="@android:drawable/ic_media_next"
+            android:gravity="center_horizontal"
             android:scaleType="centerInside"
-            android:src="@android:drawable/ic_media_next"/>
+            android:text="加油"
+            android:textColor="@color/textColor"
+            android:textSize="12sp"/>
 
-        <ImageView
+        <TextView
             android:id="@+id/four"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:drawableTop="@android:drawable/ic_menu_crop"
+            android:gravity="center_horizontal"
             android:scaleType="centerInside"
-            android:src="@android:drawable/ic_menu_crop"/>
+            android:text="加油"
+            android:textColor="@color/textColor"
+            android:textSize="12sp"/>
 
     </LinearLayout>
 

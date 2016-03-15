@@ -139,7 +139,7 @@ public class FileUtil {
     }
 
     /**
-     * 比例压缩图片
+     * 第一次压缩图片
      *
      * @return
      */

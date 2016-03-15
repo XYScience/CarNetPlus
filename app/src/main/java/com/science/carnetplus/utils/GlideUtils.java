@@ -36,7 +36,8 @@ public class GlideUtils {
 
     public void setImage(String url, final ImageView imageView) {
         // 解决CircleImageView（第三方自定义的圆形Imageview）在使用Glide的占位图是不显示问题
-        Glide.with(mContext).load(url).centerCrop().placeholder(R.mipmap.ic_launcher).crossFade().
+        // diskCacheStrategy(DiskCacheStrategy.ALL)
+        Glide.with(mContext).load(url).centerCrop().placeholder(R.mipmap.car_net_plus).crossFade().
                 into(new SimpleTarget<GlideDrawable>() {
                     @Override
                     public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {

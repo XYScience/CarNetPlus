@@ -334,6 +334,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
+                            dialog.dismiss();
                             Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                             startActivity(intent);
                             AppManager.getAppManager().finishActivity(LoginActivity.class);

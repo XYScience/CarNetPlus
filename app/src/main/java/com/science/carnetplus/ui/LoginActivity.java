@@ -2,6 +2,8 @@ package com.science.carnetplus.ui;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -27,7 +29,7 @@ import com.science.carnetplus.R;
 import com.science.carnetplus.utils.AVOSUtils;
 import com.science.carnetplus.utils.CommonDefine;
 import com.science.carnetplus.utils.CommonUtils;
-import com.science.carnetplus.utils.GlideUtils;
+import com.science.carnetplus.utils.FileUtil;
 import com.science.carnetplus.utils.SnackbarUtils;
 import com.science.carnetplus.widget.materialProgress.LoadingView;
 
@@ -143,13 +145,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     }
 
     @Override
-    public void getAvaterListener(String avatarUrl) {
+    public void getAvaterListener(byte[] avatarUrl) {
         Message msg = new Message();
         msg.what = 1;
         msg.obj = avatarUrl;
         mHandlerLoad.sendMessage(msg);
     }
-
 
     // 子线程Handler刷新UI界面
     private Handler mHandlerLoad = new Handler() {
@@ -157,7 +158,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 1:
-                    GlideUtils.getInstance(LoginActivity.this).setImage((String) msg.obj, mImgAvatar);
+                    byte[] avatarBytes = (byte[]) msg.obj;
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(avatarBytes, 0, avatarBytes.length);
+                    mImgAvatar.setImageBitmap(bitmap);
+                    // 保存图片到本地
+                    FileUtil.saveAvatarFile(LoginActivity.this, CommonDefine.AVATAR_FILE_NAME, bitmap);
             }
         }
     };
@@ -200,6 +205,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
+                            dialog.dismiss();
                             Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(mainIntent);
                             LoginActivity.this.finish();

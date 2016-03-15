@@ -1,5 +1,6 @@
 package com.science.carnetplus;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -9,16 +10,24 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.avos.avoscloud.AVUser;
 import com.science.carnetplus.ui.BaseActivity;
+import com.science.carnetplus.ui.LoginActivity;
+import com.science.carnetplus.utils.AVOSUtils;
+import com.science.carnetplus.utils.FileUtil;
 import com.science.carnetplus.utils.StatusBarCompat;
 import com.science.carnetplus.utils.ToastUtils;
 import com.science.carnetplus.widget.FABToolbar.FABToolbarLayout;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
@@ -27,6 +36,9 @@ public class MainActivity extends BaseActivity
     private View mHeaderView;
     private FABToolbarLayout mFABToolbarLayout;
     private FloatingActionButton mFABToolbarButton;
+    private CircleImageView mImgAvatar;
+    private TextView mTextUsername;
+    private TextView mTextUserDescribe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +75,11 @@ public class MainActivity extends BaseActivity
         navigationView.setNavigationItemSelectedListener(this);
         // android support library 23.1.0+
         mHeaderView = navigationView.inflateHeaderView(R.layout.nav_header_main);
+        mImgAvatar = (CircleImageView) mHeaderView.findViewById(R.id.image_avatar);
+        mTextUsername = (TextView) mHeaderView.findViewById(R.id.text_username);
+        mTextUserDescribe = (TextView) mHeaderView.findViewById(R.id.text_user_describe);
+        mTextUserDescribe.setSelected(true);
+        mTextUserDescribe.requestFocus();
     }
 
     private void initFab() {
@@ -72,6 +89,10 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void initData() {
+//        GlideUtils.getInstance(MainActivity.this).setImage(FileUtil.getAvatarFilePath(MainActivity.this), mImgAvatar);
+        mImgAvatar.setImageBitmap(FileUtil.getAvatar(FileUtil.getAvatarFilePath(MainActivity.this)));
+        mTextUsername.setText(AVUser.getCurrentUser().getUsername());
+//        mTextUserDescribe.setText(AVUser.getCurrentUser().getUsername());
     }
 
     @Override
@@ -113,6 +134,14 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_MENU) {
+            mFABToolbarLayout.show();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
@@ -128,6 +157,10 @@ public class MainActivity extends BaseActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            AVOSUtils.logout();
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
             return true;
         }
 
