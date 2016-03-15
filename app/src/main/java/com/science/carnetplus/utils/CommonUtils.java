@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -172,6 +173,29 @@ public class CommonUtils {
     }
 
     /**
+     * 判断网络是否连接
+     *
+     * @param mContext
+     * @return
+     */
+    public static boolean isConnected() {
+
+        ConnectivityManager connectivity = (ConnectivityManager) mContext
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        if (null != connectivity) {
+
+            NetworkInfo info = connectivity.getActiveNetworkInfo();
+            if (null != info && info.isConnected()) {
+                if (info.getState() == NetworkInfo.State.CONNECTED) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
      * 打开网络设置界面
      */
     public static void openSetting(Activity activity) {
@@ -197,6 +221,46 @@ public class CommonUtils {
             isWifi = type.equalsIgnoreCase("WIFI");
         }
         return isWifi;
+    }
+
+    /**
+     * 验证手机格式
+     */
+    public static boolean isMobilePhone(String mobiles) {
+        /*
+        移动：134、135、136、137、138、139、150、151、157(TD)、158、159、187、188
+		联通：130、131、132、152、155、156、185、186
+		电信：133、153、180、189、（1349卫通）
+		总结起来就是第一位必定为1，第二位必定为3或5或8，其他位置的可以为0-9
+		*/
+        String telRegex = "[1][358]\\d{9}"; //"[1]"代表第1位为数字1，"[358]"代表第二位可以为3、5、8中的一个，
+        // "\\d{9}"代表后面是可以是0～9的数字，有9位。
+        if (TextUtils.isEmpty(mobiles)) {
+            return false;
+        } else {
+            return mobiles.matches(telRegex);
+        }
+    }
+
+    /**
+     * 密码校验
+     * 由数字和字母组成，并且要同时含有数字和字母，且长度要在6-16位之间
+     */
+    public static boolean passwordVerify(String password) {
+        String regex = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$";
+        return password.matches(regex);
+    }
+
+    /**
+     * 验证码校验
+     * 判断验证码是否为 6 位纯数字，LeanCloud 统一的验证码均为 6 位纯数字。
+     *
+     * @param smsCode
+     * @return
+     */
+    public static boolean isSMSCodeValid(String smsCode) {
+        String regex = "^\\d{6}$";
+        return smsCode.matches(regex);
     }
 
     /**

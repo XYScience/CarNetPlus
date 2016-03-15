@@ -9,11 +9,16 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.EditText;
 
 import com.science.carnetplus.AppManager;
 import com.science.carnetplus.R;
 import com.science.carnetplus.utils.CommonDefine;
+import com.science.carnetplus.utils.CommonUtils;
 import com.science.carnetplus.utils.StatusBarCompat;
+import com.science.carnetplus.utils.ToastUtils;
 
 /**
  * @author 幸运Science-陈土燊
@@ -37,6 +42,11 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         AppManager.getAppManager().addActivity(this);
+        if (CommonUtils.getInstance(BaseActivity.this).isConnected()) {
+
+        } else {
+            ToastUtils.showMessage(BaseActivity.this, getString(R.string.network_not_connected));
+        }
 
         initView();
         initData();
@@ -155,6 +165,24 @@ public abstract class BaseActivity extends AppCompatActivity {
             }
         }
         return true;
+    }
+
+    /**
+     * 点击屏幕隐藏软键盘
+     *
+     * @param view
+     */
+    public void hideKeyBoard(final View view, final EditText editText) {
+        view.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                view.setFocusable(true);
+                view.setFocusableInTouchMode(true);
+                view.requestFocus();
+                CommonUtils.getInstance(BaseActivity.this).hideKeyboard(editText);
+                return false;
+            }
+        });
     }
 
     public abstract void initView();

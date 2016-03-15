@@ -9,6 +9,7 @@
     <color name="colorDivider">#B6B6B6</color>
     <color name="windowBackground">#EEEEEE</color>
     <color name="textColor">#FFFFFF</color>
+    <color name="textHintColor">#ADADAD</color>
 
     <!-- swipeRefresh color -->
     <color name="swipe_blue">#4285f4</color>

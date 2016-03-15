@@ -22,7 +22,7 @@ import java.util.List;
 
 public class AVOSUtils {
 
-    private interface OnGetAvatarListener {
+    public interface OnGetAvatarListener {
         void getAvaterListener(String avatarUrl);
     }
 
@@ -48,13 +48,12 @@ public class AVOSUtils {
     /**
      * 注册
      */
-    public static void signUp(String username, String password, String email, String installationId,
+    public static void signUp(String mobilePhone, String password, String installationId,
                               SignUpCallback signUpCallback) {
-
         AVUser user = new AVUser();
-        user.setUsername(username);
+        user.setUsername(mobilePhone);
         user.setPassword(password);
-        user.setEmail(email);
+        user.setMobilePhoneNumber(mobilePhone);
         user.put("installationId", installationId);
         user.signUpInBackground(signUpCallback);
     }
@@ -66,8 +65,7 @@ public class AVOSUtils {
         AVFile imageFile = null;
 
         try {
-            imageFile = AVFile.withAbsoluteLocalPath(username
-                    + "_avatar.jpg", avatarUrl);
+            imageFile = AVFile.withAbsoluteLocalPath("avatar.jpg", avatarUrl);
             imageFile.save();
         } catch (IOException e) {
             e.printStackTrace();
@@ -79,6 +77,39 @@ public class AVOSUtils {
         userInformation.put("username", username);
         userInformation.put("avatar", imageFile);
         userInformation.saveInBackground(saveCallback);
+    }
+
+    /**
+     * 重置头像
+     */
+    public static void resetAvatar(String username, final String avatarUrl, SaveCallback saveCallback) {
+        AVFile imageFile = null;
+        try {
+            imageFile = AVFile.withAbsoluteLocalPath("avatar.jpg", avatarUrl);
+            imageFile.save();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (AVException e) {
+            e.printStackTrace();
+        }
+
+        final AVFile finalImageFile = imageFile;
+        final AVQuery<AVObject> query = new AVQuery<AVObject>("UserInfo");
+        query.whereEqualTo("username", username);
+        query.findInBackground(new FindCallback<AVObject>() {
+            @Override
+            public void done(List<AVObject> list, AVException e) {
+                if (list != null && list.size() != 0) {
+                    String objectId = list.get(list.size() - 1).getObjectId();
+                    try {
+                        AVObject gender = query.get(objectId);
+                        gender.put("avatar", finalImageFile);
+                    } catch (AVException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            }
+        });
     }
 
     /**

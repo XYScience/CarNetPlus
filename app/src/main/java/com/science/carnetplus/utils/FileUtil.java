@@ -63,8 +63,8 @@ public class FileUtil {
             File fullFile = new File(strFilePath, fileName);
             fos = new FileOutputStream(fullFile);
             fos.write(bytes);
-            saveAvatarFilePath(fileFullPath, c);
             fileFullPath = fullFile.getPath();
+            saveAvatarFilePath(fileFullPath, c);
         } catch (Exception e) {
             fileFullPath = "";
         } finally {

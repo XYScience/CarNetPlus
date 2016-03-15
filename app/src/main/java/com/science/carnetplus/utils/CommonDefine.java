@@ -24,4 +24,7 @@ public class CommonDefine {
     // requestCode
     public static final int REQUEST_PERMISSION_CODE = 88; // 请求权限
     public static final int KITKAT_STATUS_COLOR = Color.parseColor("#30000000"); // 请求权限
+    public static final String LOGIN = "login"; // SharedPreferences
+    public static final String MOBILE_PHONE = "mobile_phone"; // SharedPreferences key
+    public static final String PASSWORD = "password"; // SharedPreferences key
 }

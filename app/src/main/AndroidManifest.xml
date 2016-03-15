@@ -63,6 +63,7 @@
             android:name=".ui.ForgetPswActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"/>
+
     </application>
 
 </manifest>
