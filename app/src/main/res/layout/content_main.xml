@@ -36,7 +36,7 @@
             android:id="@id/fabtoolbar_fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_input_add"
+            android:src="@drawable/ic_more"
             app:borderWidth="0dp"
             app:fabSize="normal"/>
 
@@ -56,9 +56,9 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:drawableTop="@android:drawable/ic_delete"
+            android:drawableTop="@drawable/ic_nearby"
             android:gravity="center_horizontal"
-            android:text="加油"
+            android:text="附近"
             android:textColor="@color/textColor"
             android:textSize="12sp"/>
 
@@ -67,7 +67,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:drawableTop="@android:drawable/ic_menu_save"
+            android:drawableTop="@drawable/ic_gas_station"
             android:gravity="center_horizontal"
             android:text="加油"
             android:textColor="@color/textColor"
@@ -78,10 +78,10 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:drawableTop="@android:drawable/ic_media_next"
+            android:drawableTop="@drawable/ic_car_info"
             android:gravity="center_horizontal"
             android:scaleType="centerInside"
-            android:text="加油"
+            android:text="车辆"
             android:textColor="@color/textColor"
             android:textSize="12sp"/>
 
@@ -90,10 +90,10 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:drawableTop="@android:drawable/ic_menu_crop"
+            android:drawableTop="@drawable/ic_music_video"
             android:gravity="center_horizontal"
             android:scaleType="centerInside"
-            android:text="加油"
+            android:text="音乐"
             android:textColor="@color/textColor"
             android:textSize="12sp"/>
 
