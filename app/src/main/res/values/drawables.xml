@@ -1,5 +1,5 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
-    <item name="ic_menu_my" type="drawable">@drawable/ic_account_circle</item>
+    <item name="ic_menu_main" type="drawable">@drawable/ic_main</item>
     <item name="ic_menu_orders" type="drawable">@drawable/ic_orders</item>
     <item name="ic_menu_car_illegally" type="drawable">@drawable/ic_car_illegally</item>
     <item name="ic_menu_about" type="drawable">@drawable/ic_about</item>

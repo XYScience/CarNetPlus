@@ -12,6 +12,13 @@ import android.graphics.Color;
 
 public class CommonDefine {
 
+    public static final int FRAGMENT_MAIN = 0;
+    public static final int FRAGMENT_MY = 1;
+    public static final int FRAGMENT_MUSIC = 2;
+    public static final int FRAGMENT_CAR_MAINTAIN = 3;
+    public static final int FRAGMENT_ORDERS = 4;
+    public static final int FRAGMENT_CAR_ILLEGALLY = 5;
+
     public static final int CAMERA_REQUEST_CODE = 1;// 拍照
     public static final int GALLERY_REQUEST_CODE = 2; // 缩放
     public static final int CROP_REQUEST_CODE = 3;// 结果

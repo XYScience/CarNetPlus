@@ -1,33 +1,37 @@
 package com.science.carnetplus;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.avos.avoscloud.AVUser;
+import com.science.carnetplus.fragments.CarIllegallyFragment;
+import com.science.carnetplus.fragments.CarMaintainFragment;
+import com.science.carnetplus.fragments.MainFragment;
+import com.science.carnetplus.fragments.MusicFragment;
+import com.science.carnetplus.fragments.MyFragment;
+import com.science.carnetplus.fragments.OrdersFragment;
 import com.science.carnetplus.ui.BaseActivity;
 import com.science.carnetplus.ui.LoginActivity;
 import com.science.carnetplus.utils.AVOSUtils;
-import com.science.carnetplus.utils.CommonUtils;
+import com.science.carnetplus.utils.CommonDefine;
 import com.science.carnetplus.utils.FileUtil;
 import com.science.carnetplus.utils.StatusBarCompat;
 import com.science.carnetplus.utils.ToastUtils;
-import com.science.carnetplus.widget.FABToolbar.FABToolbarLayout;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -35,14 +39,19 @@ public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     private Toolbar mToolbar;
+    private DrawerLayout mDrawerLayout;
     private View mHeaderView;
-    private FABToolbarLayout mFABToolbarLayout;
-    private FloatingActionButton mFABToolbarButton;
     private CircleImageView mImgAvatar;
     private ImageView mImgMusicControl;
     private TextView mTextUsername;
     private TextView mTextUserDescribe;
-    private TextView mTextAddOil, mTextCar4s, mTextCarWash, mTextCarPark;
+    private FragmentManager mFragmentManager;
+    private MainFragment mFragmentMain;
+    private MyFragment mFragmentMy;
+    private MusicFragment mFragmentMusic;
+    private CarMaintainFragment mFragmentCarMaintain;
+    private OrdersFragment mFragmentOrders;
+    private CarIllegallyFragment mFragmentCarIllegally;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,17 +69,18 @@ public class MainActivity extends BaseActivity
         }
 
         mToolbar = setToolbar(getString(R.string.app_name));
+        mFragmentManager = getFragmentManager();
 
         initDrawerLayout();
         initNavigationView();
-        initFab();
+        showFragment(CommonDefine.FRAGMENT_MAIN);
     }
 
     private void initDrawerLayout() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+                this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawerLayout.setDrawerListener(toggle);
         toggle.syncState();
     }
 
@@ -80,24 +90,11 @@ public class MainActivity extends BaseActivity
         // android support library 23.1.0+
         mHeaderView = navigationView.inflateHeaderView(R.layout.nav_header_main);
         mImgAvatar = (CircleImageView) mHeaderView.findViewById(R.id.image_avatar);
-        mImgMusicControl = (ImageView) mHeaderView.findViewById(R.id.img_music_control);
         mTextUsername = (TextView) mHeaderView.findViewById(R.id.text_username);
+        mImgMusicControl = (ImageView) mHeaderView.findViewById(R.id.img_music_control);
         mTextUserDescribe = (TextView) mHeaderView.findViewById(R.id.text_user_describe);
         mTextUserDescribe.setSelected(true);
         mTextUserDescribe.requestFocus();
-    }
-
-    private void initFab() {
-        mFABToolbarLayout = (FABToolbarLayout) findViewById(R.id.fabtoolbar);
-        mFABToolbarButton = (FloatingActionButton) findViewById(R.id.fabtoolbar_fab);
-        mTextAddOil = (TextView) findViewById(R.id.text_add_oil);
-        mTextCar4s = (TextView) findViewById(R.id.text_car_4s);
-        mTextCarWash = (TextView) findViewById(R.id.text_car_wash);
-        mTextCarPark = (TextView) findViewById(R.id.text_car_park);
-        CommonUtils.materialRipple(mTextAddOil, "#ffffff", 0.3f);
-        CommonUtils.materialRipple(mTextCar4s, "#ffffff", 0.3f);
-        CommonUtils.materialRipple(mTextCarWash, "#ffffff", 0.3f);
-        CommonUtils.materialRipple(mTextCarPark, "#ffffff", 0.3f);
     }
 
     @Override
@@ -110,39 +107,21 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void initListener() {
-        mTextAddOil.setOnClickListener(this);
-        mTextCar4s.setOnClickListener(this);
-        mTextCarWash.setOnClickListener(this);
-        mTextCarPark.setOnClickListener(this);
+        mImgAvatar.setOnClickListener(this);
+        mTextUsername.setOnClickListener(this);
         mImgMusicControl.setOnClickListener(this);
-
-        mFABToolbarButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mFABToolbarLayout.show();
-            }
-        });
-        mFABToolbarButton.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                if (mFABToolbarLayout.isFab()) {
-                    Toast.makeText(MainActivity.this, "long click!", Toast.LENGTH_SHORT).show();
-                }
-                return true; // true为不加短按,false为加入短按
-            }
-        });
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.text_add_oil:
+            case R.id.image_avatar:
+                mDrawerLayout.closeDrawer(GravityCompat.START);
+                showFragment(CommonDefine.FRAGMENT_MY);
                 break;
-            case R.id.text_car_4s:
-                break;
-            case R.id.text_car_wash:
-                break;
-            case R.id.text_car_park:
+            case R.id.text_username:
+                mDrawerLayout.closeDrawer(GravityCompat.START);
+                showFragment(CommonDefine.FRAGMENT_MY);
                 break;
         }
     }
@@ -150,20 +129,12 @@ public class MainActivity extends BaseActivity
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START) || mFABToolbarLayout.isToolbar()) {
+        if (drawer.isDrawerOpen(GravityCompat.START) || mFragmentMain.mFABToolbarLayout.isToolbar()) {
             drawer.closeDrawer(GravityCompat.START);
-            mFABToolbarLayout.hide();
+            mFragmentMain.mFABToolbarLayout.hide();
         } else {
             doExitApp();
         }
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_MENU) {
-            mFABToolbarLayout.show();
-        }
-        return super.onKeyDown(keyCode, event);
     }
 
     @Override
@@ -194,16 +165,16 @@ public class MainActivity extends BaseActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_my) {
-            // Handle the camera action
+        if (id == R.id.nav_nav_main) {
+            showFragment(CommonDefine.FRAGMENT_MAIN);
         } else if (id == R.id.nav_music) {
-
+            showFragment(CommonDefine.FRAGMENT_MUSIC);
         } else if (id == R.id.nav_orders) {
-
-        } else if (id == R.id.nav_car) {
-
+            showFragment(CommonDefine.FRAGMENT_ORDERS);
+        } else if (id == R.id.nav_car_maintain) {
+            showFragment(CommonDefine.FRAGMENT_CAR_MAINTAIN);
         } else if (id == R.id.nav_car_illegally) {
-
+            showFragment(CommonDefine.FRAGMENT_CAR_ILLEGALLY);
         } else if (id == R.id.nav_settings) {
 
         } else if (id == R.id.nav_about) {
@@ -214,10 +185,80 @@ public class MainActivity extends BaseActivity
             startActivity(intent);
             finish();
         }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        mToolbar.setTitle(item.getTitle());
+        mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void showFragment(int index) {
+        FragmentTransaction ft = mFragmentManager.beginTransaction();
+        hideFragment(ft);
+        switch (index) {
+            case CommonDefine.FRAGMENT_MAIN:
+                if (mFragmentMain == null) {
+                    mFragmentMain = new MainFragment();
+                    ft.add(R.id.content, mFragmentMain);
+                } else {
+                    ft.show(mFragmentMain);
+                }
+                break;
+            case CommonDefine.FRAGMENT_MY:
+                if (mFragmentMy == null) {
+                    mFragmentMy = new MyFragment();
+                    ft.add(R.id.content, mFragmentMy);
+                } else {
+                    ft.show(mFragmentMy);
+                }
+                break;
+            case CommonDefine.FRAGMENT_MUSIC:
+                if (mFragmentMusic == null) {
+                    mFragmentMusic = new MusicFragment();
+                    ft.add(R.id.content, mFragmentMusic);
+                } else {
+                    ft.show(mFragmentMusic);
+                }
+                break;
+            case CommonDefine.FRAGMENT_CAR_MAINTAIN:
+                if (mFragmentCarMaintain == null) {
+                    mFragmentCarMaintain = new CarMaintainFragment();
+                    ft.add(R.id.content, mFragmentCarMaintain);
+                } else {
+                    ft.show(mFragmentCarMaintain);
+                }
+                break;
+            case CommonDefine.FRAGMENT_ORDERS:
+                if (mFragmentOrders == null) {
+                    mFragmentOrders = new OrdersFragment();
+                    ft.add(R.id.content, mFragmentOrders);
+                } else {
+                    ft.show(mFragmentOrders);
+                }
+                break;
+            case CommonDefine.FRAGMENT_CAR_ILLEGALLY:
+                if (mFragmentCarIllegally == null) {
+                    mFragmentCarIllegally = new CarIllegallyFragment();
+                    ft.add(R.id.content, mFragmentCarIllegally);
+                } else {
+                    ft.show(mFragmentCarIllegally);
+                }
+                break;
+        }
+        ft.commit();
+    }
+
+    private void hideFragment(FragmentTransaction ft) {
+        if (mFragmentMain != null)
+            ft.hide(mFragmentMain);
+        if (mFragmentMy != null)
+            ft.hide(mFragmentMy);
+        if (mFragmentMusic != null)
+            ft.hide(mFragmentMusic);
+        if (mFragmentCarMaintain != null)
+            ft.hide(mFragmentCarMaintain);
+        if (mFragmentOrders != null)
+            ft.hide(mFragmentOrders);
+        if (mFragmentCarIllegally != null)
+            ft.hide(mFragmentCarIllegally);
     }
 
     private long exitTime = 0;

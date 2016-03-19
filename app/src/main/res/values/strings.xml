@@ -11,6 +11,7 @@
     <!-- navgation menu -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_main">主页</string>
     <string name="nav_my">我的</string>
     <string name="nav_music">音乐</string>
     <string name="nav_car">车辆信息</string>
