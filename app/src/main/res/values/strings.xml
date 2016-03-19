@@ -12,6 +12,8 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_my">我的</string>
+    <string name="nav_music">音乐</string>
+    <string name="nav_car">车辆信息</string>
     <string name="nav_orders">历史订单</string>
     <string name="nav_car_illegally">违章信息</string>
     <string name="others">其它</string>
@@ -20,6 +22,13 @@
 
     <!-- MainActivity -->
     <string name="double_click_quit">再按一次退出车++( ▼-▼ )</string>
+    <string name="action_list">详情列表</string>
+    <string name="add_oil">加油</string>
+    <string name="add_oil_place">加油站</string>
+    <string name="car_4s">4S店</string>
+    <string name="car_wash">洗车</string>
+    <string name="car_wash_place">洗车场</string>
+    <string name="car_park">停车场</string>
 
     <!-- LoginActivity -->
     <string name="account">账户</string>

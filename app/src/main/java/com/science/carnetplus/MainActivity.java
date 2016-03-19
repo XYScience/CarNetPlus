@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +23,7 @@ import com.avos.avoscloud.AVUser;
 import com.science.carnetplus.ui.BaseActivity;
 import com.science.carnetplus.ui.LoginActivity;
 import com.science.carnetplus.utils.AVOSUtils;
+import com.science.carnetplus.utils.CommonUtils;
 import com.science.carnetplus.utils.FileUtil;
 import com.science.carnetplus.utils.StatusBarCompat;
 import com.science.carnetplus.utils.ToastUtils;
@@ -37,8 +39,10 @@ public class MainActivity extends BaseActivity
     private FABToolbarLayout mFABToolbarLayout;
     private FloatingActionButton mFABToolbarButton;
     private CircleImageView mImgAvatar;
+    private ImageView mImgMusicControl;
     private TextView mTextUsername;
     private TextView mTextUserDescribe;
+    private TextView mTextAddOil, mTextCar4s, mTextCarWash, mTextCarPark;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +80,7 @@ public class MainActivity extends BaseActivity
         // android support library 23.1.0+
         mHeaderView = navigationView.inflateHeaderView(R.layout.nav_header_main);
         mImgAvatar = (CircleImageView) mHeaderView.findViewById(R.id.image_avatar);
+        mImgMusicControl = (ImageView) mHeaderView.findViewById(R.id.img_music_control);
         mTextUsername = (TextView) mHeaderView.findViewById(R.id.text_username);
         mTextUserDescribe = (TextView) mHeaderView.findViewById(R.id.text_user_describe);
         mTextUserDescribe.setSelected(true);
@@ -85,6 +90,14 @@ public class MainActivity extends BaseActivity
     private void initFab() {
         mFABToolbarLayout = (FABToolbarLayout) findViewById(R.id.fabtoolbar);
         mFABToolbarButton = (FloatingActionButton) findViewById(R.id.fabtoolbar_fab);
+        mTextAddOil = (TextView) findViewById(R.id.text_add_oil);
+        mTextCar4s = (TextView) findViewById(R.id.text_car_4s);
+        mTextCarWash = (TextView) findViewById(R.id.text_car_wash);
+        mTextCarPark = (TextView) findViewById(R.id.text_car_park);
+        CommonUtils.materialRipple(mTextAddOil, "#ffffff", 0.3f);
+        CommonUtils.materialRipple(mTextCar4s, "#ffffff", 0.3f);
+        CommonUtils.materialRipple(mTextCarWash, "#ffffff", 0.3f);
+        CommonUtils.materialRipple(mTextCarPark, "#ffffff", 0.3f);
     }
 
     @Override
@@ -97,6 +110,12 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void initListener() {
+        mTextAddOil.setOnClickListener(this);
+        mTextCar4s.setOnClickListener(this);
+        mTextCarWash.setOnClickListener(this);
+        mTextCarPark.setOnClickListener(this);
+        mImgMusicControl.setOnClickListener(this);
+
         mFABToolbarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -114,11 +133,17 @@ public class MainActivity extends BaseActivity
         });
     }
 
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-
+            case R.id.text_add_oil:
+                break;
+            case R.id.text_car_4s:
+                break;
+            case R.id.text_car_wash:
+                break;
+            case R.id.text_car_park:
+                break;
         }
     }
 
@@ -156,11 +181,7 @@ public class MainActivity extends BaseActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            AVOSUtils.logout();
-            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-            startActivity(intent);
-            finish();
+        if (id == R.id.action_list) {
             return true;
         }
 
@@ -175,16 +196,23 @@ public class MainActivity extends BaseActivity
 
         if (id == R.id.nav_my) {
             // Handle the camera action
+        } else if (id == R.id.nav_music) {
+
         } else if (id == R.id.nav_orders) {
+
+        } else if (id == R.id.nav_car) {
 
         } else if (id == R.id.nav_car_illegally) {
 
-        } else if (id == R.id.nav_manage) {
-
         } else if (id == R.id.nav_settings) {
 
-        } else if (id == R.id.nav_exit_app) {
+        } else if (id == R.id.nav_about) {
 
+        } else if (id == R.id.nav_exit_app) {
+            AVOSUtils.logout();
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

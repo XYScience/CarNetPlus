@@ -53,7 +53,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     private Button mBtnLogin;
     private TextView mTextForgetPassword;
     private TextView mTextRegister;
-    private CommonUtils mCommonUtils;
     private AVOSUtils mAVOSUtils;
 
     @Override
@@ -81,8 +80,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
         mAVOSUtils = AVOSUtils.getInstance();
         mAVOSUtils.setOnGetAvatarListener(this);
-        mCommonUtils = CommonUtils.getInstance(LoginActivity.this);
-        mCommonUtils.materialRipple(mBtnLogin);
+        CommonUtils.materialRipple(mBtnLogin);
     }
 
     @Override

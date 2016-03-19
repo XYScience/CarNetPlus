@@ -63,7 +63,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     private EditText mEditVerify;
     private Button mBtnRegister;
     private Button mBtnGetVerify;
-    private CommonUtils mCommonUtils;
     private BottomSheetBehavior mSheetBehavior;
     private View mBottomSheet;
     private TextView mTextCamera, mTextGallery, mTextCancel;
@@ -98,8 +97,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         mTextCancel = (TextView) findViewById(R.id.text_cancel);
 
         mAVOSUtils = AVOSUtils.getInstance();
-        mCommonUtils = CommonUtils.getInstance(RegisterActivity.this);
-        mCommonUtils.materialRipple(mBtnRegister);
+        CommonUtils.materialRipple(mBtnRegister);
     }
 
     @Override
@@ -166,7 +164,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.img_circle_user_avatar:
-                mCommonUtils.hideKeyboard(mEditMobilePhone);
+                CommonUtils.hideKeyboard(mEditMobilePhone, RegisterActivity.this);
                 mSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 break;
 
@@ -201,9 +199,9 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         mobilePhone = mEditMobilePhone.getText().toString().trim();
         password = mEditPassword.getText().toString().trim();
         verify = mEditVerify.getText().toString().trim();
-        if (mCommonUtils.isMobilePhone(mobilePhone)) {
+        if (CommonUtils.isMobilePhone(mobilePhone)) {
             if (!TextUtils.isEmpty(password)) {
-                if (mCommonUtils.passwordVerify(password)) {
+                if (CommonUtils.passwordVerify(password)) {
                     // 获取验证码
                     if (type == 0) {
                         getVerify();
@@ -211,7 +209,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     // 注册
                     else {
                         if (!TextUtils.isEmpty(verify)) {
-                            if (mCommonUtils.isSMSCodeValid(verify)) {
+                            if (CommonUtils.isSMSCodeValid(verify)) {
                                 if (isTakeAvatar) {
                                     // 点击"注册"按钮
                                     register();

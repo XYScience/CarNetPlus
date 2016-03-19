@@ -35,7 +35,6 @@ import com.science.carnetplus.widget.materialProgress.LoadingView;
 
 public class ForgetPswActivity extends BaseActivity implements View.OnClickListener {
 
-    private CommonUtils mCommonUtils;
     private CoordinatorLayout mRootLayout;
     private CoordinatorLayout mCoordinatorSnackbar;
     private EditText mEditMobilePhone;
@@ -55,7 +54,6 @@ public class ForgetPswActivity extends BaseActivity implements View.OnClickListe
         setContentView(R.layout.activity_forget_psw);
         setToolbar(getString(R.string.forget_psw));
 
-        mCommonUtils = CommonUtils.getInstance(this);
         mRootLayout = (CoordinatorLayout) findViewById(R.id.root_layout);
         mCoordinatorSnackbar = (CoordinatorLayout) findViewById(R.id.coordinator_snackbar);
         mEditMobilePhone = (EditText) findViewById(R.id.edit_mobile_phone);
@@ -64,8 +62,8 @@ public class ForgetPswActivity extends BaseActivity implements View.OnClickListe
         mBtnGetVerifyCode = (Button) findViewById(R.id.btn_get_verify);
         mBtnSure = (Button) findViewById(R.id.btn_sure);
 
-        mCommonUtils.materialRipple(mBtnGetVerifyCode);
-        mCommonUtils.materialRipple(mBtnSure, "#ffffff");
+        CommonUtils.materialRipple(mBtnGetVerifyCode);
+        CommonUtils.materialRipple(mBtnSure, "#ffffff");
     }
 
     @Override
@@ -99,15 +97,15 @@ public class ForgetPswActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void verifyEdit(int type) {
-        mCommonUtils.hideKeyboard(mEditMobilePhone);
-        if (mCommonUtils.isMobilePhone(mobilePhone)) {
+        CommonUtils.hideKeyboard(mEditMobilePhone, ForgetPswActivity.this);
+        if (CommonUtils.isMobilePhone(mobilePhone)) {
             if (type == 0) {
                 // 点击"验证码"按钮
                 requestVerify();
             } else {
                 if (!TextUtils.isEmpty(verifyCode)) {
                     if (!TextUtils.isEmpty(newPassword)) {
-                        if (mCommonUtils.passwordVerify(newPassword)) {
+                        if (CommonUtils.passwordVerify(newPassword)) {
                             resetPassword(); // 确认重置密码
                         } else {
                             SnackbarUtils.showSnackbar(mCoordinatorSnackbar, getString(R.string.error_register_password));
@@ -129,7 +127,7 @@ public class ForgetPswActivity extends BaseActivity implements View.OnClickListe
      * 发送验证码
      */
     private void requestVerify() {
-        mCommonUtils.hideKeyboard(mEditMobilePhone);
+        CommonUtils.hideKeyboard(mEditMobilePhone, ForgetPswActivity.this);
         AVUser.requestPasswordResetBySmsCodeInBackground(mobilePhone, new RequestMobileCodeCallback() {
             @Override
             public void done(AVException e) {
