@@ -84,4 +84,23 @@
     <string name="new_password">新密码</string>
     <string name="enter_new_password">请输入新密码</string>
 
+    <!-- UserInfoActivity -->
+    <string name="nickname">昵称</string>
+    <string name="sex">性别</string>
+    <string name="birth">出生</string>
+    <string name="birth_years">出生年月</string>
+    <string name="hometown">所在地区</string>
+    <string name="email">邮箱</string>
+    <string name="binding_email">绑定邮箱</string>
+    <string name="my_cars">爱车</string>
+    <string name="my_cars_setting">请设置爱车信息</string>
+    <string name="quit_account">退出登录</string>
+
+    <!-- AlterUserInfoActivity -->
+    <string name="user_avatar">头像</string>
+    <string name="alter_user_info">更改信息</string>
+    <string name="user_describe">自我描述</string>
+    <string name="user_describe_one_word">一句话描述自己</string>
+    <string name="done">完成</string>
+
 </resources>

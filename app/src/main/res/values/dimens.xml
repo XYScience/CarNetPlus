@@ -10,5 +10,8 @@
     <!-- fab margins  -->
     <dimen name="fab_horizontal_margin">4dp</dimen>
     <dimen name="fab_vertical_margin">0dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="user_info_appbar_height">250dp</dimen>
 
 </resources>

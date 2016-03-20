@@ -33,15 +33,18 @@ public class AVOSUtils {
         this.mOnGetAvatarListener = onGetAvatarListener;
     }
 
-    private static AVOSUtils avosUtils;
+    private volatile static AVOSUtils avosUtils;
 
     private AVOSUtils() {
-
     }
 
-    public static synchronized AVOSUtils getInstance() {
+    public static AVOSUtils getInstance() {
         if (avosUtils == null) {
-            avosUtils = new AVOSUtils();
+            synchronized (AVOSUtils.class) {
+                if (avosUtils == null) {
+                    avosUtils = new AVOSUtils();
+                }
+            }
         }
         return avosUtils;
     }

@@ -23,11 +23,9 @@ import com.science.carnetplus.fragments.CarIllegallyFragment;
 import com.science.carnetplus.fragments.CarMaintainFragment;
 import com.science.carnetplus.fragments.MainFragment;
 import com.science.carnetplus.fragments.MusicFragment;
-import com.science.carnetplus.fragments.MyFragment;
 import com.science.carnetplus.fragments.OrdersFragment;
 import com.science.carnetplus.ui.BaseActivity;
-import com.science.carnetplus.ui.LoginActivity;
-import com.science.carnetplus.utils.AVOSUtils;
+import com.science.carnetplus.ui.UserInfoActivity;
 import com.science.carnetplus.utils.CommonDefine;
 import com.science.carnetplus.utils.FileUtil;
 import com.science.carnetplus.utils.StatusBarCompat;
@@ -47,7 +45,6 @@ public class MainActivity extends BaseActivity
     private TextView mTextUserDescribe;
     private FragmentManager mFragmentManager;
     private MainFragment mFragmentMain;
-    private MyFragment mFragmentMy;
     private MusicFragment mFragmentMusic;
     private CarMaintainFragment mFragmentCarMaintain;
     private OrdersFragment mFragmentOrders;
@@ -116,12 +113,12 @@ public class MainActivity extends BaseActivity
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.image_avatar:
-                mDrawerLayout.closeDrawer(GravityCompat.START);
-                showFragment(CommonDefine.FRAGMENT_MY);
+                Intent intent1 = new Intent(MainActivity.this, UserInfoActivity.class);
+                startActivity(intent1);
                 break;
             case R.id.text_username:
-                mDrawerLayout.closeDrawer(GravityCompat.START);
-                showFragment(CommonDefine.FRAGMENT_MY);
+                Intent intent2 = new Intent(MainActivity.this, UserInfoActivity.class);
+                startActivity(intent2);
                 break;
         }
     }
@@ -180,9 +177,6 @@ public class MainActivity extends BaseActivity
         } else if (id == R.id.nav_about) {
 
         } else if (id == R.id.nav_exit_app) {
-            AVOSUtils.logout();
-            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-            startActivity(intent);
             finish();
         }
         mToolbar.setTitle(item.getTitle());
@@ -200,14 +194,6 @@ public class MainActivity extends BaseActivity
                     ft.add(R.id.content, mFragmentMain);
                 } else {
                     ft.show(mFragmentMain);
-                }
-                break;
-            case CommonDefine.FRAGMENT_MY:
-                if (mFragmentMy == null) {
-                    mFragmentMy = new MyFragment();
-                    ft.add(R.id.content, mFragmentMy);
-                } else {
-                    ft.show(mFragmentMy);
                 }
                 break;
             case CommonDefine.FRAGMENT_MUSIC:
@@ -249,8 +235,6 @@ public class MainActivity extends BaseActivity
     private void hideFragment(FragmentTransaction ft) {
         if (mFragmentMain != null)
             ft.hide(mFragmentMain);
-        if (mFragmentMy != null)
-            ft.hide(mFragmentMy);
         if (mFragmentMusic != null)
             ft.hide(mFragmentMusic);
         if (mFragmentCarMaintain != null)
