@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -18,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVUser;
 import com.science.carnetplus.fragments.CarIllegallyFragment;
 import com.science.carnetplus.fragments.CarMaintainFragment;
@@ -26,10 +29,13 @@ import com.science.carnetplus.fragments.MusicFragment;
 import com.science.carnetplus.fragments.OrdersFragment;
 import com.science.carnetplus.ui.BaseActivity;
 import com.science.carnetplus.ui.UserInfoActivity;
+import com.science.carnetplus.utils.AVOSUtils;
 import com.science.carnetplus.utils.CommonDefine;
 import com.science.carnetplus.utils.FileUtil;
 import com.science.carnetplus.utils.StatusBarCompat;
 import com.science.carnetplus.utils.ToastUtils;
+
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -41,7 +47,7 @@ public class MainActivity extends BaseActivity
     private View mHeaderView;
     private CircleImageView mImgAvatar;
     private ImageView mImgMusicControl;
-    private TextView mTextUsername;
+    private TextView mTextNickname;
     private TextView mTextUserDescribe;
     private FragmentManager mFragmentManager;
     private MainFragment mFragmentMain;
@@ -49,6 +55,7 @@ public class MainActivity extends BaseActivity
     private CarMaintainFragment mFragmentCarMaintain;
     private OrdersFragment mFragmentOrders;
     private CarIllegallyFragment mFragmentCarIllegally;
+    private String sex, birth, hometown;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +94,7 @@ public class MainActivity extends BaseActivity
         // android support library 23.1.0+
         mHeaderView = navigationView.inflateHeaderView(R.layout.nav_header_main);
         mImgAvatar = (CircleImageView) mHeaderView.findViewById(R.id.image_avatar);
-        mTextUsername = (TextView) mHeaderView.findViewById(R.id.text_username);
+        mTextNickname = (TextView) mHeaderView.findViewById(R.id.text_nickname);
         mImgMusicControl = (ImageView) mHeaderView.findViewById(R.id.img_music_control);
         mTextUserDescribe = (TextView) mHeaderView.findViewById(R.id.text_user_describe);
         mTextUserDescribe.setSelected(true);
@@ -98,14 +105,47 @@ public class MainActivity extends BaseActivity
     public void initData() {
 //        GlideUtils.getInstance(MainActivity.this).setImage(FileUtil.getAvatarFilePath(MainActivity.this), mImgAvatar);
         mImgAvatar.setImageBitmap(FileUtil.getAvatar(FileUtil.getAvatarFilePath(MainActivity.this)));
-        mTextUsername.setText(AVUser.getCurrentUser().getUsername());
-//        mTextUserDescribe.setText(AVUser.getCurrentUser().getUsername());
+        AVOSUtils.getInstance().getUserInfo(AVUser.getCurrentUser().getUsername().toString(), new AVOSUtils.OnAVOSCallback() {
+            @Override
+            public void getAvaterListener(byte[] avatarBytes) {
+
+            }
+
+            @Override
+            public void getUserInfoListener(List<AVObject> userInfoList) {
+                Message msg = new Message();
+                msg.what = 1;
+                msg.obj = userInfoList;
+                mHandler.sendMessage(msg);
+            }
+        });
+    }
+
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1:
+                    updateUserInfo((List<AVObject>) msg.obj);
+                    break;
+            }
+        }
+    };
+
+    private void updateUserInfo(List<AVObject> list) {
+        if (list != null && list.size() != 0) {
+            mTextUserDescribe.setText(list.get(list.size() - 1).getString(CommonDefine.DESCRIBE));
+            mTextNickname.setText(list.get(list.size() - 1).getString(CommonDefine.NICKNAME));
+            sex = list.get(list.size() - 1).getString(CommonDefine.SEX);
+            birth = list.get(list.size() - 1).getString(CommonDefine.BIRTH);
+            hometown = list.get(list.size() - 1).getString(CommonDefine.HOMETOWN);
+        }
     }
 
     @Override
     public void initListener() {
         mImgAvatar.setOnClickListener(this);
-        mTextUsername.setOnClickListener(this);
+        mTextNickname.setOnClickListener(this);
         mImgMusicControl.setOnClickListener(this);
     }
 
@@ -113,13 +153,31 @@ public class MainActivity extends BaseActivity
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.image_avatar:
-                Intent intent1 = new Intent(MainActivity.this, UserInfoActivity.class);
-                startActivity(intent1);
+                intentUserInfo();
                 break;
-            case R.id.text_username:
-                Intent intent2 = new Intent(MainActivity.this, UserInfoActivity.class);
-                startActivity(intent2);
+            case R.id.text_nickname:
+                intentUserInfo();
                 break;
+        }
+    }
+
+    private void intentUserInfo() {
+        Intent intent = new Intent(MainActivity.this, UserInfoActivity.class);
+        intent.putExtra(CommonDefine.DESCRIBE, mTextUserDescribe.getText().toString());
+        intent.putExtra(CommonDefine.NICKNAME, mTextNickname.getText().toString());
+        intent.putExtra(CommonDefine.SEX, sex);
+        intent.putExtra(CommonDefine.BIRTH, birth);
+        intent.putExtra(CommonDefine.HOMETOWN, hometown);
+        startActivityForResult(intent, CommonDefine.INTENT_REQUSET);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //requestCode标示请求的标示   resultCode表示有数据
+        if (requestCode == CommonDefine.INTENT_REQUSET && resultCode == RESULT_OK) {
+            mTextUserDescribe.setText(data.getStringExtra(CommonDefine.DESCRIBE));
+            mTextNickname.setText(data.getStringExtra(CommonDefine.NICKNAME));
         }
     }
 

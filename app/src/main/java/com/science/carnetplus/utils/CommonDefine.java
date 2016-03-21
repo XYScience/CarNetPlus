@@ -33,4 +33,13 @@ public class CommonDefine {
     public static final String LOGIN = "login"; // SharedPreferences
     public static final String MOBILE_PHONE = "mobile_phone"; // SharedPreferences key
     public static final String PASSWORD = "password"; // SharedPreferences key
+
+    // 用户信息字段
+    public static final String DESCRIBE = "describe";
+    public static final String NICKNAME = "nickname";
+    public static final String SEX = "sex";
+    public static final String BIRTH = "birth";
+    public static final String HOMETOWN = "hometown";
+
+    public static final int INTENT_REQUSET = 1; // ForResult的意图
 }

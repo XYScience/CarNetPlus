@@ -95,6 +95,7 @@
     <string name="my_cars">爱车</string>
     <string name="my_cars_setting">请设置爱车信息</string>
     <string name="quit_account">退出登录</string>
+    <string name="user_describe_details">加油！加油！加油！重要的事情说三遍！！！</string>
 
     <!-- AlterUserInfoActivity -->
     <string name="user_avatar">头像</string>

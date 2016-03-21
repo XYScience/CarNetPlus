@@ -31,7 +31,6 @@
         android:focusableInTouchMode="true"
         android:marqueeRepeatLimit="marquee_forever"
         android:singleLine="true"
-        android:text="加油！加油！加油！重要的事情说三遍！！！"
         android:textSize="14sp"/>
 
 </FrameLayout>

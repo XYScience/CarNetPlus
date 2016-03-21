@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.avos.avoscloud.AVUser;
 import com.science.carnetplus.R;
 import com.science.carnetplus.utils.AVOSUtils;
+import com.science.carnetplus.utils.CommonDefine;
 import com.science.carnetplus.utils.CommonUtils;
 import com.science.carnetplus.utils.FileUtil;
 import com.science.carnetplus.utils.StatusBarCompat;
@@ -36,21 +37,22 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UserInfoActivity extends BaseActivity implements View.OnClickListener {
 
+    private Toolbar mToolbar;
+    private AVOSUtils mAVOSUtils;
     private FrameLayout mLayoutMy;
     private AppBarLayout mAppBarLayout;
+    private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private CircleImageView mImgUserAvatar;
+    private TextView mTextAccount;
     private TextView mTextUserDescribe;
+    private TextView mTextNickname;
+    private TextView mTextSex;
+    private TextView mTextBirth;
+    private TextView mTextHometown;
     private FloatingActionButton mFab;
     private LinearLayout mListLayout;
-    private RelativeLayout mLayoutAccount;
-    private RelativeLayout mLayoutNickname;
-    private RelativeLayout mLayoutSex;
-    private RelativeLayout mLayoutBirth;
-    private RelativeLayout mLayoutHometown;
-    private RelativeLayout mLayoutEmail;
     private RelativeLayout mLayoutCars;
     private RelativeLayout mLayoutQuitAccount;
-    private TextView mTextAccount;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,43 +63,46 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void initView() {
         setContentView(R.layout.activity_user_info);
-        Toolbar toolbar = setToolbar(AVUser.getCurrentUser().getUsername().toString());
+        mToolbar = setToolbar(getIntent().getStringExtra(CommonDefine.NICKNAME));
         if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
-            CollapsingToolbarLayout.LayoutParams lp = (CollapsingToolbarLayout.LayoutParams) toolbar.getLayoutParams();
+            CollapsingToolbarLayout.LayoutParams lp = (CollapsingToolbarLayout.LayoutParams) mToolbar.getLayoutParams();
             lp.height = (int) (CommonUtils.getStatusBarHeight(this) +
                     getResources().getDimension(R.dimen.abc_action_bar_default_height_material));
-            toolbar.setLayoutParams(lp);
+            mToolbar.setLayoutParams(lp);
         }
 
         mAppBarLayout = (AppBarLayout) findViewById(R.id.appbar);
+        mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         mLayoutMy = (FrameLayout) findViewById(R.id.my_fl);
         mImgUserAvatar = (CircleImageView) findViewById(R.id.img_circle_user_avatar);
         mFab = (FloatingActionButton) findViewById(R.id.fab);
         mTextUserDescribe = (TextView) findViewById(R.id.text_user_describe);
         mTextAccount = (TextView) findViewById(R.id.text_account);
+        mTextNickname = (TextView) findViewById(R.id.text_nickname);
+        mTextSex = (TextView) findViewById(R.id.text_sex);
+        mTextBirth = (TextView) findViewById(R.id.text_birth);
+        mTextHometown = (TextView) findViewById(R.id.text_hometown);
         mListLayout = (LinearLayout) findViewById(R.id.list_layout);
-        mLayoutAccount = (RelativeLayout) findViewById(R.id.layout_account);
-        mLayoutNickname = (RelativeLayout) findViewById(R.id.layout_nickname);
-        mLayoutSex = (RelativeLayout) findViewById(R.id.layout_sex);
-        mLayoutBirth = (RelativeLayout) findViewById(R.id.layout_birth);
-        mLayoutHometown = (RelativeLayout) findViewById(R.id.layout_hometown);
-        mLayoutEmail = (RelativeLayout) findViewById(R.id.layout_email);
         mLayoutCars = (RelativeLayout) findViewById(R.id.layout_cars);
         mLayoutQuitAccount = (RelativeLayout) findViewById(R.id.layout_quit_account);
-        CommonUtils.materialRipple(mLayoutEmail, "#585858");
         CommonUtils.materialRipple(mLayoutCars, "#585858");
         CommonUtils.materialRipple(mLayoutQuitAccount, "#585858");
+        mAVOSUtils = AVOSUtils.getInstance();
     }
 
     @Override
     public void initData() {
         mImgUserAvatar.setImageBitmap(FileUtil.getAvatar(FileUtil.getAvatarFilePath(UserInfoActivity.this)));
         mTextAccount.setText(AVUser.getCurrentUser().getUsername().toString());
+        mTextUserDescribe.setText(getIntent().getStringExtra(CommonDefine.DESCRIBE));
+        mTextNickname.setText(getIntent().getStringExtra(CommonDefine.NICKNAME));
+        mTextSex.setText(getIntent().getStringExtra(CommonDefine.SEX));
+        mTextBirth.setText(getIntent().getStringExtra(CommonDefine.BIRTH));
+        mTextHometown.setText(getIntent().getStringExtra(CommonDefine.HOMETOWN));
     }
 
     @Override
     public void initListener() {
-        mLayoutEmail.setOnClickListener(this);
         mLayoutCars.setOnClickListener(this);
         mLayoutQuitAccount.setOnClickListener(this);
         mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
@@ -114,7 +119,12 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(UserInfoActivity.this, AlterUserInfoActivity.class);
-                startActivity(intent);
+                intent.putExtra(CommonDefine.DESCRIBE, mTextUserDescribe.getText().toString());
+                intent.putExtra(CommonDefine.NICKNAME, mTextNickname.getText().toString());
+                intent.putExtra(CommonDefine.SEX, mTextSex.getText().toString());
+                intent.putExtra(CommonDefine.BIRTH, mTextBirth.getText().toString());
+                intent.putExtra(CommonDefine.HOMETOWN, mTextHometown.getText().toString());
+                startActivityForResult(intent, CommonDefine.INTENT_REQUSET);
             }
         });
     }
@@ -122,12 +132,10 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.layout_email:
-                break;
             case R.id.layout_cars:
                 break;
             case R.id.layout_quit_account:
-                AVOSUtils.logout();
+                mAVOSUtils.logout();
                 Intent intent = new Intent(UserInfoActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
@@ -136,13 +144,40 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //requestCode标示请求的标示   resultCode表示有数据
+        if (requestCode == CommonDefine.INTENT_REQUSET && resultCode == RESULT_OK) {
+            mTextUserDescribe.setText(data.getStringExtra(CommonDefine.DESCRIBE));
+            mTextNickname.setText(data.getStringExtra(CommonDefine.NICKNAME));
+            mTextSex.setText(data.getStringExtra(CommonDefine.SEX));
+            mTextBirth.setText(data.getStringExtra(CommonDefine.BIRTH));
+            mTextHometown.setText(data.getStringExtra(CommonDefine.HOMETOWN));
+            mCollapsingToolbarLayout.setTitle(data.getStringExtra(CommonDefine.NICKNAME));
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        responseMainActivity();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                responseMainActivity();
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void responseMainActivity() {
+        Intent intent = new Intent();
+        intent.putExtra(CommonDefine.DESCRIBE, mTextUserDescribe.getText().toString());
+        intent.putExtra(CommonDefine.NICKNAME, mTextNickname.getText().toString());
+        setResult(RESULT_OK, intent);
+        finish();
     }
 }

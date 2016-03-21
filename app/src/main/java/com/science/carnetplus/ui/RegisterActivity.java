@@ -324,11 +324,13 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         final LoadingView loadingView = (LoadingView) view.findViewById(R.id.loading_view);
         final TextView textLoadingTip = (TextView) view.findViewById(R.id.text_loading_tip);
 
-        mAVOSUtils.upLoadUserAvatar(AVUser.getCurrentUser().getUsername(), mStrAvatarUrl, new SaveCallback() {
+        final String username = AVUser.getCurrentUser().getUsername();
+        mAVOSUtils.upLoadUserAvatar(username, mStrAvatarUrl, new SaveCallback() {
             @Override
             public void done(AVException e) {
                 if (e == null) {
                     textLoadingTip.setText(getString(R.string.register_success));
+                    mAVOSUtils.updateUserInfo(username, username, "性别", "出生日期", "所在地区", getString(R.string.user_describe_details));
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {

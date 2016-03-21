@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:background="@android:color/white"
             android:divider="@drawable/layout_divider"
-            android:elevation="2dp"
+            android:elevation="@dimen/elevation_activity_item"
             android:orientation="vertical"
             android:showDividers="middle">
 
@@ -75,6 +75,7 @@
                     android:tint="@color/drawable_tint"/>
 
                 <TextView
+                    android:id="@+id/nickname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -88,6 +89,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_toRightOf="@+id/nickname"
+                    android:gravity="right"
                     android:hint="@string/nickname"
                     android:textColor="@color/textPrimary"
                     android:textColorHint="@color/textHintColor"
@@ -103,7 +108,7 @@
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:background="@android:color/white"
             android:divider="@drawable/layout_divider"
-            android:elevation="2dp"
+            android:elevation="@dimen/elevation_activity_item"
             android:orientation="vertical"
             android:showDividers="middle">
 
@@ -192,6 +197,7 @@
                     android:tint="@color/drawable_tint"/>
 
                 <TextView
+                    android:id="@+id/hometown"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -205,6 +211,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_toRightOf="@+id/hometown"
+                    android:gravity="right"
                     android:hint="@string/hometown"
                     android:textColor="@color/textPrimary"
                     android:textColorHint="@color/textHintColor"
@@ -216,136 +226,100 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:background="@android:color/white"
-            android:divider="@drawable/layout_divider"
-            android:elevation="2dp"
-            android:orientation="vertical"
-            android:showDividers="middle">
+            android:elevation="@dimen/elevation_activity_item"
+            android:orientation="vertical">
 
             <RelativeLayout
-                android:id="@+id/layout_email"
+                android:id="@+id/layout_cars"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/activity_horizontal_margin">
 
                 <ImageView
-                    android:id="@+id/img_email"
+                    android:id="@+id/img_car_info"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/activity_horizontal_margin"
-                    android:src="@drawable/ic_mail"
-                    android:tint="@color/drawable_tint"/>
+                    android:src="@drawable/ic_car_info"
+                    android:tint="@color/colorPrimary"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_toRightOf="@+id/img_email"
-                    android:text="@string/email"
-                    android:textColor="@color/textPrimary"
+                    android:layout_toRightOf="@+id/img_car_info"
+                    android:text="@string/my_cars"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="16sp"/>
 
                 <TextView
-                    android:id="@+id/text_email"
+                    android:id="@+id/text_email2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_toLeftOf="@+id/img_right1"
-                    android:hint="@string/binding_email"
+                    android:layout_toLeftOf="@+id/img_right2"
+                    android:hint="@string/my_cars_setting"
                     android:textColor="@color/textPrimary"
-                    android:textColorHint="@color/textHintColor"
+                    android:textColorHint="@color/colorLightPrimary"
                     android:textSize="16sp"/>
 
                 <ImageView
-                    android:id="@+id/img_right1"
+                    android:id="@+id/img_right2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="-6dp"
                     android:src="@drawable/ic_chevron_right"
-                    android:tint="@color/drawable_tint"/>
+                    android:tint="@color/colorPrimary"/>
 
             </RelativeLayout>
-
         </LinearLayout>
 
-        <RelativeLayout
-            android:id="@+id/layout_cars"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:background="@android:color/white"
-            android:elevation="2dp"
-            android:padding="@dimen/activity_horizontal_margin">
+            android:elevation="@dimen/elevation_activity_item"
+            android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/img_car_info"
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:id="@+id/layout_quit_account"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:src="@drawable/ic_car_info"
-                android:tint="@color/colorPrimary"/>
+                android:padding="@dimen/activity_horizontal_margin">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/img_car_info"
-                android:text="@string/my_cars"
-                android:textColor="@color/colorPrimary"
-                android:textSize="16sp"/>
+                <ImageView
+                    android:id="@+id/img_quit_account"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:src="@drawable/ic_exit_to_app"
+                    android:tint="@color/drawable_tint"/>
 
-            <TextView
-                android:id="@+id/text_my_cars"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toLeftOf="@+id/img_right2"
-                android:hint="@string/my_cars_setting"
-                android:textColor="@color/textPrimary"
-                android:textColorHint="@color/colorLightPrimary"
-                android:textSize="16sp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/img_quit_account"
+                    android:text="@string/quit_account"
+                    android:textColor="@color/textPrimary"
+                    android:textSize="16sp"/>
 
-            <ImageView
-                android:id="@+id/img_right2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="-6dp"
-                android:src="@drawable/ic_chevron_right"
-                android:tint="@color/colorPrimary"/>
+            </RelativeLayout>
+        </LinearLayout>
 
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/layout_quit_account"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:background="@android:color/white"
-            android:elevation="2dp"
-            android:padding="@dimen/activity_horizontal_margin">
+            android:elevation="@dimen/elevation_activity_item"
+            android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/img_quit_account"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:src="@drawable/ic_exit_to_app"
-                android:tint="@color/drawable_tint"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/img_quit_account"
-                android:text="@string/quit_account"
-                android:textColor="@color/textPrimary"
-                android:textSize="16sp"/>
-
-        </RelativeLayout>
+        </LinearLayout>
 
     </LinearLayout>
 

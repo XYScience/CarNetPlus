@@ -22,6 +22,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.LogInCallback;
 import com.science.carnetplus.MainActivity;
@@ -33,6 +34,8 @@ import com.science.carnetplus.utils.FileUtil;
 import com.science.carnetplus.utils.SnackbarUtils;
 import com.science.carnetplus.widget.materialProgress.LoadingView;
 
+import java.util.List;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -43,7 +46,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * @data 2016/3/6
  */
 
-public class LoginActivity extends BaseActivity implements View.OnClickListener, AVOSUtils.OnGetAvatarListener {
+public class LoginActivity extends BaseActivity implements View.OnClickListener {
 
     private CoordinatorLayout mCoordinatorSnackbar;
     private RelativeLayout mContentLayout;
@@ -79,7 +82,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         mTextRegister = (TextView) findViewById(R.id.text_register);
 
         mAVOSUtils = AVOSUtils.getInstance();
-        mAVOSUtils.setOnGetAvatarListener(this);
         CommonUtils.materialRipple(mBtnLogin);
     }
 
@@ -90,7 +92,20 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         mEditAccount.setText(sharedPreferences.getString(CommonDefine.MOBILE_PHONE, null));
         String account = mEditAccount.getText().toString().trim();
         if (!TextUtils.isEmpty(account)) {
-            mAVOSUtils.getUserAvatar(account);
+            mAVOSUtils.getUserAvatar(account, new AVOSUtils.OnAVOSCallback() {
+                @Override
+                public void getAvaterListener(byte[] avatarBytes) {
+                    Message msg = new Message();
+                    msg.what = 1;
+                    msg.obj = avatarBytes;
+                    mHandlerLoad.sendMessage(msg);
+                }
+
+                @Override
+                public void getUserInfoListener(List<AVObject> userInfoList) {
+
+                }
+            });
         }
     }
 
@@ -117,7 +132,20 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
             @Override
             public void afterTextChanged(Editable s) {
-                mAVOSUtils.getUserAvatar(mEditAccount.getText().toString().trim());
+                mAVOSUtils.getUserAvatar(mEditAccount.getText().toString().trim(), new AVOSUtils.OnAVOSCallback() {
+                    @Override
+                    public void getAvaterListener(byte[] avatarBytes) {
+                        Message msg = new Message();
+                        msg.what = 1;
+                        msg.obj = avatarBytes;
+                        mHandlerLoad.sendMessage(msg);
+                    }
+
+                    @Override
+                    public void getUserInfoListener(List<AVObject> userInfoList) {
+
+                    }
+                });
             }
         });
     }
@@ -142,14 +170,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         }
     }
 
-    @Override
-    public void getAvaterListener(byte[] avatarUrl) {
-        Message msg = new Message();
-        msg.what = 1;
-        msg.obj = avatarUrl;
-        mHandlerLoad.sendMessage(msg);
-    }
-
     // 子线程Handler刷新UI界面
     private Handler mHandlerLoad = new Handler() {
 
@@ -161,6 +181,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                     mImgAvatar.setImageBitmap(bitmap);
                     // 保存图片到本地
                     FileUtil.saveAvatarFile(LoginActivity.this, CommonDefine.AVATAR_FILE_NAME, bitmap);
+                    break;
             }
         }
     };

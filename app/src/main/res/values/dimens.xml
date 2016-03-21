@@ -14,4 +14,6 @@
 
     <dimen name="user_info_appbar_height">250dp</dimen>
 
+    <dimen name="elevation_activity_item">2dp</dimen>
+
 </resources>
