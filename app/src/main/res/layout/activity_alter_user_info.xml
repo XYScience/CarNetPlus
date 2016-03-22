@@ -5,25 +5,27 @@
     android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/windowBackground"
     android:orientation="vertical">
 
     <include
         android:id="@+id/appbar"
         layout="@layout/toolbar"/>
 
-    <LinearLayout
+    <RelativeLayout
+        android:id="@+id/content_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/windowBackground"
         android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <RelativeLayout
+            android:id="@+id/layout_avatar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:background="@android:color/white"
-            android:elevation="@dimen/activity_vertical_margin"
+            android:elevation="@dimen/elevation_activity_item"
             android:orientation="horizontal"
             android:padding="@dimen/activity_horizontal_margin">
 
@@ -42,14 +44,16 @@
                 android:layout_alignParentRight="true"
                 android:scaleType="centerCrop"
                 android:src="@mipmap/car_net_plus"
-                app:civ_border_color="@android:color/white"
+                app:civ_border_color="@color/windowBackground"
                 app:civ_border_width="2dp"/>
 
         </RelativeLayout>
 
         <LinearLayout
+            android:id="@+id/layout_middle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/layout_avatar"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:background="@android:color/white"
             android:divider="@drawable/layout_divider"
@@ -148,6 +152,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/layout_middle"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:background="@android:color/white"
             android:divider="@drawable/layout_divider"
@@ -267,6 +272,21 @@
 
         </LinearLayout>
 
-    </LinearLayout>
+        <android.support.design.widget.CoordinatorLayout
+            android:id="@+id/coordinator_snackBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"/>
+
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/darken_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#7f000000"
+        android:visibility="gone"/>
+
+    <include layout="@layout/bottom_sheet_behavior"/>
 
 </android.support.design.widget.CoordinatorLayout>

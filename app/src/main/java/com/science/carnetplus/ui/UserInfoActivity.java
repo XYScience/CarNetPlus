@@ -92,13 +92,18 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     public void initData() {
-        mImgUserAvatar.setImageBitmap(FileUtil.getAvatar(FileUtil.getAvatarFilePath(UserInfoActivity.this)));
         mTextAccount.setText(AVUser.getCurrentUser().getUsername().toString());
         mTextUserDescribe.setText(getIntent().getStringExtra(CommonDefine.DESCRIBE));
         mTextNickname.setText(getIntent().getStringExtra(CommonDefine.NICKNAME));
         mTextSex.setText(getIntent().getStringExtra(CommonDefine.SEX));
         mTextBirth.setText(getIntent().getStringExtra(CommonDefine.BIRTH));
         mTextHometown.setText(getIntent().getStringExtra(CommonDefine.HOMETOWN));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mImgUserAvatar.setImageBitmap(FileUtil.getAvatar(FileUtil.getAvatarFilePath(UserInfoActivity.this)));
     }
 
     @Override

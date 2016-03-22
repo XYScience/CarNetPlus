@@ -177,12 +177,12 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 break;
 
             case R.id.text_camera:
-                initPemission(0, getString(R.string.request_camera_write_permission),
+                initPermission(0, getString(R.string.request_camera_write_permission),
                         Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA);
                 break;
 
             case R.id.text_gallery:
-                initPemission(1, getString(R.string.request_write_permission),
+                initPermission(1, getString(R.string.request_write_permission),
                         Manifest.permission.WRITE_EXTERNAL_STORAGE);
                 break;
 
@@ -355,7 +355,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         });
     }
 
-    private void initPemission(final int type, String permissionTip, String... permission) {
+    private void initPermission(final int type, String permissionTip, String... permission) {
         performCodeWithPermission(permissionTip, new PermissionCallback() {
             @Override
             public void hasPermission() {

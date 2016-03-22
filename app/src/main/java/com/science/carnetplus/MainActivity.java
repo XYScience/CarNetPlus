@@ -104,7 +104,6 @@ public class MainActivity extends BaseActivity
     @Override
     public void initData() {
 //        GlideUtils.getInstance(MainActivity.this).setImage(FileUtil.getAvatarFilePath(MainActivity.this), mImgAvatar);
-        mImgAvatar.setImageBitmap(FileUtil.getAvatar(FileUtil.getAvatarFilePath(MainActivity.this)));
         AVOSUtils.getInstance().getUserInfo(AVUser.getCurrentUser().getUsername().toString(), new AVOSUtils.OnAVOSCallback() {
             @Override
             public void getAvaterListener(byte[] avatarBytes) {
@@ -119,6 +118,12 @@ public class MainActivity extends BaseActivity
                 mHandler.sendMessage(msg);
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mImgAvatar.setImageBitmap(FileUtil.getAvatar(FileUtil.getAvatarFilePath(MainActivity.this)));
     }
 
     private Handler mHandler = new Handler() {

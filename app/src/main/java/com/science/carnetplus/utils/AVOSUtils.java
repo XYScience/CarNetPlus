@@ -100,14 +100,19 @@ public class AVOSUtils {
             @Override
             public void done(List<AVObject> list, AVException e) {
                 if (list != null && list.size() != 0) {
-                    String objectId = list.get(list.size() - 1).getObjectId();
-                    try {
-                        AVObject gender = query.get(objectId);
-                        gender.put("avatar", finalImageFile);
-                        gender.save();
-                    } catch (AVException e1) {
-                        e1.printStackTrace();
-                    }
+                    final String objectId = list.get(list.size() - 1).getObjectId();
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                AVObject gender = query.get(objectId);
+                                gender.put("avatar", finalImageFile);
+                                gender.save();
+                            } catch (AVException e1) {
+                                e1.printStackTrace();
+                            }
+                        }
+                    }).start();
                 }
             }
         });
