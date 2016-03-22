@@ -5,9 +5,15 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="nav_header_right_vertical">32dp</dimen>
 
-    <!-- 主页fabtoolbar fab margins  -->
+    <!-- fab margins  -->
     <dimen name="fab_horizontal_margin">4dp</dimen>
     <dimen name="fab_vertical_margin">0dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="user_info_appbar_height">250dp</dimen>
+
+    <dimen name="elevation_activity_item">2dp</dimen>
 
 </resources>

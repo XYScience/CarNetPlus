@@ -26,20 +26,6 @@ import com.balysv.materialripple.MaterialRippleLayout;
 
 public class CommonUtils {
 
-    private static Context mContext;
-    private static CommonUtils commonUtils;
-
-    private CommonUtils(Context context) {
-        this.mContext = context.getApplicationContext();
-    }
-
-    public static synchronized CommonUtils getInstance(Context context) {
-        if (commonUtils == null) {
-            commonUtils = new CommonUtils(context);
-        }
-        return commonUtils;
-    }
-
     /**
      * 获得屏幕宽度
      *
@@ -133,9 +119,8 @@ public class CommonUtils {
      *
      * @param v
      */
-    public static void hideKeyboard(View v) {
-        InputMethodManager imm = (InputMethodManager) mContext
-                .getSystemService(Context.INPUT_METHOD_SERVICE);
+    public static void hideKeyboard(View v, Context context) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
 
@@ -144,9 +129,8 @@ public class CommonUtils {
      *
      * @param v
      */
-    public static void showKeyboard(View v) {
-        InputMethodManager imm = (InputMethodManager) mContext
-                .getSystemService(Context.INPUT_METHOD_SERVICE);
+    public static void showKeyboard(View v, Context context) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(v, 0);
     }
 
@@ -175,13 +159,12 @@ public class CommonUtils {
     /**
      * 判断网络是否连接
      *
-     * @param mContext
+     * @param context
      * @return
      */
-    public static boolean isConnected() {
+    public static boolean isConnected(Context context) {
 
-        ConnectivityManager connectivity = (ConnectivityManager) mContext
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         if (null != connectivity) {
 
@@ -212,8 +195,8 @@ public class CommonUtils {
      *
      * @return 是否是wifi 网络
      */
-    public static boolean isWifiNet() {
-        ConnectivityManager manager = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+    public static boolean isWifiNet(Context context) {
+        ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = manager.getActiveNetworkInfo();
         boolean isWifi = false;
         if (networkInfo != null && networkInfo.isConnected()) {
@@ -266,6 +249,16 @@ public class CommonUtils {
     /**
      * 5.+水波纹特效
      *
+     * @param view 加载动画的view
+     */
+    public static void materialRipple(View view) {
+        MaterialRippleLayout.on(view).rippleColor(Color.parseColor("#585858")).
+                rippleAlpha(0.2f).rippleHover(true).rippleOverlay(true).create();
+    }
+
+    /**
+     * 5.+水波纹特效
+     *
      * @param view  加载动画的view
      * @param color 加载的颜色
      */
@@ -277,11 +270,13 @@ public class CommonUtils {
     /**
      * 5.+水波纹特效
      *
-     * @param view 加载动画的view
+     * @param view
+     * @param color
+     * @param alpha
      */
-    public static void materialRipple(View view) {
-        MaterialRippleLayout.on(view).rippleColor(Color.parseColor("#585858")).
-                rippleAlpha(0.2f).rippleHover(true).rippleOverlay(true).create();
+    public static void materialRipple(View view, String color, float alpha) {
+        MaterialRippleLayout.on(view).rippleColor(Color.parseColor(color)).
+                rippleAlpha(alpha).rippleHover(true).rippleOverlay(true).create();
     }
 
 }

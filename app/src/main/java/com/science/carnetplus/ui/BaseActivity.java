@@ -42,7 +42,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         AppManager.getAppManager().addActivity(this);
-        if (CommonUtils.getInstance(BaseActivity.this).isConnected()) {
+        if (CommonUtils.isConnected(this)) {
 
         } else {
             ToastUtils.showMessage(BaseActivity.this, getString(R.string.network_not_connected));
@@ -179,7 +179,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                 view.setFocusable(true);
                 view.setFocusableInTouchMode(true);
                 view.requestFocus();
-                CommonUtils.getInstance(BaseActivity.this).hideKeyboard(editText);
+                CommonUtils.hideKeyboard(editText, BaseActivity.this);
                 return false;
             }
         });

@@ -19,5 +19,6 @@
 
     <!-- 白色背景时的波纹颜色 -->
     <color name="ripple_white">#585858</color>
+    <color name="drawable_tint">#737373</color>
 
 </resources>

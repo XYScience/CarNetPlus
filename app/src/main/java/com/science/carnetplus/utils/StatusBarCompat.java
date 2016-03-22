@@ -1,7 +1,6 @@
 package com.science.carnetplus.utils;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,13 +34,13 @@ public class StatusBarCompat {
                 ViewGroup contentView = (ViewGroup) activity.findViewById(android.R.id.content);
                 View statusBarView = contentView.getChildAt(0);
                 //改变颜色时避免重复添加statusBarView
-                if (statusBarView != null && statusBarView.getMeasuredHeight() == getStatusBarHeight(activity)) {
+                if (statusBarView != null && statusBarView.getMeasuredHeight() == CommonUtils.getStatusBarHeight(activity)) {
                     statusBarView.setBackgroundColor(CommonDefine.KITKAT_STATUS_COLOR);
                     return;
                 }
                 statusBarView = new View(activity);
                 ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                        getStatusBarHeight(activity));
+                        CommonUtils.getStatusBarHeight(activity));
                 statusBarView.setBackgroundColor(CommonDefine.KITKAT_STATUS_COLOR);
                 contentView.addView(statusBarView, lp);
             }
@@ -53,12 +52,4 @@ public class StatusBarCompat {
         compat(activity, INVALID_VAL, true);
     }
 
-    public static int getStatusBarHeight(Context context) {
-        int result = 0;
-        int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = context.getResources().getDimensionPixelSize(resourceId);
-        }
-        return result;
-    }
 }

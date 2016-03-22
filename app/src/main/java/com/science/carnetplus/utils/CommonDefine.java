@@ -12,6 +12,12 @@ import android.graphics.Color;
 
 public class CommonDefine {
 
+    public static final int FRAGMENT_MAIN = 0;
+    public static final int FRAGMENT_MUSIC = 1;
+    public static final int FRAGMENT_CAR_MAINTAIN = 2;
+    public static final int FRAGMENT_ORDERS = 3;
+    public static final int FRAGMENT_CAR_ILLEGALLY = 4;
+
     public static final int CAMERA_REQUEST_CODE = 1;// 拍照
     public static final int GALLERY_REQUEST_CODE = 2; // 缩放
     public static final int CROP_REQUEST_CODE = 3;// 结果
@@ -27,4 +33,13 @@ public class CommonDefine {
     public static final String LOGIN = "login"; // SharedPreferences
     public static final String MOBILE_PHONE = "mobile_phone"; // SharedPreferences key
     public static final String PASSWORD = "password"; // SharedPreferences key
+
+    // 用户信息字段
+    public static final String DESCRIBE = "describe";
+    public static final String NICKNAME = "nickname";
+    public static final String SEX = "sex";
+    public static final String BIRTH = "birth";
+    public static final String HOMETOWN = "hometown";
+
+    public static final int INTENT_REQUSET = 1; // ForResult的意图
 }

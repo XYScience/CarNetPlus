@@ -11,21 +11,8 @@
     app:fadeInFraction="0.3"
     app:hideDuration="300"
     app:horizontalMargin="@dimen/fab_horizontal_margin"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
     app:showDuration="600"
     app:verticalMargin="@dimen/fab_vertical_margin">
-
-    <TextView
-        android:id="@+id/text"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:ellipsize="marquee"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:marqueeRepeatLimit="marquee_forever"
-        android:singleLine="true"
-        android:text="加油！加油！加油！重要的事情说三遍！！！"/>
 
     <RelativeLayout
         android:id="@id/fabtoolbar_container"
@@ -36,9 +23,7 @@
             android:id="@id/fabtoolbar_fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_input_add"
-            app:borderWidth="0dp"
-            app:fabSize="normal"/>
+            android:src="@drawable/ic_car_info"/>
 
     </RelativeLayout>
 
@@ -47,53 +32,59 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:orientation="horizontal"
-        android:paddingBottom="10dp"
-        android:paddingTop="6dp">
+        android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/one"
+            android:id="@+id/text_add_oil"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:drawableTop="@android:drawable/ic_delete"
-            android:gravity="center_horizontal"
-            android:text="加油"
+            android:drawableTop="@drawable/ic_gas_station"
+            android:gravity="center"
+            android:paddingBottom="10dp"
+            android:paddingTop="6dp"
+            android:text="@string/add_oil"
             android:textColor="@color/textColor"
             android:textSize="12sp"/>
 
         <TextView
-            android:id="@+id/two"
+            android:id="@+id/text_car_4s"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:drawableTop="@android:drawable/ic_menu_save"
-            android:gravity="center_horizontal"
-            android:text="加油"
+            android:drawableTop="@drawable/ic_car_4s"
+            android:gravity="center"
+            android:paddingBottom="10dp"
+            android:paddingTop="6dp"
+            android:text="@string/car_4s"
             android:textColor="@color/textColor"
             android:textSize="12sp"/>
 
         <TextView
-            android:id="@+id/three"
+            android:id="@+id/text_car_wash"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:drawableTop="@android:drawable/ic_media_next"
-            android:gravity="center_horizontal"
+            android:drawableTop="@drawable/ic_local_car_wash"
+            android:gravity="center"
+            android:paddingBottom="10dp"
+            android:paddingTop="6dp"
             android:scaleType="centerInside"
-            android:text="加油"
+            android:text="@string/car_wash"
             android:textColor="@color/textColor"
             android:textSize="12sp"/>
 
         <TextView
-            android:id="@+id/four"
+            android:id="@+id/text_car_park"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:drawableTop="@android:drawable/ic_menu_crop"
-            android:gravity="center_horizontal"
+            android:drawableTop="@drawable/ic_local_parking"
+            android:gravity="center"
+            android:paddingBottom="10dp"
+            android:paddingTop="6dp"
             android:scaleType="centerInside"
-            android:text="加油"
+            android:text="@string/car_park"
             android:textColor="@color/textColor"
             android:textSize="12sp"/>
 

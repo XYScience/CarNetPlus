@@ -23,25 +23,24 @@ import java.util.List;
 
 public class AVOSUtils {
 
-    public interface OnGetAvatarListener {
+    public interface OnAVOSCallback {
         void getAvaterListener(byte[] avatarBytes);
+
+        void getUserInfoListener(List<AVObject> userInfoList);
     }
 
-    private OnGetAvatarListener mOnGetAvatarListener = null;
-
-    public void setOnGetAvatarListener(OnGetAvatarListener onGetAvatarListener) {
-        this.mOnGetAvatarListener = onGetAvatarListener;
-    }
-
-    private static AVOSUtils avosUtils;
+    private volatile static AVOSUtils avosUtils;
 
     private AVOSUtils() {
-
     }
 
-    public static synchronized AVOSUtils getInstance() {
+    public static AVOSUtils getInstance() {
         if (avosUtils == null) {
-            avosUtils = new AVOSUtils();
+            synchronized (AVOSUtils.class) {
+                if (avosUtils == null) {
+                    avosUtils = new AVOSUtils();
+                }
+            }
         }
         return avosUtils;
     }
@@ -49,8 +48,8 @@ public class AVOSUtils {
     /**
      * 注册
      */
-    public static void signUp(String mobilePhone, String password, String installationId,
-                              SignUpCallback signUpCallback) {
+    public void signUp(String mobilePhone, String password, String installationId,
+                       SignUpCallback signUpCallback) {
         AVUser user = new AVUser();
         user.setUsername(mobilePhone);
         user.setPassword(password);
@@ -60,9 +59,9 @@ public class AVOSUtils {
     }
 
     /**
-     * 保存用户头像
+     * 首次注册保存用户头像
      */
-    public static void upLoadUserAvatar(String username, String avatarUrl, SaveCallback saveCallback) {
+    public void upLoadUserAvatar(String username, String avatarUrl, SaveCallback saveCallback) {
         AVFile imageFile = null;
 
         try {
@@ -83,7 +82,7 @@ public class AVOSUtils {
     /**
      * 重置头像
      */
-    public static void resetAvatar(String username, final String avatarUrl, SaveCallback saveCallback) {
+    public void resetAvatar(String username, final String avatarUrl) {
         AVFile imageFile = null;
         try {
             imageFile = AVFile.withAbsoluteLocalPath("avatar.jpg", avatarUrl);
@@ -105,6 +104,7 @@ public class AVOSUtils {
                     try {
                         AVObject gender = query.get(objectId);
                         gender.put("avatar", finalImageFile);
+                        gender.save();
                     } catch (AVException e1) {
                         e1.printStackTrace();
                     }
@@ -116,7 +116,7 @@ public class AVOSUtils {
     /**
      * 获取用户头像
      */
-    public void getUserAvatar(String username) {
+    public void getUserAvatar(String username, final OnAVOSCallback callback) {
         AVQuery<AVObject> query = new AVQuery<AVObject>("UserInfo");
         query.whereEqualTo("username", username);
         query.findInBackground(new FindCallback<AVObject>() {
@@ -124,7 +124,7 @@ public class AVOSUtils {
             public void done(List<AVObject> list, AVException e) {
                 if (list != null && list.size() != 0) {
                     String objectId = list.get(list.size() - 1).getObjectId();
-                    getAvatarFile(objectId);
+                    getAvatarFile(objectId, callback);
                 }
             }
         });
@@ -135,7 +135,7 @@ public class AVOSUtils {
      *
      * @param objectId
      */
-    private void getAvatarFile(final String objectId) {
+    private void getAvatarFile(final String objectId, final OnAVOSCallback callback) {
 
         new Thread(new Runnable() {
             @Override
@@ -152,9 +152,7 @@ public class AVOSUtils {
                 imageFile.getDataInBackground(new GetDataCallback() {
                     @Override
                     public void done(byte[] bytes, AVException e) {
-                        if (mOnGetAvatarListener != null) {
-                            mOnGetAvatarListener.getAvaterListener(bytes);
-                        }
+                        callback.getAvaterListener(bytes);
                     }
                 });
 
@@ -163,9 +161,62 @@ public class AVOSUtils {
         }).start();
     }
 
+    /**
+     * 更新用户信息:昵称
+     *
+     * @param username
+     * @param nickname
+     */
+    public void updateUserInfo(String username, final String nickname, final String describe,
+                               final String sex, final String birth, final String hometown) {
+        final AVQuery<AVObject> query = new AVQuery<AVObject>("UserInfo");
+        query.whereEqualTo("username", username);
+        query.findInBackground(new FindCallback<AVObject>() {
+            @Override
+            public void done(final List<AVObject> list, AVException e) {
+                if (list != null && list.size() != 0) {
+                    final String objectId = list.get(list.size() - 1).getObjectId();
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AVObject avObject = null;
+                            try {
+                                avObject = query.get(objectId);
+                                avObject.put(CommonDefine.NICKNAME, nickname);
+                                avObject.put(CommonDefine.DESCRIBE, describe);
+                                avObject.put(CommonDefine.SEX, sex);
+                                avObject.put(CommonDefine.BIRTH, birth);
+                                avObject.put(CommonDefine.HOMETOWN, hometown);
+                                avObject.save();
+                            } catch (AVException e1) {
+                                e1.printStackTrace();
+                            }
+                        }
+                    }).start();
+                }
+            }
+        });
+    }
+
+    /**
+     * 得到用户信息
+     *
+     * @param username
+     */
+    public void getUserInfo(String username, final OnAVOSCallback callback) {
+        AVQuery<AVObject> query = new AVQuery<AVObject>("UserInfo");
+        query.whereEqualTo("username", username);
+        query.findInBackground(new FindCallback<AVObject>() {
+            public void done(List<AVObject> avObjects, AVException e) {
+                if (e == null) {
+                    callback.getUserInfoListener(avObjects);
+                }
+            }
+        });
+    }
 
     // 退出登录
-    public static void logout() {
+    public void logout() {
         AVUser.logOut();
     }
 }
