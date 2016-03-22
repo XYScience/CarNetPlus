@@ -270,13 +270,7 @@
 
             </RelativeLayout>
 
-        </LinearLayout>
-
-        <android.support.design.widget.CoordinatorLayout
-            android:id="@+id/coordinator_snackBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"/>
+        </LinearLayout> 
 
     </RelativeLayout>
 

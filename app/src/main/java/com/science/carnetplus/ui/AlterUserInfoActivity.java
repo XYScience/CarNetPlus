@@ -45,12 +45,13 @@ public class AlterUserInfoActivity extends BaseActivity implements View.OnClickL
     private RelativeLayout mLayoutSex, mLayoutBirth, mLayoutHometown;
     private EditText mEditNickname, mEditUserDescribe;
     private TextView mTextSex, mTextBirth, mTextHomeTown;
-    private CoordinatorLayout mCoordinatorBottom, mCoordinatorSnackBar;
+    private CoordinatorLayout mCoordinatorBottom;
     private View mDarkenLayout;
     private BottomSheetBehavior mSheetBehavior;
     private View mBottomSheet;
     private TextView mTextCamera, mTextGallery, mTextCancel;
     private String mStrAvatarUrl;
+    private boolean isSex = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +65,6 @@ public class AlterUserInfoActivity extends BaseActivity implements View.OnClickL
 
         mRootLayout = (CoordinatorLayout) findViewById(R.id.root_layout);
         mLayoutContent = (RelativeLayout) findViewById(R.id.content_layout);
-        mCoordinatorSnackBar = (CoordinatorLayout) findViewById(R.id.coordinator_snackBar);
         mImgUserAvatar = (CircleImageView) findViewById(R.id.img_circle_user_avatar);
         mLayoutSex = (RelativeLayout) findViewById(R.id.layout_sex);
         mLayoutBirth = (RelativeLayout) findViewById(R.id.layout_birth);
@@ -165,30 +165,51 @@ public class AlterUserInfoActivity extends BaseActivity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.img_circle_user_avatar:
+                isSex = false;
                 CommonUtils.hideKeyboard(mEditNickname, AlterUserInfoActivity.this);
+                mTextCamera.setText(getString(R.string.camera));
+                mTextGallery.setText(getString(R.string.gallery));
+                mTextCamera.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_photo_camera_grey), null, null, null);
+                mTextGallery.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_photo_grey), null, null, null);
                 mSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 break;
 
-            case R.id.text_sex:
+            case R.id.layout_sex:
+                CommonUtils.hideKeyboard(mEditNickname, AlterUserInfoActivity.this);
+                isSex = true;
+                mTextCamera.setText(getString(R.string.man));
+                mTextGallery.setText(getString(R.string.lady));
+                mTextCamera.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_man), null, null, null);
+                mTextGallery.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_lady), null, null, null);
+                mSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                break;
+
+            case R.id.layout_birth:
 
                 break;
 
-            case R.id.text_birth:
-
-                break;
-
-            case R.id.text_hometown:
+            case R.id.layout_hometown:
 
                 break;
 
             case R.id.text_camera:
-                initPermission(0, getString(R.string.request_camera_write_permission),
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA);
+                if (isSex) {
+                    mTextSex.setText(getString(R.string.man));
+                    mSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                } else {
+                    initPermission(0, getString(R.string.request_camera_write_permission),
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA);
+                }
                 break;
 
             case R.id.text_gallery:
-                initPermission(1, getString(R.string.request_write_permission),
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                if (isSex) {
+                    mTextSex.setText(getString(R.string.lady));
+                    mSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                } else {
+                    initPermission(1, getString(R.string.request_write_permission),
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                }
                 break;
 
             case R.id.text_cancel:
@@ -304,9 +325,11 @@ public class AlterUserInfoActivity extends BaseActivity implements View.OnClickL
         String birth = mTextBirth.getText().toString();
         String hometown = mTextHomeTown.getText().toString();
 
-        // 保存头像图标，并返回头像地址url
-        mStrAvatarUrl = FileUtil.saveAvatarFile(AlterUserInfoActivity.this, CommonDefine.AVATAR_FILE_NAME, cropBitmap);
-        mAVOSUtils.resetAvatar(AVUser.getCurrentUser().getUsername(), mStrAvatarUrl);
+        if (cropBitmap != null) {
+            // 保存头像图标，并返回头像地址url
+            mStrAvatarUrl = FileUtil.saveAvatarFile(AlterUserInfoActivity.this, CommonDefine.AVATAR_FILE_NAME, cropBitmap);
+            mAVOSUtils.resetAvatar(AVUser.getCurrentUser().getUsername(), mStrAvatarUrl);
+        }
         mAVOSUtils.updateUserInfo(AVUser.getCurrentUser().getUsername(), nickname, userDescribe, sex, birth, hometown);
         Intent intent = new Intent();
         intent.putExtra(CommonDefine.DESCRIBE, userDescribe);
