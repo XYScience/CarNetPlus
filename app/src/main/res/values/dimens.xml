@@ -16,4 +16,6 @@
 
     <dimen name="elevation_activity_item">2dp</dimen>
 
+    <dimen name="dialog_horizontal_margin">24dp</dimen>
+
 </resources>

@@ -13,7 +13,6 @@ import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -231,7 +230,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         }
                     }, 1000);
                 } else {
-                    Log.e(">>>>>>>>>>>", ">>>>>>>>>>>loginByMobilePhoneNumber" + e.toString());
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {

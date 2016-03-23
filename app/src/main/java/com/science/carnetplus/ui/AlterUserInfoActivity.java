@@ -1,6 +1,7 @@
 package com.science.carnetplus.ui;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -9,6 +10,8 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -25,6 +28,8 @@ import com.science.carnetplus.utils.CommonDefine;
 import com.science.carnetplus.utils.CommonUtils;
 import com.science.carnetplus.utils.FileUtil;
 import com.science.carnetplus.utils.SnackbarUtils;
+import com.science.carnetplus.widget.wheelview.CityPicker;
+import com.science.carnetplus.widget.wheelview.TimePicker;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -185,11 +190,11 @@ public class AlterUserInfoActivity extends BaseActivity implements View.OnClickL
                 break;
 
             case R.id.layout_birth:
-
+                getBirthDate();
                 break;
 
             case R.id.layout_hometown:
-
+                getHomeTown();
                 break;
 
             case R.id.text_camera:
@@ -216,6 +221,46 @@ public class AlterUserInfoActivity extends BaseActivity implements View.OnClickL
                 mSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 break;
         }
+    }
+
+    /**
+     * 获取生日日期
+     */
+    private void getBirthDate() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(AlterUserInfoActivity.this);
+        builder.setTitle(getString(R.string.please_select));
+        View view = LayoutInflater.from(AlterUserInfoActivity.this).inflate(R.layout.birth_date_picker, null);
+        builder.setView(view);
+        final TimePicker timePicker = (TimePicker) view.findViewById(R.id.time_picker);
+        builder.setPositiveButton(getString(R.string.sure), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mTextBirth.setText(timePicker.getTimePicker());
+                dialog.dismiss();
+            }
+        });
+        builder.setNegativeButton(getString(R.string.cancel), null);
+        builder.create().show();
+    }
+
+    /**
+     * 获取所在地区
+     */
+    private void getHomeTown() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(AlterUserInfoActivity.this);
+        builder.setTitle(getString(R.string.please_select));
+        View view = LayoutInflater.from(AlterUserInfoActivity.this).inflate(R.layout.hometown_picker, null);
+        builder.setView(view);
+        final CityPicker cityPicker = (CityPicker) view.findViewById(R.id.hometown_picker);
+        builder.setPositiveButton(getString(R.string.sure), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mTextHomeTown.setText(cityPicker.getHometown());
+                dialog.dismiss();
+            }
+        });
+        builder.setNegativeButton(getString(R.string.cancel), null);
+        builder.create().show();
     }
 
     private void initPermission(final int type, String permissionTip, String... permission) {

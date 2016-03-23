@@ -1,5 +1,6 @@
 package com.science.carnetplus.ui;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
@@ -9,6 +10,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -138,14 +140,34 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.layout_cars:
+                Intent intent = new Intent(UserInfoActivity.this, LoginActivity.class);
+                startActivity(intent);
                 break;
             case R.id.layout_quit_account:
+                logout();
+                break;
+        }
+    }
+
+    /**
+     * 退出登录
+     */
+    private void logout() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(UserInfoActivity.this);
+        builder.setTitle(getString(R.string.tip));
+        builder.setMessage(getString(R.string.logout_ensure));
+        builder.setPositiveButton(getString(R.string.sure), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
                 mAVOSUtils.logout();
                 Intent intent = new Intent(UserInfoActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
-                break;
-        }
+                dialog.dismiss();
+            }
+        });
+        builder.setNegativeButton(getString(R.string.cancel), null);
+        builder.create().show();
     }
 
     @Override

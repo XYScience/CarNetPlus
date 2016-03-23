@@ -188,6 +188,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
+                    android:gravity="right"
                     android:hint="@string/sex"
                     android:textColor="@color/textPrimary"
                     android:textColorHint="@color/textHintColor"
@@ -223,6 +224,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
+                    android:gravity="right"
                     android:hint="@string/birth_years"
                     android:textColor="@color/textPrimary"
                     android:textColorHint="@color/textHintColor"
@@ -245,7 +247,6 @@
                     android:tint="@color/drawable_tint"/>
 
                 <TextView
-                    android:id="@+id/hometown"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -261,7 +262,6 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                    android:layout_toRightOf="@+id/hometown"
                     android:gravity="right"
                     android:hint="@string/hometown"
                     android:textColor="@color/textPrimary"
@@ -270,7 +270,7 @@
 
             </RelativeLayout>
 
-        </LinearLayout> 
+        </LinearLayout>
 
     </RelativeLayout>
 
