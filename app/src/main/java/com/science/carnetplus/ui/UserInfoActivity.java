@@ -140,7 +140,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.layout_cars:
-                Intent intent = new Intent(UserInfoActivity.this, LoginActivity.class);
+                Intent intent = new Intent(UserInfoActivity.this, MyCarsInfoActivity.class);
                 startActivity(intent);
                 break;
             case R.id.layout_quit_account:
