@@ -20,9 +20,9 @@ import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.RequestMobileCodeCallback;
 import com.avos.avoscloud.UpdatePasswordCallback;
 import com.science.carnetplus.R;
-import com.science.carnetplus.utils.CommonDefine;
-import com.science.carnetplus.utils.CommonUtils;
-import com.science.carnetplus.utils.SnackbarUtils;
+import com.science.carnetplus.util.CommonDefine;
+import com.science.carnetplus.util.CommonUtils;
+import com.science.carnetplus.util.SnackbarUtils;
 import com.science.carnetplus.widget.materialProgress.LoadingView;
 
 /**

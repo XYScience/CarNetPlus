@@ -5,11 +5,34 @@
     android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/windowBackground"
     android:orientation="vertical">
 
     <include
         android:id="@+id/appbar"
         layout="@layout/toolbar"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <TextView
+            android:id="@+id/total_cars"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:text="共有车辆x辆"
+            android:textColor="@color/textPrimary"
+            android:textSize="16sp"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -17,6 +40,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="right|bottom"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_mode_edit"/>
+        android:src="@drawable/ic_add"
+        app:layout_behavior="com.science.carnetplus.widget.FABScrollBehavior"/>
 
 </android.support.design.widget.CoordinatorLayout>

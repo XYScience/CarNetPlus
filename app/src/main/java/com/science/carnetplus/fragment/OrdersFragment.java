@@ -1,4 +1,4 @@
-package com.science.carnetplus.fragments;
+package com.science.carnetplus.fragment;
 
 import android.app.Fragment;
 import android.os.Bundle;

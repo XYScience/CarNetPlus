@@ -33,12 +33,12 @@ import com.avos.avoscloud.SaveCallback;
 import com.science.carnetplus.AppManager;
 import com.science.carnetplus.MainActivity;
 import com.science.carnetplus.R;
-import com.science.carnetplus.utils.AVOSUtils;
-import com.science.carnetplus.utils.BottomSheetBehaviorUtils;
-import com.science.carnetplus.utils.CommonDefine;
-import com.science.carnetplus.utils.CommonUtils;
-import com.science.carnetplus.utils.FileUtil;
-import com.science.carnetplus.utils.SnackbarUtils;
+import com.science.carnetplus.util.AVOSUtils;
+import com.science.carnetplus.util.BottomSheetBehaviorUtils;
+import com.science.carnetplus.util.CommonDefine;
+import com.science.carnetplus.util.CommonUtils;
+import com.science.carnetplus.util.FileUtil;
+import com.science.carnetplus.util.SnackbarUtils;
 import com.science.carnetplus.widget.materialProgress.LoadingView;
 
 import de.hdodenhof.circleimageview.CircleImageView;

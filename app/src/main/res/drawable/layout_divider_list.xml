@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 上边框颜色 -->
+    <item>
+        <shape>
+            <solid android:color="@color/colorDivider"/><!-- 填充颜色值 -->
+        </shape>
+    </item>
+
+    <item android:bottom="1px">
+        <shape>
+            <solid android:color="@android:color/white"/><!-- 填充颜色值 -->
+        </shape>
+    </item>
+</layer-list>

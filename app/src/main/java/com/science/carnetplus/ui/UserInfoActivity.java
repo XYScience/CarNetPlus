@@ -21,11 +21,11 @@ import android.widget.TextView;
 
 import com.avos.avoscloud.AVUser;
 import com.science.carnetplus.R;
-import com.science.carnetplus.utils.AVOSUtils;
-import com.science.carnetplus.utils.CommonDefine;
-import com.science.carnetplus.utils.CommonUtils;
-import com.science.carnetplus.utils.FileUtil;
-import com.science.carnetplus.utils.StatusBarCompat;
+import com.science.carnetplus.util.AVOSUtils;
+import com.science.carnetplus.util.CommonDefine;
+import com.science.carnetplus.util.CommonUtils;
+import com.science.carnetplus.util.FileUtil;
+import com.science.carnetplus.util.StatusBarCompat;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 

@@ -26,11 +26,11 @@ import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.LogInCallback;
 import com.science.carnetplus.MainActivity;
 import com.science.carnetplus.R;
-import com.science.carnetplus.utils.AVOSUtils;
-import com.science.carnetplus.utils.CommonDefine;
-import com.science.carnetplus.utils.CommonUtils;
-import com.science.carnetplus.utils.FileUtil;
-import com.science.carnetplus.utils.SnackbarUtils;
+import com.science.carnetplus.util.AVOSUtils;
+import com.science.carnetplus.util.CommonDefine;
+import com.science.carnetplus.util.CommonUtils;
+import com.science.carnetplus.util.FileUtil;
+import com.science.carnetplus.util.SnackbarUtils;
 import com.science.carnetplus.widget.materialProgress.LoadingView;
 
 import java.util.List;
@@ -64,7 +64,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         if (AVUser.getCurrentUser() != null) {
             Intent intentRegister = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intentRegister);
-            finish();
+            LoginActivity.this.finish();
         }
     }
 
@@ -176,10 +176,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             switch (msg.what) {
                 case 1:
                     byte[] avatarBytes = (byte[]) msg.obj;
-                    Bitmap bitmap = BitmapFactory.decodeByteArray(avatarBytes, 0, avatarBytes.length);
-                    mImgAvatar.setImageBitmap(bitmap);
-                    // 保存图片到本地
-                    FileUtil.saveAvatarFile(LoginActivity.this, CommonDefine.AVATAR_FILE_NAME, bitmap);
+                    if (avatarBytes != null) {
+                        Bitmap bitmap = BitmapFactory.decodeByteArray(avatarBytes, 0, avatarBytes.length);
+                        mImgAvatar.setImageBitmap(bitmap);
+                        // 保存图片到本地
+                        FileUtil.saveAvatarFile(LoginActivity.this, CommonDefine.AVATAR_FILE_NAME, bitmap);
+                    }
                     break;
             }
         }

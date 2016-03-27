@@ -15,10 +15,10 @@ import android.widget.EditText;
 
 import com.science.carnetplus.AppManager;
 import com.science.carnetplus.R;
-import com.science.carnetplus.utils.CommonDefine;
-import com.science.carnetplus.utils.CommonUtils;
-import com.science.carnetplus.utils.StatusBarCompat;
-import com.science.carnetplus.utils.ToastUtils;
+import com.science.carnetplus.util.CommonDefine;
+import com.science.carnetplus.util.CommonUtils;
+import com.science.carnetplus.util.StatusBarCompat;
+import com.science.carnetplus.util.ToastUtils;
 
 /**
  * @author 幸运Science-陈土燊

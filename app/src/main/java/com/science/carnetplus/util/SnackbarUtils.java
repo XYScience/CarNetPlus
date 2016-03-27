@@ -1,4 +1,4 @@
-package com.science.carnetplus.utils;
+package com.science.carnetplus.util;
 
 import android.support.design.widget.Snackbar;
 import android.view.View;

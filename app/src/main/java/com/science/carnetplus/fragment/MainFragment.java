@@ -1,4 +1,4 @@
-package com.science.carnetplus.fragments;
+package com.science.carnetplus.fragment;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.science.carnetplus.R;
-import com.science.carnetplus.utils.CommonUtils;
+import com.science.carnetplus.util.CommonUtils;
 import com.science.carnetplus.widget.FABToolbar.FABToolbarLayout;
 
 /**

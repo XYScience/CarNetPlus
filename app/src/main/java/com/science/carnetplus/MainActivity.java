@@ -22,18 +22,18 @@ import android.widget.TextView;
 
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVUser;
-import com.science.carnetplus.fragments.CarIllegallyFragment;
-import com.science.carnetplus.fragments.CarMaintainFragment;
-import com.science.carnetplus.fragments.MainFragment;
-import com.science.carnetplus.fragments.MusicFragment;
-import com.science.carnetplus.fragments.OrdersFragment;
+import com.science.carnetplus.fragment.CarIllegallyFragment;
+import com.science.carnetplus.fragment.CarMaintainFragment;
+import com.science.carnetplus.fragment.MainFragment;
+import com.science.carnetplus.fragment.MusicFragment;
+import com.science.carnetplus.fragment.OrdersFragment;
 import com.science.carnetplus.ui.BaseActivity;
 import com.science.carnetplus.ui.UserInfoActivity;
-import com.science.carnetplus.utils.AVOSUtils;
-import com.science.carnetplus.utils.CommonDefine;
-import com.science.carnetplus.utils.FileUtil;
-import com.science.carnetplus.utils.StatusBarCompat;
-import com.science.carnetplus.utils.ToastUtils;
+import com.science.carnetplus.util.AVOSUtils;
+import com.science.carnetplus.util.CommonDefine;
+import com.science.carnetplus.util.FileUtil;
+import com.science.carnetplus.util.StatusBarCompat;
+import com.science.carnetplus.util.ToastUtils;
 
 import java.util.List;
 

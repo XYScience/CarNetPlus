@@ -1,4 +1,4 @@
-package com.science.carnetplus.utils;
+package com.science.carnetplus.util;
 
 import android.app.Activity;
 import android.os.Build;

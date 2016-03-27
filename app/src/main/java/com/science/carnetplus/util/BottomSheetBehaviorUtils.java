@@ -1,4 +1,4 @@
-package com.science.carnetplus.utils;
+package com.science.carnetplus.util;
 
 import android.os.Build;
 import android.support.v4.view.ViewCompat;

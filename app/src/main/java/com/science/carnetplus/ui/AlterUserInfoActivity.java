@@ -22,12 +22,12 @@ import android.widget.TextView;
 
 import com.avos.avoscloud.AVUser;
 import com.science.carnetplus.R;
-import com.science.carnetplus.utils.AVOSUtils;
-import com.science.carnetplus.utils.BottomSheetBehaviorUtils;
-import com.science.carnetplus.utils.CommonDefine;
-import com.science.carnetplus.utils.CommonUtils;
-import com.science.carnetplus.utils.FileUtil;
-import com.science.carnetplus.utils.SnackbarUtils;
+import com.science.carnetplus.util.AVOSUtils;
+import com.science.carnetplus.util.BottomSheetBehaviorUtils;
+import com.science.carnetplus.util.CommonDefine;
+import com.science.carnetplus.util.CommonUtils;
+import com.science.carnetplus.util.FileUtil;
+import com.science.carnetplus.util.SnackbarUtils;
 import com.science.carnetplus.widget.wheelview.CityPicker;
 import com.science.carnetplus.widget.wheelview.TimePicker;
 
