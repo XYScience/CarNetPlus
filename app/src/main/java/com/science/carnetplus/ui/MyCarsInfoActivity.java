@@ -1,8 +1,10 @@
 package com.science.carnetplus.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.util.CircularArray;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -30,6 +32,7 @@ import java.util.Map;
 public class MyCarsInfoActivity extends BaseActivity {
 
     private RecyclerView mRecyclerView;
+    private FloatingActionButton mFabAddCar;
     private CircularArray<Map<String, String>> mMapList;
     private MyAdapter mMyAdapter;
     private TextView mTextTotalCars;
@@ -44,6 +47,7 @@ public class MyCarsInfoActivity extends BaseActivity {
         setContentView(R.layout.activity_my_cars_info);
         setToolbar(getString(R.string.my_cars));
 
+        mFabAddCar = (FloatingActionButton) findViewById(R.id.fab_add_car);
         mTextTotalCars = (TextView) findViewById(R.id.total_cars);
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(MyCarsInfoActivity.this));
@@ -68,7 +72,7 @@ public class MyCarsInfoActivity extends BaseActivity {
 
     @Override
     public void initData() {
-        mTextTotalCars.setText("共有车辆：" + mMapList.size());
+        mTextTotalCars.setText(getString(R.string.total_cars) + mMapList.size());
     }
 
     @Override
@@ -84,6 +88,14 @@ public class MyCarsInfoActivity extends BaseActivity {
             @Override
             public void loading() {
                 new LoadAsyncTask().execute();
+            }
+        });
+
+        mFabAddCar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MyCarsInfoActivity.this, AddCarActivity.class);
+                startActivity(intent);
             }
         });
     }

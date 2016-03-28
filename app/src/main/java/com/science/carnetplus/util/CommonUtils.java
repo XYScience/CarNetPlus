@@ -247,6 +247,19 @@ public class CommonUtils {
     }
 
     /**
+     * 车牌号格式：汉字 + A-Z + 5位A-Z或0-9
+     * （只包括了普通车牌号，教练车和部分部队车等车牌号不包括在内）
+     *
+     * @param carnumber
+     * @return
+     */
+    public static boolean isCarnumberNO(String carnumber) {
+        String carnumRegex = "[\u4e00-\u9fa5]{1}[A-Z]{1}[A-Z_0-9]{5}";
+        if (TextUtils.isEmpty(carnumber)) return false;
+        else return carnumber.matches(carnumRegex);
+    }
+
+    /**
      * 5.+水波纹特效
      *
      * @param view 加载动画的view

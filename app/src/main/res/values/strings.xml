@@ -111,5 +111,19 @@
     <string name="lady">女</string>
 
     <!-- MyCarsInfoActivity -->
+    <string name="total_cars">共有车辆：</string>
+
+    <!-- AddCarActivity -->
+    <string name="add_car">添加车辆</string>
+    <string name="car_number">车牌号</string>
+    <string name="car_number_please_select">请选择车牌号</string>
+    <string name="car_oil_number">油号</string>
+    <string name="car_oil_number_please_select">请选择油号</string>
+    <string name="car_brand">品牌</string>
+    <string name="car_brand_please_select">请选择品牌</string>
+    <string name="car_type">车型</string>
+    <string name="car_type_please_select">请选择车型</string>
+    <string name="car_color">颜色</string>
+    <string name="car_color_please_select">请选择颜色</string>
 
 </resources>
