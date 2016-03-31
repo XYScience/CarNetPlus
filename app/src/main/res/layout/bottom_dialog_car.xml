@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@android:color/white"
+              android:divider="@drawable/layout_divider"
+              android:orientation="vertical"
+              android:paddingBottom="8dp"
+              android:showDividers="beginning">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="56dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="@string/please_select"
+            android:textSize="16sp"/>
+
+        <ImageView
+            android:id="@+id/img_scroll_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_scroll_more"
+            android:tint="@color/drawable_tint"/>
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/colorDivider"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/list_bottom_car"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</LinearLayout>

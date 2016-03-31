@@ -184,15 +184,12 @@
 
         </LinearLayout>
 
+        <android.support.design.widget.CoordinatorLayout
+            android:id="@+id/coordinator_snackbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"/>
+
     </RelativeLayout>
-
-    <View
-        android:id="@+id/darken_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#7f000000"
-        android:visibility="gone"/>
-
-    <include layout="@layout/bottom_sheet_behavior"/>
 
 </android.support.design.widget.CoordinatorLayout>

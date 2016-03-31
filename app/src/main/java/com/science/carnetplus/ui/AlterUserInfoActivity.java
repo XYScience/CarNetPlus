@@ -385,4 +385,13 @@ public class AlterUserInfoActivity extends BaseActivity implements View.OnClickL
         setResult(RESULT_OK, intent);
         finish();
     }
+
+    @Override
+    public void onBackPressed() {
+        if (mSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+            mSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        } else {
+            super.onBackPressed();
+        }
+    }
 }

@@ -1,6 +1,5 @@
 package com.science.carnetplus.ui;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -15,7 +14,8 @@ import android.widget.TextView;
 
 import com.science.carnetplus.R;
 import com.science.carnetplus.adapter.baseAdapter.BaseAdapter;
-import com.science.carnetplus.adapter.baseAdapter.ViewHolder;
+import com.science.carnetplus.adapter.baseAdapter.MyCarAdapter;
+import com.science.carnetplus.util.CommonDefine;
 import com.science.carnetplus.util.SnackbarUtils;
 
 import java.util.HashMap;
@@ -34,7 +34,7 @@ public class MyCarsInfoActivity extends BaseActivity {
     private RecyclerView mRecyclerView;
     private FloatingActionButton mFabAddCar;
     private CircularArray<Map<String, String>> mMapList;
-    private MyAdapter mMyAdapter;
+    private MyCarAdapter mMyAdapter;
     private TextView mTextTotalCars;
 
     @Override
@@ -52,7 +52,7 @@ public class MyCarsInfoActivity extends BaseActivity {
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(MyCarsInfoActivity.this));
         mRecyclerView.setHasFixedSize(true);
-        mMyAdapter = new MyAdapter(MyCarsInfoActivity.this, mRecyclerView, getList());
+        mMyAdapter = new MyCarAdapter(MyCarsInfoActivity.this, mRecyclerView, getList());
         mRecyclerView.setAdapter(mMyAdapter);
     }
 
@@ -60,11 +60,11 @@ public class MyCarsInfoActivity extends BaseActivity {
         mMapList = new CircularArray<Map<String, String>>();
         for (int i = 0; i < 4; i++) {
             Map<String, String> map = new HashMap<String, String>();
-            map.put("car_number", "粤A12345");
-            map.put("car_oil_number", "90#");
-            map.put("car_brand", "法拉第");
-            map.put("car_model", "小轿车");
-            map.put("car_color", "黑色");
+            map.put(CommonDefine.CAR_NUMBER, "粤A12345");
+            map.put(CommonDefine.CAR_OIL_NUMBER, "90#");
+            map.put(CommonDefine.CAR_BRAND, "法拉第");
+            map.put(CommonDefine.CAR_MODEL, "小轿车");
+            map.put(CommonDefine.CAR_COLOR, "黑色");
             mMapList.addLast(map);
         }
         return mMapList;
@@ -140,29 +140,4 @@ public class MyCarsInfoActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private class MyAdapter extends BaseAdapter<Map<String, String>> {
-
-        private CircularArray<Map<String, String>> list;
-
-        public MyAdapter(Context context, RecyclerView recyclerView, CircularArray<Map<String, String>> ts) {
-            super(context, recyclerView, ts);
-            list = ts;
-        }
-
-        @Override
-        public int onCreateNormalViewLayoutID(int viewType) {
-            return R.layout.item_my_cars;
-        }
-
-        @Override
-        public void onBindNormalViewHolder(ViewHolder holder, final int position) {
-            Map<String, String> item = list.get(position);
-            holder.setTextView(R.id.number, position + 1 + "，");
-            holder.setTextView(R.id.car_number, item.get("car_number"));
-            holder.setTextView(R.id.car_oil_number, item.get("car_oil_number"));
-            holder.setTextView(R.id.car_brand, item.get("car_brand"));
-            holder.setTextView(R.id.car_model, item.get("car_model"));
-            holder.setTextView(R.id.car_color, item.get("car_color"));
-        }
-    }
 }

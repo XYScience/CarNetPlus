@@ -158,7 +158,7 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseAdapter.RV
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
-                if (!canScrollDown(recyclerView)) {
+//                if (!canScrollDown(recyclerView)) {
 
                     //首次进入不加载
                     if (!mIsLoading && !mFirstEnter) {
@@ -177,7 +177,7 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseAdapter.RV
                             mOnLoadingListener.loading();
                         }
                     }
-                }
+//                }
 
                 if (mFirstEnter) {
                     mFirstEnter = false;
