@@ -12,10 +12,35 @@
         android:id="@+id/appbar"
         layout="@layout/toolbar"/>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <ListView
+            android:id="@+id/list_brand"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:divider="@null"/>
+
+        <TextView
+            android:id="@+id/dialog"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center"
+            android:background="@drawable/oval_bg_gray"
+            android:gravity="center"
+            android:textColor="@android:color/white"
+            android:textSize="30dp"
+            android:visibility="invisible"/>
+
+        <com.science.carnetplus.widget.sortListView.SideBar
+            android:id="@+id/sidrbar"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="right|center"/>
+
+    </FrameLayout>
 
 </android.support.design.widget.CoordinatorLayout>

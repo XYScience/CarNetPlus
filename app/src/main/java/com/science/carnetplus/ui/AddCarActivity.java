@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.science.carnetplus.R;
 import com.science.carnetplus.adapter.CarOilNumberAdapter;
 import com.science.carnetplus.util.AVOSUtils;
+import com.science.carnetplus.util.CommonDefine;
 import com.science.carnetplus.util.CommonUtils;
 import com.science.carnetplus.util.SnackbarUtils;
 import com.science.carnetplus.util.ToastUtils;
@@ -99,7 +100,7 @@ public class AddCarActivity extends BaseActivity implements View.OnClickListener
 
             case R.id.layout_car_brand:
                 Intent intent = new Intent(AddCarActivity.this, CarBrandActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, CommonDefine.INTENT_REQUSET);
                 break;
 
             case R.id.layout_car_type:
@@ -236,6 +237,15 @@ public class AddCarActivity extends BaseActivity implements View.OnClickListener
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //requestCode标示请求的标示   resultCode表示有数据
+        if (requestCode == CommonDefine.INTENT_REQUSET && resultCode == RESULT_OK) {
+            mTextCarBrand.setText(data.getStringExtra(CommonDefine.CAR_BRAND));
+        }
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.done, menu);
         return true;
@@ -256,6 +266,7 @@ public class AddCarActivity extends BaseActivity implements View.OnClickListener
     }
 
     private void addCarDone() {
+        CommonUtils.hideKeyboard(mEditCarNumber, AddCarActivity.this);
         if (CommonUtils.isCarnumberNO(mEditCarNumber.getText().toString())) {
 
         } else {
