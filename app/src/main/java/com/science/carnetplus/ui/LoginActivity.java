@@ -104,6 +104,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 public void getUserInfoListener(List<AVObject> userInfoList) {
 
                 }
+
+                @Override
+                public void getCarListListener(List<AVObject> carList) {
+
+                }
             });
         }
     }
@@ -142,6 +147,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
                     @Override
                     public void getUserInfoListener(List<AVObject> userInfoList) {
+
+                    }
+
+                    @Override
+                    public void getCarListListener(List<AVObject> carList) {
 
                     }
                 });

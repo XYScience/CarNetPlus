@@ -1,24 +1,26 @@
 package com.science.carnetplus.ui;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.util.CircularArray;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
+import com.avos.avoscloud.AVObject;
+import com.avos.avoscloud.AVUser;
 import com.science.carnetplus.R;
-import com.science.carnetplus.adapter.baseAdapter.BaseAdapter;
-import com.science.carnetplus.adapter.baseAdapter.MyCarAdapter;
+import com.science.carnetplus.adapter.MyCarAdapter;
+import com.science.carnetplus.util.AVOSUtils;
 import com.science.carnetplus.util.CommonDefine;
 import com.science.carnetplus.util.SnackbarUtils;
+import com.science.carnetplus.widget.WrapContentLinearLayoutManager;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -33,7 +35,6 @@ public class MyCarsInfoActivity extends BaseActivity {
 
     private RecyclerView mRecyclerView;
     private FloatingActionButton mFabAddCar;
-    private CircularArray<Map<String, String>> mMapList;
     private MyCarAdapter mMyAdapter;
     private TextView mTextTotalCars;
 
@@ -50,29 +51,54 @@ public class MyCarsInfoActivity extends BaseActivity {
         mFabAddCar = (FloatingActionButton) findViewById(R.id.fab_add_car);
         mTextTotalCars = (TextView) findViewById(R.id.total_cars);
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(MyCarsInfoActivity.this));
+        mRecyclerView.setLayoutManager(new WrapContentLinearLayoutManager(MyCarsInfoActivity.this));
         mRecyclerView.setHasFixedSize(true);
-        mMyAdapter = new MyCarAdapter(MyCarsInfoActivity.this, mRecyclerView, getList());
+        mMyAdapter = new MyCarAdapter(MyCarsInfoActivity.this, mRecyclerView);
         mRecyclerView.setAdapter(mMyAdapter);
-    }
-
-    private CircularArray<Map<String, String>> getList() {
-        mMapList = new CircularArray<Map<String, String>>();
-        for (int i = 0; i < 4; i++) {
-            Map<String, String> map = new HashMap<String, String>();
-            map.put(CommonDefine.CAR_NUMBER, "粤A12345");
-            map.put(CommonDefine.CAR_OIL_NUMBER, "90#");
-            map.put(CommonDefine.CAR_BRAND, "法拉第");
-            map.put(CommonDefine.CAR_MODEL, "小轿车");
-            map.put(CommonDefine.CAR_COLOR, "黑色");
-            mMapList.addLast(map);
-        }
-        return mMapList;
     }
 
     @Override
     public void initData() {
-        mTextTotalCars.setText(getString(R.string.total_cars) + mMapList.size());
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AVOSUtils.getInstance().getCarList(AVUser.getCurrentUser().getUsername(), new AVOSUtils.OnAVOSCallback() {
+            @Override
+            public void getAvaterListener(byte[] avatarBytes) {
+
+            }
+
+            @Override
+            public void getUserInfoListener(List<AVObject> userInfoList) {
+            }
+
+            @Override
+            public void getCarListListener(List<AVObject> carList) {
+                mTextTotalCars.setText(getString(R.string.total_cars) + carList.size());
+                setCarList(carList);
+            }
+        });
+    }
+
+    private void setCarList(List<AVObject> list) {
+        CircularArray<Map<String, String>> mapList = new CircularArray<Map<String, String>>();
+        if (list != null && list.size() != 0) {
+            mMyAdapter.setLoadingComplete();
+            for (int i = 0; i < list.size(); i++) {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put(CommonDefine.CAR_NUMBER, list.get(i).getString(CommonDefine.CAR_NUMBER));
+                map.put(CommonDefine.CAR_OIL_NUMBER, list.get(i).getString(CommonDefine.CAR_OIL_NUMBER));
+                map.put(CommonDefine.CAR_BRAND, list.get(i).getString(CommonDefine.CAR_BRAND));
+                map.put(CommonDefine.CAR_MODEL, list.get(i).getString(CommonDefine.CAR_MODEL));
+                map.put(CommonDefine.CAR_COLOR, list.get(i).getString(CommonDefine.CAR_COLOR));
+                mapList.addLast(map);
+            }
+            mMyAdapter.setList(mapList);
+            mMyAdapter.notifyItemRangeInserted(0, list.size());
+        }
     }
 
     @Override
@@ -81,13 +107,6 @@ public class MyCarsInfoActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 SnackbarUtils.showSnackbar(view, "click:" + (position + 1));
-            }
-        });
-
-        mMyAdapter.setOnLoadingListener(new BaseAdapter.OnLoadingListener() {
-            @Override
-            public void loading() {
-                new LoadAsyncTask().execute();
             }
         });
 
@@ -100,35 +119,22 @@ public class MyCarsInfoActivity extends BaseActivity {
         });
     }
 
-    private class LoadAsyncTask extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            mMyAdapter.setLoadingComplete();
-            int size = mMapList.size();
-            for (int i = size + 1; i < size + 3; i++) {
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("car_number", "粤A12345");
-                map.put("car_oil_number", "90#");
-                map.put("car_brand", "法拉第");
-                map.put("car_model", "小轿车");
-                map.put("car_color", "黑色");
-                mMapList.addLast(map);
-            }
-            mMyAdapter.notifyItemRangeInserted(mMapList.size() - 2, 2);
-        }
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        //requestCode标示请求的标示   resultCode表示有数据
+//        if (requestCode == CommonDefine.INTENT_REQUSET && resultCode == RESULT_OK) {
+//            Map<String, String> map = new HashMap<String, String>();
+//            map.put(CommonDefine.CAR_NUMBER, data.getStringExtra(CommonDefine.CAR_NUMBER));
+//            map.put(CommonDefine.CAR_OIL_NUMBER, data.getStringExtra(CommonDefine.CAR_OIL_NUMBER));
+//            map.put(CommonDefine.CAR_BRAND, data.getStringExtra(CommonDefine.CAR_BRAND));
+//            map.put(CommonDefine.CAR_MODEL, data.getStringExtra(CommonDefine.CAR_MODEL));
+//            map.put(CommonDefine.CAR_COLOR, data.getStringExtra(CommonDefine.CAR_COLOR));
+//            mMyAdapter.setNotShowLoading();
+//            mMyAdapter.getList().addFirst(map);
+//            mMyAdapter.notifyItemInserted(0);
+//        }
+//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

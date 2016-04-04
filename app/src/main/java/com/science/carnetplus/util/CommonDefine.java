@@ -44,9 +44,9 @@ public class CommonDefine {
     public static final int INTENT_REQUSET = 1; // ForResult的意图
 
     // my cars
-    public static final String CAR_NUMBER = "car_number";
-    public static final String CAR_OIL_NUMBER = "car_oil_number";
-    public static final String CAR_BRAND = "car_brand";
-    public static final String CAR_MODEL = "car_model";
-    public static final String CAR_COLOR = "car_color";
+    public static final String CAR_NUMBER = "carNumber";
+    public static final String CAR_OIL_NUMBER = "carOilNumber";
+    public static final String CAR_BRAND = "carBrand";
+    public static final String CAR_MODEL = "carType";
+    public static final String CAR_COLOR = "carColor";
 }

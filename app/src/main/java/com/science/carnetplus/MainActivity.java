@@ -123,6 +123,11 @@ public class MainActivity extends BaseActivity
                 msg.obj = userInfoList;
                 mHandler.sendMessage(msg);
             }
+
+            @Override
+            public void getCarListListener(List<AVObject> carList) {
+
+            }
         });
     }
 

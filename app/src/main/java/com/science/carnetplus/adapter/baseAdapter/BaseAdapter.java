@@ -3,8 +3,8 @@ package com.science.carnetplus.adapter.baseAdapter;
 import android.content.Context;
 import android.support.v4.util.CircularArray;
 import android.support.v4.view.ViewCompat;
+import android.support.v4.view.ViewPropertyAnimatorListenerAdapter;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.science.carnetplus.R;
+import com.science.carnetplus.util.MyLogger;
 import com.science.carnetplus.widget.materialProgress.LoadingView;
 
 /**
@@ -41,11 +42,19 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseAdapter.RV
     private boolean mFirstEnter = true;
     private RecyclerView mRecyclerView;
 
-    public BaseAdapter(Context context, RecyclerView recyclerView, CircularArray<T> ts) {
+    public BaseAdapter(Context context, RecyclerView recyclerView) {
         mContext = context;
-        mTs = ts;
+        mTs = new CircularArray<T>();
         mRecyclerView = recyclerView;
         //notifyLoading();
+    }
+
+    public CircularArray<T> getList() {
+        return mTs;
+    }
+
+    public void setList(CircularArray<T> ts) {
+        mTs = ts;
     }
 
     private OnLoadingListener mOnLoadingListener;
@@ -65,6 +74,10 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseAdapter.RV
     public void setOnLoadingListener(OnLoadingListener onLoadingListener) {
         setScrollListener(mRecyclerView);
         mOnLoadingListener = onLoadingListener;
+    }
+
+    public void setNotShowLoading() {
+        mIsLoading = true;
     }
 
     /**
@@ -89,7 +102,15 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseAdapter.RV
         if (mLoadingViewHolder != null) {
             mLoadingViewHolder.loadingProgress.setVisibility(View.GONE);
             mLoadingViewHolder.loadingProgress.stopAnimation();
+            mLoadingViewHolder.tvLoading.setVisibility(View.INVISIBLE);
             mLoadingViewHolder.tvLoading.setText(mContext.getString(R.string.load_complete));
+            ViewCompat.animate(mLoadingViewHolder.tvLoading).alpha(1f).setDuration(400)
+                    .setListener(new ViewPropertyAnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(View view) {
+                            view.setVisibility(View.VISIBLE);
+                        }
+                    }).start();
         }
     }
 
@@ -144,7 +165,7 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseAdapter.RV
      */
     private void setScrollListener(RecyclerView recyclerView) {
         if (recyclerView == null) {
-            Log.e(TAG, ">>>>>>>>>>>>>recycleView 为空");
+            MyLogger.e("recycleView 为空");
             return;
         }
 
@@ -160,23 +181,23 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseAdapter.RV
 
 //                if (!canScrollDown(recyclerView)) {
 
-                    //首次进入不加载
-                    if (!mIsLoading && !mFirstEnter) {
+                //首次进入不加载
+                if (!mIsLoading && !mFirstEnter) {
 
-                        notifyLoading();
+                    notifyLoading();
 
-                        mIsLoading = true;
+                    mIsLoading = true;
 
-                        if (mLoadingViewHolder != null) {
-                            mLoadingViewHolder.loadingProgress.setVisibility(View.VISIBLE);
-                            mLoadingViewHolder.loadingProgress.startAnimation();
-                            mLoadingViewHolder.tvLoading.setText(mContext.getString(R.string.loading));
-                        }
-
-                        if (mOnLoadingListener != null) {
-                            mOnLoadingListener.loading();
-                        }
+                    if (mLoadingViewHolder != null) {
+                        mLoadingViewHolder.loadingProgress.setVisibility(View.VISIBLE);
+                        mLoadingViewHolder.loadingProgress.startAnimation();
+                        mLoadingViewHolder.tvLoading.setText(mContext.getString(R.string.loading));
                     }
+
+                    if (mOnLoadingListener != null) {
+                        mOnLoadingListener.loading();
+                    }
+                }
 //                }
 
                 if (mFirstEnter) {

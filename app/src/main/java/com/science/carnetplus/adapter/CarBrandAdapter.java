@@ -1,7 +1,6 @@
 package com.science.carnetplus.adapter;
 
 import android.content.Context;
-import android.support.v4.util.CircularArray;
 import android.support.v7.widget.RecyclerView;
 
 import com.science.carnetplus.R;
@@ -20,11 +19,8 @@ import java.util.List;
 
 public class CarBrandAdapter extends BaseAdapter<List<String>> {
 
-    public CircularArray<List<String>> mArray;
-
-    public CarBrandAdapter(Context context, RecyclerView recyclerView, CircularArray<List<String>> ts) {
-        super(context, recyclerView, ts);
-        mArray = ts;
+    public CarBrandAdapter(Context context, RecyclerView recyclerView) {
+        super(context, recyclerView);
     }
 
     @Override
@@ -34,7 +30,6 @@ public class CarBrandAdapter extends BaseAdapter<List<String>> {
 
     @Override
     public void onBindNormalViewHolder(ViewHolder holder, int position) {
-        List<String> list = mArray.get(position);
-        holder.setTextView(R.id.text_car_brand, list.get(position));
+        holder.setTextView(R.id.text_car_brand, getList().get(position).get(position));
     }
 }

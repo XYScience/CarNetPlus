@@ -265,8 +265,10 @@ public class CommonUtils {
      * @param view 加载动画的view
      */
     public static void materialRipple(View view) {
-        MaterialRippleLayout.on(view).rippleColor(Color.parseColor("#585858")).
-                rippleAlpha(0.2f).rippleHover(true).rippleOverlay(true).create();
+        if (view != null) {
+            MaterialRippleLayout.on(view).rippleColor(Color.parseColor("#585858")).
+                    rippleAlpha(0.2f).rippleHover(true).rippleOverlay(true).create();
+        }
     }
 
     /**
@@ -276,8 +278,10 @@ public class CommonUtils {
      * @param color 加载的颜色
      */
     public static void materialRipple(View view, String color) {
-        MaterialRippleLayout.on(view).rippleColor(Color.parseColor(color)).
-                rippleAlpha(0.2f).rippleHover(true).rippleOverlay(true).create();
+        if (view != null) {
+            MaterialRippleLayout.on(view).rippleColor(Color.parseColor(color)).
+                    rippleAlpha(0.2f).rippleHover(true).rippleOverlay(true).create();
+        }
     }
 
     /**
@@ -288,8 +292,10 @@ public class CommonUtils {
      * @param alpha
      */
     public static void materialRipple(View view, String color, float alpha) {
-        MaterialRippleLayout.on(view).rippleColor(Color.parseColor(color)).
-                rippleAlpha(alpha).rippleHover(true).rippleOverlay(true).create();
+        if (view != null) {
+            MaterialRippleLayout.on(view).rippleColor(Color.parseColor(color)).
+                    rippleAlpha(alpha).rippleHover(true).rippleOverlay(true).create();
+        }
     }
 
 }

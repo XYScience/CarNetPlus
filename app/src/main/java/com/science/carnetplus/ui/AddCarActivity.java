@@ -7,6 +7,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.util.CircularArray;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,11 +18,15 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVUser;
+import com.avos.avoscloud.SaveCallback;
 import com.science.carnetplus.R;
 import com.science.carnetplus.adapter.CarOilNumberAdapter;
 import com.science.carnetplus.util.AVOSUtils;
 import com.science.carnetplus.util.CommonDefine;
 import com.science.carnetplus.util.CommonUtils;
+import com.science.carnetplus.util.MyLogger;
 import com.science.carnetplus.util.SnackbarUtils;
 import com.science.carnetplus.util.ToastUtils;
 
@@ -38,7 +43,6 @@ import java.util.List;
 
 public class AddCarActivity extends BaseActivity implements View.OnClickListener {
 
-    private AVOSUtils mAVOSUtils;
     private CoordinatorLayout mRootLayout, mCoordinatorSnackBar;
     private RelativeLayout mLayoutContent;
     private EditText mEditCarNumber;
@@ -71,7 +75,6 @@ public class AddCarActivity extends BaseActivity implements View.OnClickListener
         CommonUtils.materialRipple(mLayoutCarBrand, "#585858");
         CommonUtils.materialRipple(mLayoutCarType, "#585858");
         CommonUtils.materialRipple(mLayoutCarColor, "#585858");
-        mAVOSUtils = AVOSUtils.getInstance();
     }
 
     @Override
@@ -133,8 +136,9 @@ public class AddCarActivity extends BaseActivity implements View.OnClickListener
         } else {
             array = getCarColor();
         }
-        CarOilNumberAdapter adapter = new CarOilNumberAdapter(AddCarActivity.this, recyclerView, array);
+        CarOilNumberAdapter adapter = new CarOilNumberAdapter(AddCarActivity.this, recyclerView);
         recyclerView.setAdapter(adapter);
+        adapter.setList(array);
         adapter.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -267,15 +271,47 @@ public class AddCarActivity extends BaseActivity implements View.OnClickListener
 
     private void addCarDone() {
         CommonUtils.hideKeyboard(mEditCarNumber, AddCarActivity.this);
-        if (CommonUtils.isCarnumberNO(mEditCarNumber.getText().toString())) {
-
+        String carNumber = mEditCarNumber.getText().toString();
+        String carOilNumber = mTextCarOilNumber.getText().toString();
+        String carBrand = mTextCarBrand.getText().toString();
+        String carType = mTextCarType.getText().toString();
+        String carColor = mTextCarColor.getText().toString();
+        if (CommonUtils.isCarnumberNO(carNumber)) {
+            if (!TextUtils.isEmpty(carOilNumber)) {
+                if (!TextUtils.isEmpty(carBrand)) {
+                    if (!TextUtils.isEmpty(carType)) {
+                        if (!TextUtils.isEmpty(carColor)) {
+                            saveCarInfo(carNumber, carOilNumber, carBrand, carType, carColor);
+                        } else {
+                            SnackbarUtils.showSnackbar(mCoordinatorSnackBar, getString(R.string.car_color_please_select));
+                        }
+                    } else {
+                        SnackbarUtils.showSnackbar(mCoordinatorSnackBar, getString(R.string.car_type_please_select));
+                    }
+                } else {
+                    SnackbarUtils.showSnackbar(mCoordinatorSnackBar, getString(R.string.car_brand_please_select));
+                }
+            } else {
+                SnackbarUtils.showSnackbar(mCoordinatorSnackBar, getString(R.string.car_oil_number_please_select));
+            }
         } else {
             SnackbarUtils.showSnackbar(mCoordinatorSnackBar, getString(R.string.car_number_please_enter_correct));
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
+    private void saveCarInfo(final String carNumber, final String carOilNumber,
+                             final String carBrand, final String carType, final String carColor) {
+        AVOSUtils.getInstance().saveCarInfo(AVUser.getCurrentUser().getUsername(), carNumber, carOilNumber, carBrand, carType, carColor,
+                new SaveCallback() {
+                    @Override
+                    public void done(AVException e) {
+                        if (e == null) {
+                            finish();
+                        } else {
+                            MyLogger.e(e);
+                        }
+                    }
+                });
     }
+
 }

@@ -27,6 +27,8 @@ public class AVOSUtils {
         void getAvaterListener(byte[] avatarBytes);
 
         void getUserInfoListener(List<AVObject> userInfoList);
+
+        void getCarListListener(List<AVObject> carList);
     }
 
     private volatile static AVOSUtils avosUtils;
@@ -215,6 +217,45 @@ public class AVOSUtils {
             public void done(List<AVObject> avObjects, AVException e) {
                 if (e == null) {
                     callback.getUserInfoListener(avObjects);
+                }
+            }
+        });
+    }
+
+    /**
+     * 保存车辆信息
+     *
+     * @param carNumber
+     * @param carOilNumber
+     * @param carBrand
+     * @param carType
+     * @param carColor
+     * @param saveCallback
+     */
+    public void saveCarInfo(String username, String carNumber, String carOilNumber, String carBrand,
+                            String carType, String carColor, SaveCallback saveCallback) {
+        AVObject avObject = new AVObject("CarInfo");
+        avObject.put("username", username);
+        avObject.put("carNumber", carNumber);
+        avObject.put("carOilNumber", carOilNumber);
+        avObject.put("carBrand", carBrand);
+        avObject.put("carType", carType);
+        avObject.put("carColor", carColor);
+        avObject.saveInBackground(saveCallback);
+    }
+
+    /**
+     * 得到车辆信息
+     */
+    public void getCarList(String username, final OnAVOSCallback callback) {
+        AVQuery<AVObject> query = new AVQuery<AVObject>("CarInfo");
+        query.whereEqualTo("username", username);
+        // 根据 createdAt 字段降序显示数据
+        query.orderByDescending("createdAt");
+        query.findInBackground(new FindCallback<AVObject>() {
+            public void done(List<AVObject> avObjects, AVException e) {
+                if (e == null) {
+                    callback.getCarListListener(avObjects);
                 }
             }
         });
