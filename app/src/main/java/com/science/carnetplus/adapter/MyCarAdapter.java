@@ -7,6 +7,7 @@ import com.science.carnetplus.R;
 import com.science.carnetplus.adapter.baseAdapter.BaseAdapter;
 import com.science.carnetplus.adapter.baseAdapter.ViewHolder;
 import com.science.carnetplus.util.CommonDefine;
+import com.science.carnetplus.widget.LabelView;
 
 import java.util.Map;
 
@@ -20,6 +21,8 @@ import java.util.Map;
 
 public class MyCarAdapter extends BaseAdapter<Map<String, String>> {
 
+    private LabelView mLabelView;
+
     public MyCarAdapter(Context context, RecyclerView recyclerView) {
         super(context, recyclerView);
     }
@@ -32,11 +35,16 @@ public class MyCarAdapter extends BaseAdapter<Map<String, String>> {
     @Override
     public void onBindNormalViewHolder(ViewHolder holder, final int position) {
         Map<String, String> item = getList().get(position);
+        mLabelView = holder.getLabelView(R.id.labelView);
         holder.setTextView(R.id.number, position + 1 + "，");
         holder.setTextView(R.id.car_number, item.get(CommonDefine.CAR_NUMBER));
         holder.setTextView(R.id.car_oil_number, item.get(CommonDefine.CAR_OIL_NUMBER));
         holder.setTextView(R.id.car_brand, item.get(CommonDefine.CAR_BRAND));
         holder.setTextView(R.id.car_model, item.get(CommonDefine.CAR_MODEL));
         holder.setTextView(R.id.car_color, item.get(CommonDefine.CAR_COLOR));
+    }
+
+    public LabelView getLabelView() {
+        return mLabelView;
     }
 }

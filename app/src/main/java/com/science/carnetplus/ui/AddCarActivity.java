@@ -306,6 +306,13 @@ public class AddCarActivity extends BaseActivity implements View.OnClickListener
                     @Override
                     public void done(AVException e) {
                         if (e == null) {
+                            Intent intent = new Intent();
+                            intent.putExtra(CommonDefine.CAR_NUMBER, carNumber);
+                            intent.putExtra(CommonDefine.CAR_OIL_NUMBER, carOilNumber);
+                            intent.putExtra(CommonDefine.CAR_BRAND, carBrand);
+                            intent.putExtra(CommonDefine.CAR_MODEL, carType);
+                            intent.putExtra(CommonDefine.CAR_COLOR, carColor);
+                            setResult(RESULT_OK, intent);
                             finish();
                         } else {
                             MyLogger.e(e);
