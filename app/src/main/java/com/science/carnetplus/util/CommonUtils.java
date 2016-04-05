@@ -267,7 +267,7 @@ public class CommonUtils {
     public static void materialRipple(View view) {
         if (view != null) {
             MaterialRippleLayout.on(view).rippleColor(Color.parseColor("#585858")).
-                    rippleAlpha(0.2f).rippleHover(true).rippleOverlay(true).create();
+                    rippleAlpha(0.2f).rippleHover(true).rippleDuration(300).create();
         }
     }
 
@@ -280,7 +280,7 @@ public class CommonUtils {
     public static void materialRipple(View view, String color) {
         if (view != null) {
             MaterialRippleLayout.on(view).rippleColor(Color.parseColor(color)).
-                    rippleAlpha(0.2f).rippleHover(true).rippleOverlay(true).create();
+                    rippleAlpha(0.2f).rippleHover(true).rippleDuration(300).create();
         }
     }
 
@@ -294,7 +294,7 @@ public class CommonUtils {
     public static void materialRipple(View view, String color, float alpha) {
         if (view != null) {
             MaterialRippleLayout.on(view).rippleColor(Color.parseColor(color)).
-                    rippleAlpha(alpha).rippleHover(true).rippleOverlay(true).create();
+                    rippleAlpha(alpha).rippleHover(true).rippleDuration(300).create();
         }
     }
 
