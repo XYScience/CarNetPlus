@@ -32,6 +32,7 @@ import com.science.carnetplus.ui.UserInfoActivity;
 import com.science.carnetplus.util.AVOSUtils;
 import com.science.carnetplus.util.CommonDefine;
 import com.science.carnetplus.util.FileUtil;
+import com.science.carnetplus.util.MyLogger;
 import com.science.carnetplus.util.StatusBarCompat;
 import com.science.carnetplus.util.ToastUtils;
 
@@ -60,6 +61,7 @@ public class MainActivity extends BaseActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MyLogger.e("程序启动");
         StatusBarCompat.compat(MainActivity.this, Color.TRANSPARENT, false);
     }
 

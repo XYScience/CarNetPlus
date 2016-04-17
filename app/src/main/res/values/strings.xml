@@ -110,8 +110,9 @@
     <string name="man">男</string>
     <string name="lady">女</string>
 
-    <!-- MyCarsInfoActivity -->
+    <!-- CarsListActivity -->
     <string name="total_cars">共有车辆：</string>
+    <string name="car_default">默认</string>
 
     <!-- AddCarActivity -->
     <string name="add_car">添加车辆</string>

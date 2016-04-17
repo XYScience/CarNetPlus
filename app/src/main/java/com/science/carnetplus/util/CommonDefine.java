@@ -47,6 +47,7 @@ public class CommonDefine {
     public static final String CAR_NUMBER = "carNumber";
     public static final String CAR_OIL_NUMBER = "carOilNumber";
     public static final String CAR_BRAND = "carBrand";
-    public static final String CAR_MODEL = "carType";
+    public static final String CAR_TYPE = "carType";
     public static final String CAR_COLOR = "carColor";
+    public static final String CAR_DEFAULT = "carDefault";
 }

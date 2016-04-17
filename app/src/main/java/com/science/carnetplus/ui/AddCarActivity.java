@@ -2,6 +2,8 @@ package com.science.carnetplus.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.util.CircularArray;
@@ -43,7 +45,7 @@ import java.util.List;
 
 public class AddCarActivity extends BaseActivity implements View.OnClickListener {
 
-    private CoordinatorLayout mRootLayout, mCoordinatorSnackBar;
+    private CoordinatorLayout mCoordinatorSnackBar;
     private RelativeLayout mLayoutContent;
     private EditText mEditCarNumber;
     private RelativeLayout mLayoutCarOilNumber, mLayoutCarBrand, mLayoutCarType, mLayoutCarColor;
@@ -59,7 +61,6 @@ public class AddCarActivity extends BaseActivity implements View.OnClickListener
         setContentView(R.layout.activity_add_car);
         setToolbar(getString(R.string.add_car));
 
-        mRootLayout = (CoordinatorLayout) findViewById(R.id.root_layout);
         mCoordinatorSnackBar = (CoordinatorLayout) findViewById(R.id.coordinator_snackbar);
         mLayoutContent = (RelativeLayout) findViewById(R.id.content_layout);
         mEditCarNumber = (EditText) findViewById(R.id.edit_car_number);
@@ -301,24 +302,46 @@ public class AddCarActivity extends BaseActivity implements View.OnClickListener
 
     private void saveCarInfo(final String carNumber, final String carOilNumber,
                              final String carBrand, final String carType, final String carColor) {
-        AVOSUtils.getInstance().saveCarInfo(AVUser.getCurrentUser().getUsername(), carNumber, carOilNumber, carBrand, carType, carColor,
-                new SaveCallback() {
-                    @Override
-                    public void done(AVException e) {
-                        if (e == null) {
-                            Intent intent = new Intent();
-                            intent.putExtra(CommonDefine.CAR_NUMBER, carNumber);
-                            intent.putExtra(CommonDefine.CAR_OIL_NUMBER, carOilNumber);
-                            intent.putExtra(CommonDefine.CAR_BRAND, carBrand);
-                            intent.putExtra(CommonDefine.CAR_MODEL, carType);
-                            intent.putExtra(CommonDefine.CAR_COLOR, carColor);
-                            setResult(RESULT_OK, intent);
-                            finish();
-                        } else {
-                            MyLogger.e(e);
-                        }
-                    }
-                });
+        mHandler.sendEmptyMessageDelayed(0, 0);
+        Message message = new Message();
+        message.what = 1;
+        Bundle bundle = new Bundle();
+        bundle.putStringArray("car", new String[]{carNumber, carOilNumber, carBrand, carType, carColor});
+        message.setData(bundle);
+        mHandler.sendMessageDelayed(message, 500);
     }
+
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            AVOSUtils avosUtils = AVOSUtils.getInstance();
+            if (msg.what == 0) {
+                avosUtils.setNoDefaultCar(AVUser.getCurrentUser().getUsername());
+            } else if (msg.what == 1) {
+                Bundle bundle = msg.getData();
+                final String[] car = bundle.getStringArray("car");
+                avosUtils.saveCarInfo(AVUser.getCurrentUser().getUsername(), car[0],
+                        car[1], car[2], car[3], car[4], "0", new SaveCallback() {
+                            @Override
+                            public void done(AVException e) {
+                                if (e == null) {
+                                    Intent intent = new Intent();
+                                    intent.putExtra(CommonDefine.CAR_NUMBER, car[0]);
+                                    intent.putExtra(CommonDefine.CAR_OIL_NUMBER, car[1]);
+                                    intent.putExtra(CommonDefine.CAR_BRAND, car[2]);
+                                    intent.putExtra(CommonDefine.CAR_TYPE, car[3]);
+                                    intent.putExtra(CommonDefine.CAR_COLOR, car[4]);
+                                    intent.putExtra(CommonDefine.CAR_DEFAULT, "0");
+                                    setResult(RESULT_OK, intent);
+                                    finish();
+                                } else {
+                                    MyLogger.e(e);
+                                }
+                            }
+                        });
+            }
+        }
+    };
 
 }

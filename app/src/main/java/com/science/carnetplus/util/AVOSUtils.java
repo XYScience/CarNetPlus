@@ -233,15 +233,82 @@ public class AVOSUtils {
      * @param saveCallback
      */
     public void saveCarInfo(String username, String carNumber, String carOilNumber, String carBrand,
-                            String carType, String carColor, SaveCallback saveCallback) {
+                            String carType, String carColor, String defaultCar, SaveCallback saveCallback) {
         AVObject avObject = new AVObject("CarInfo");
         avObject.put("username", username);
-        avObject.put("carNumber", carNumber);
-        avObject.put("carOilNumber", carOilNumber);
-        avObject.put("carBrand", carBrand);
-        avObject.put("carType", carType);
-        avObject.put("carColor", carColor);
+        avObject.put(CommonDefine.CAR_NUMBER, carNumber);
+        avObject.put(CommonDefine.CAR_OIL_NUMBER, carOilNumber);
+        avObject.put(CommonDefine.CAR_BRAND, carBrand);
+        avObject.put(CommonDefine.CAR_TYPE, carType);
+        avObject.put(CommonDefine.CAR_COLOR, carColor);
+        avObject.put(CommonDefine.CAR_DEFAULT, defaultCar);
         avObject.saveInBackground(saveCallback);
+    }
+
+    /**
+     * 更新默认汽车
+     *
+     * @param username
+     */
+    public void setDefaultCar(String username, String carNumber, final String defaultCar) {
+        final AVQuery<AVObject> query = new AVQuery<AVObject>("CarInfo");
+        query.whereEqualTo("username", username);
+        query.whereEqualTo(CommonDefine.CAR_NUMBER, carNumber);
+        query.findInBackground(new FindCallback<AVObject>() {
+            @Override
+            public void done(final List<AVObject> list, AVException e) {
+                if (list != null && list.size() != 0) {
+                    final String objectId = list.get(list.size() - 1).getObjectId();
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AVObject avObject = null;
+                            try {
+                                avObject = query.get(objectId);
+                                avObject.put(CommonDefine.CAR_DEFAULT, defaultCar);
+                                avObject.save();
+                            } catch (AVException e1) {
+                                e1.printStackTrace();
+                            }
+                        }
+                    }).start();
+                }
+            }
+        });
+    }
+
+    /**
+     * 设置非默认汽车
+     *
+     * @param username
+     */
+    public void setNoDefaultCar(String username) {
+        final AVQuery<AVObject> query = new AVQuery<AVObject>("CarInfo");
+        query.whereEqualTo("username", username);
+        query.whereEqualTo(CommonDefine.CAR_DEFAULT, "0");
+        query.findInBackground(new FindCallback<AVObject>() {
+            @Override
+            public void done(final List<AVObject> list, AVException e) {
+                if (list != null && list.size() != 0) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AVObject avObject = null;
+                            try {
+                                for (int i = 0; i < list.size(); i++) {
+                                    String objectId = list.get(i).getObjectId();
+                                    avObject = query.get(objectId);
+                                    avObject.put(CommonDefine.CAR_DEFAULT, "-1");
+                                    avObject.save();
+                                }
+                            } catch (AVException e1) {
+                                e1.printStackTrace();
+                            }
+                        }
+                    }).start();
+                }
+            }
+        });
     }
 
     /**
@@ -251,7 +318,7 @@ public class AVOSUtils {
         AVQuery<AVObject> query = new AVQuery<AVObject>("CarInfo");
         query.whereEqualTo("username", username);
         // 根据 createdAt 字段降序显示数据
-        query.orderByDescending("createdAt");
+        query.orderByDescending("updatedAt");
         query.findInBackground(new FindCallback<AVObject>() {
             public void done(List<AVObject> avObjects, AVException e) {
                 if (e == null) {

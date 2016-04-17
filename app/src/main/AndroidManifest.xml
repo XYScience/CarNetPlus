@@ -70,7 +70,7 @@
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".ui.MyCarsInfoActivity"
+            android:name=".ui.CarsListActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"/>
 

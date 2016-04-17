@@ -2,6 +2,8 @@ package com.science.carnetplus.util;
 
 import android.util.Log;
 
+import java.text.SimpleDateFormat;
+
 /**
  * @author 幸运Science-陈土燊
  * @description 养眼log~~
@@ -15,63 +17,65 @@ public class MyLogger {
     public static boolean IS_DEBUG = true;
 
     /**
-     * 原始打印方法
+     * 最终的打印方法
+     * 打印内容：tag:>>>>>>>>>>;
+     * msg:方法名(类名.java：行数): 要打印的信息
      *
      * @param msg 信息
      */
-    private static void takeLogE(String className, String methodName, String msg) {
-        if (IS_DEBUG) {
-            //为了看起来养眼,对类名前缀的长度进行统一
-            if (className.length() > 24) {
-                className = className.substring(0, 24) + "...";
-            }
-            if (methodName.length() > 24) {
-                methodName = methodName.substring(0, 24) + "...:";
-            }
-            Log.e(className, methodName + msg);
-        }
+    private static void takeLogE(String methodLine, String msg) {
+        Log.e(">>>>>>>>>>", methodLine + msg);
     }
 
     public static void e(Object msg) {
-        String className = getClassName();
-        String methodLine = getMethodLine();
-        takeLogE(className, methodLine, String.valueOf(msg));
+        if (IS_DEBUG) {
+            String methodLine = getMethodAndLine();
+            takeLogE(methodLine, String.valueOf(msg));
+        }
     }
 
     /**
-     * 打印的时候带上类名
+     * 打印方法的类名
      *
      * @return 类名前缀
      */
     public static String getClassName() {
-        if (!IS_DEBUG) {
-            return null;
-        }
         StackTraceElement traceElement = ((new Exception()).getStackTrace())[2];
         String className = traceElement.getFileName();
         //去除文件名中的后缀
         if (className.contains(".java")) {
             className = className.substring(0, className.length() - 5);
         }
-        return className + ">>>>>>>>>>>>>>>>>>>>>>>>";
+        return className;
     }
 
-    public static String getMethodName() {
-        if (!IS_DEBUG) {
-            return null;
-        }
+    /**
+     * 打印的方法+类名+所在行数(显示超链)
+     */
+    private static String getMethodAndLine() {
+        String result = "";
         StackTraceElement traceElement = ((new Exception()).getStackTrace())[2];
-        String methodName = traceElement.getMethodName();
-        return methodName + ">>>>>>>>>>>>>>>>>>>>>>>>";
+        result += traceElement.getMethodName();
+        result += "(" + traceElement.getFileName();
+        result += ":" + traceElement.getLineNumber() + "): ";
+        return result;
     }
 
-    public static String getMethodLine() {
-        if (!IS_DEBUG) {
-            return null;
+    /**
+     * 打印分割线,主要用于程序启动或销毁时在log中做标记
+     *
+     * @param msg 信息
+     */
+    public static void line(String msg) {
+        if (IS_DEBUG) {
+            takeLogE("---====================================---\n" +
+                    "\t我是" + msg + "的分割线-" + getCurrentTime() +
+                    "\n---====================================---", null);
         }
-        StackTraceElement traceElement = ((new Exception()).getStackTrace())[2];
-        String methodName = traceElement.getMethodName();
-        int methodLine = traceElement.getLineNumber();
-        return methodName + "-" + methodLine + ">>>>>>>>>>>>>>>>>>>>>>>>";
+    }
+
+    public static String getCurrentTime() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return dateFormat.format(System.currentTimeMillis());
     }
 }
