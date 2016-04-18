@@ -113,6 +113,9 @@
     <!-- CarsListActivity -->
     <string name="total_cars">共有车辆：</string>
     <string name="car_default">默认</string>
+    <string name="set_car_default">设为默认</string>
+    <string name="modify">修改</string>
+    <string name="delete">删除</string>
 
     <!-- AddCarActivity -->
     <string name="add_car">添加车辆</string>

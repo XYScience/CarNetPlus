@@ -49,4 +49,13 @@
         android:src="@drawable/ic_add"
         app:layout_behavior="com.science.carnetplus.widget.FABScrollBehavior"/>
 
+    <View
+        android:id="@+id/darken_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/dialogBg"
+        android:visibility="gone"/>
+
+    <include layout="@layout/bottom_sheet_car_list"/>
+
 </android.support.design.widget.CoordinatorLayout>

@@ -27,6 +27,7 @@
                 android:id="@+id/bottom_sheet_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/windowBackground"
                 android:gravity="center_vertical"
                 android:minHeight="56dp"
                 android:paddingLeft="16dp"
@@ -43,16 +44,15 @@
                 app:mrl_rippleOverlay="true">
 
                 <TextView
-                    android:id="@+id/text_camera"
+                    android:id="@+id/text_set_car_default"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_photo_camera_grey"
                     android:drawablePadding="32dp"
                     android:gravity="center_vertical"
                     android:minHeight="48dp"
                     android:paddingLeft="16dp"
                     android:paddingRight="16dp"
-                    android:text="@string/camera"
+                    android:text="@string/set_car_default"
                     android:textSize="16sp"/>
 
             </com.balysv.materialripple.MaterialRippleLayout>
@@ -66,18 +66,38 @@
                 app:mrl_rippleOverlay="true">
 
                 <TextView
-                    android:id="@+id/text_gallery"
+                    android:id="@+id/text_modify"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_photo_grey"
                     android:drawablePadding="32dp"
                     android:gravity="center_vertical"
                     android:minHeight="48dp"
                     android:paddingLeft="16dp"
                     android:paddingRight="16dp"
-                    android:text="@string/gallery"
+                    android:text="@string/modify"
                     android:textSize="16sp"/>
 
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:mrl_rippleAlpha="0.2"
+                app:mrl_rippleColor="@color/ripple_white"
+                app:mrl_rippleHover="true"
+                app:mrl_rippleOverlay="true">
+
+                <TextView
+                    android:id="@+id/text_delete"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="32dp"
+                    android:gravity="center_vertical"
+                    android:minHeight="48dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:text="@string/delete"
+                    android:textSize="16sp"/>
             </com.balysv.materialripple.MaterialRippleLayout>
 
             <com.balysv.materialripple.MaterialRippleLayout
@@ -92,7 +112,6 @@
                     android:id="@+id/text_cancel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_cancel_grey"
                     android:drawablePadding="32dp"
                     android:gravity="center_vertical"
                     android:minHeight="48dp"

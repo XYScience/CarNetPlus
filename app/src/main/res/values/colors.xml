@@ -10,6 +10,7 @@
     <color name="windowBackground">#EEEEEE</color>
     <color name="textColor">#FFFFFF</color>
     <color name="textHintColor">#ADADAD</color>
+    <color name="dialogBg">#9f000000</color>
 
     <!-- swipeRefresh color -->
     <color name="swipe_blue">#4285f4</color>

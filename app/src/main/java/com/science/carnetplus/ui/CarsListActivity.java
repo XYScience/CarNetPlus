@@ -4,11 +4,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
@@ -17,6 +22,7 @@ import com.avos.avoscloud.AVUser;
 import com.science.carnetplus.R;
 import com.science.carnetplus.adapter.CarListAdapter;
 import com.science.carnetplus.util.AVOSUtils;
+import com.science.carnetplus.util.BottomSheetBehaviorUtils;
 import com.science.carnetplus.util.CommonDefine;
 
 import java.util.ArrayList;
@@ -33,7 +39,7 @@ import java.util.Map;
  * @data 2016/3/24
  */
 
-public class CarsListActivity extends BaseActivity {
+public class CarsListActivity extends BaseActivity implements View.OnClickListener {
 
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -42,6 +48,12 @@ public class CarsListActivity extends BaseActivity {
     private TextView mTextTotalCars;
     private int carListSize;
     private AVOSUtils mAVOSUtils;
+    private CoordinatorLayout mRootLayout;
+    private View mDarkenLayout;
+    private BottomSheetBehavior mSheetBehavior;
+    private View mBottomSheet;
+    private TextView mTextBottomSheetTitle, mTextSetCarDefault, mTextModify, mTextDelete, mTextCancel;
+    private int mPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +83,15 @@ public class CarsListActivity extends BaseActivity {
                 mSwipeRefreshLayout.setRefreshing(true);
             }
         });
+        mRootLayout = (CoordinatorLayout) findViewById(R.id.root_layout);
+        mDarkenLayout = findViewById(R.id.darken_layout);
+        mBottomSheet = findViewById(R.id.design_bottom_sheet);
+        mSheetBehavior = BottomSheetBehavior.from(mBottomSheet);
+        mTextBottomSheetTitle = (TextView) findViewById(R.id.bottom_sheet_title);
+        mTextSetCarDefault = (TextView) findViewById(R.id.text_set_car_default);
+        mTextModify = (TextView) findViewById(R.id.text_modify);
+        mTextDelete = (TextView) findViewById(R.id.text_delete);
+        mTextCancel = (TextView) findViewById(R.id.text_cancel);
         mAVOSUtils = AVOSUtils.getInstance();
     }
 
@@ -121,29 +142,23 @@ public class CarsListActivity extends BaseActivity {
             }
             mMyAdapter.setMapList(mapList);
             mMyAdapter.notifyDataSetChanged();
+            mRecyclerView.scrollToPosition(0);
         }
     }
 
     @Override
     public void initListener() {
+        mTextSetCarDefault.setOnClickListener(this);
+        mTextModify.setOnClickListener(this);
+        mTextDelete.setOnClickListener(this);
+        mTextCancel.setOnClickListener(this);
+
         mMyAdapter.setOnItemClickListener(new CarListAdapter.OnItemClickListener() {
             @Override
             public void onClick(View view, int position) {
-                int size = mMyAdapter.getMapList().size();
-                if (size > 1) {
-                    for (int i = 0; i < size; i++) {
-                        if ("0".equals(mMyAdapter.getMapList().get(i).get(CommonDefine.CAR_DEFAULT))) {
-                            mMyAdapter.getMapList().get(i).put(CommonDefine.CAR_DEFAULT, "-1");
-                        }
-                    }
-                    mMyAdapter.getMapList().get(position).put(CommonDefine.CAR_DEFAULT, "0");
-                    Collections.swap(mMyAdapter.getMapList(), position, 0);
-                    mMyAdapter.notifyDataSetChanged();
-                    mRecyclerView.scrollToPosition(0);
-
-                    mHandler.sendEmptyMessageDelayed(0, 0);
-                    mHandler.sendEmptyMessageDelayed(1, 500);
-                }
+                mPosition = position;
+                mTextBottomSheetTitle.setText(mMyAdapter.getMapList().get(position).get(CommonDefine.CAR_NUMBER));
+                mSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
             }
         });
 
@@ -151,6 +166,7 @@ public class CarsListActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(CarsListActivity.this, AddCarActivity.class);
+                intent.putExtra(CommonDefine.INTENT_ACTIVITY, CommonDefine.INTENT_REQUSET);
                 startActivityForResult(intent, CommonDefine.INTENT_REQUSET);
             }
         });
@@ -159,6 +175,50 @@ public class CarsListActivity extends BaseActivity {
             @Override
             public void onRefresh() {
                 getCarList();
+            }
+        });
+
+        // BottomSheet展开时，点击暗色屏幕收起BottomSheet
+        mDarkenLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            }
+        });
+
+        // 取消滑动BottomSheet以外的地方而拖出BottomSheet
+        mRootLayout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                if (mSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
+                    mSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                }
+                return true;
+            }
+        });
+
+        mSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            boolean hasRequest;
+
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                if (newState == BottomSheetBehavior.STATE_COLLAPSED || newState == BottomSheetBehavior.STATE_HIDDEN) {
+                    mDarkenLayout.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+                // BottomSheet展开和收起屏幕变暗变亮
+                mDarkenLayout.setVisibility(View.VISIBLE);
+                ViewCompat.setAlpha(mDarkenLayout, slideOffset);
+
+                if (!hasRequest && mSheetBehavior.getPeekHeight() == 0 && slideOffset > 0) {
+                    hasRequest = true;
+                    BottomSheetBehaviorUtils.updateOffsets(bottomSheet);
+                }
             }
         });
     }
@@ -172,9 +232,81 @@ public class CarsListActivity extends BaseActivity {
             } else if (msg.what == 1) {
                 mAVOSUtils.setDefaultCar(AVUser.getCurrentUser().getUsername().toString(),
                         mMyAdapter.getMapList().get(0).get(CommonDefine.CAR_NUMBER), "0");
+            } else if (msg.what == 2) {
+                getCarList();
             }
         }
     };
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.text_set_car_default:
+                setCarDefault();
+                mSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                break;
+
+            case R.id.text_modify:
+                modifyCar();
+                mSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                break;
+
+            case R.id.text_delete:
+                deleteCar();
+                mSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                break;
+
+            case R.id.text_cancel:
+                mSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                break;
+        }
+    }
+
+    /**
+     * 设置为默认车型
+     */
+    private void setCarDefault() {
+        int size = mMyAdapter.getMapList().size();
+        if (size > 1) {
+            for (int i = 0; i < size; i++) {
+                if ("0".equals(mMyAdapter.getMapList().get(i).get(CommonDefine.CAR_DEFAULT))) {
+                    mMyAdapter.getMapList().get(i).put(CommonDefine.CAR_DEFAULT, "-1");
+                }
+            }
+            mMyAdapter.getMapList().get(mPosition).put(CommonDefine.CAR_DEFAULT, "0");
+            Collections.swap(mMyAdapter.getMapList(), mPosition, 0);
+            mMyAdapter.notifyDataSetChanged();
+            mRecyclerView.scrollToPosition(0);
+
+            mHandler.sendEmptyMessageDelayed(0, 0);
+            mHandler.sendEmptyMessageDelayed(1, 500);
+        }
+    }
+
+    /**
+     * 删除车辆
+     */
+    private void deleteCar() {
+        String carNumber = mMyAdapter.getMapList().get(mPosition).get(CommonDefine.CAR_NUMBER);
+        mMyAdapter.getMapList().remove(mPosition);
+        mMyAdapter.notifyDataSetChanged();
+        mAVOSUtils.deleteCar(AVUser.getCurrentUser().getUsername().toString(), carNumber);
+        mTextTotalCars.setText(getString(R.string.total_cars) + (carListSize - 1));
+    }
+
+    /**
+     * 修改车辆
+     */
+    private void modifyCar() {
+        Intent intent = new Intent(CarsListActivity.this, AddCarActivity.class);
+        intent.putExtra(CommonDefine.CAR_NUMBER, mMyAdapter.getMapList().get(mPosition).get(CommonDefine.CAR_NUMBER));
+        intent.putExtra(CommonDefine.CAR_OIL_NUMBER, mMyAdapter.getMapList().get(mPosition).get(CommonDefine.CAR_OIL_NUMBER));
+        intent.putExtra(CommonDefine.CAR_BRAND, mMyAdapter.getMapList().get(mPosition).get(CommonDefine.CAR_BRAND));
+        intent.putExtra(CommonDefine.CAR_TYPE, mMyAdapter.getMapList().get(mPosition).get(CommonDefine.CAR_TYPE));
+        intent.putExtra(CommonDefine.CAR_COLOR, mMyAdapter.getMapList().get(mPosition).get(CommonDefine.CAR_COLOR));
+        intent.putExtra(CommonDefine.INTENT_ACTIVITY, CommonDefine.INTENT_REQUSET_2);
+        startActivityForResult(intent, CommonDefine.INTENT_REQUSET_2);
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -200,6 +332,14 @@ public class CarsListActivity extends BaseActivity {
             mMyAdapter.getMapList().add(0, map);
             mMyAdapter.notifyDataSetChanged();
             mTextTotalCars.setText(getString(R.string.total_cars) + (carListSize + 1));
+        } else if (requestCode == CommonDefine.INTENT_REQUSET_2 && resultCode == RESULT_OK) {
+            mSwipeRefreshLayout.post(new Runnable() {
+                @Override
+                public void run() {
+                    mSwipeRefreshLayout.setRefreshing(true);
+                }
+            });
+            mHandler.sendEmptyMessageDelayed(2, 500);
         }
     }
 
@@ -212,5 +352,4 @@ public class CarsListActivity extends BaseActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
 }

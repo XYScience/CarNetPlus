@@ -59,7 +59,7 @@ public class AddCarActivity extends BaseActivity implements View.OnClickListener
     @Override
     public void initView() {
         setContentView(R.layout.activity_add_car);
-        setToolbar(getString(R.string.add_car));
+        setToolbar(getString(R.string.my_cars));
 
         mCoordinatorSnackBar = (CoordinatorLayout) findViewById(R.id.coordinator_snackbar);
         mLayoutContent = (RelativeLayout) findViewById(R.id.content_layout);
@@ -80,7 +80,14 @@ public class AddCarActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void initData() {
-
+        mEditCarNumber.setText(getIntent().getStringExtra(CommonDefine.CAR_NUMBER));
+        mTextCarOilNumber.setText(getIntent().getStringExtra(CommonDefine.CAR_OIL_NUMBER));
+        mTextCarBrand.setText(getIntent().getStringExtra(CommonDefine.CAR_BRAND));
+        mTextCarType.setText(getIntent().getStringExtra(CommonDefine.CAR_TYPE));
+        mTextCarColor.setText(getIntent().getStringExtra(CommonDefine.CAR_COLOR));
+        if (getIntent().getIntExtra(CommonDefine.INTENT_ACTIVITY, 1) == CommonDefine.INTENT_REQUSET_2) {
+            mEditCarNumber.setFocusable(false);
+        }
     }
 
     @Override
@@ -282,7 +289,18 @@ public class AddCarActivity extends BaseActivity implements View.OnClickListener
                 if (!TextUtils.isEmpty(carBrand)) {
                     if (!TextUtils.isEmpty(carType)) {
                         if (!TextUtils.isEmpty(carColor)) {
-                            saveCarInfo(carNumber, carOilNumber, carBrand, carType, carColor);
+                            int intentExtra = getIntent().getIntExtra(CommonDefine.INTENT_ACTIVITY, 1);
+                            if (intentExtra == CommonDefine.INTENT_REQUSET) {
+                                saveCarInfo(carNumber, carOilNumber, carBrand, carType, carColor);
+                            } else if (intentExtra == CommonDefine.INTENT_REQUSET_2) {
+                                mHandler.sendEmptyMessageDelayed(0, 0);
+                                Message message = new Message();
+                                message.what = 2;
+                                Bundle bundle = new Bundle();
+                                bundle.putStringArray("car", new String[]{carNumber, carOilNumber, carBrand, carType, carColor});
+                                message.setData(bundle);
+                                mHandler.sendMessageDelayed(message, 500);
+                            }
                         } else {
                             SnackbarUtils.showSnackbar(mCoordinatorSnackBar, getString(R.string.car_color_please_select));
                         }
@@ -340,6 +358,14 @@ public class AddCarActivity extends BaseActivity implements View.OnClickListener
                                 }
                             }
                         });
+            } else if (msg.what == 2) {
+                Bundle bundle = msg.getData();
+                final String[] car = bundle.getStringArray("car");
+                AVOSUtils.getInstance().updateCarInfo(AVUser.getCurrentUser().getUsername(), car[0],
+                        car[1], car[2], car[3], car[4]);
+                Intent intent = new Intent();
+                setResult(RESULT_OK, intent);
+                finish();
             }
         }
     };

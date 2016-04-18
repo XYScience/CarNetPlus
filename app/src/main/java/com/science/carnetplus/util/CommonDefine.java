@@ -41,7 +41,9 @@ public class CommonDefine {
     public static final String BIRTH = "birth";
     public static final String HOMETOWN = "hometown";
 
+    public static final String INTENT_ACTIVITY = "intent_activity"; // ForResult的意图
     public static final int INTENT_REQUSET = 1; // ForResult的意图
+    public static final int INTENT_REQUSET_2 = 2; // ForResult的意图
 
     // my cars
     public static final String CAR_NUMBER = "carNumber";

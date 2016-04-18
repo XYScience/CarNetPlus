@@ -246,6 +246,41 @@ public class AVOSUtils {
     }
 
     /**
+     * 更新汽车信息
+     */
+    public void updateCarInfo(String username, final String carNumber, final String carOilNumber,
+                              final String carBrand, final String carType, final String carColor) {
+        final AVQuery<AVObject> query = new AVQuery<AVObject>("CarInfo");
+        query.whereEqualTo("username", username);
+        query.whereEqualTo(CommonDefine.CAR_NUMBER, carNumber);
+        query.findInBackground(new FindCallback<AVObject>() {
+            @Override
+            public void done(final List<AVObject> list, AVException e) {
+                if (list != null && list.size() != 0) {
+                    final String objectId = list.get(list.size() - 1).getObjectId();
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AVObject avObject = null;
+                            try {
+                                avObject = query.get(objectId);
+                                avObject.put(CommonDefine.CAR_OIL_NUMBER, carOilNumber);
+                                avObject.put(CommonDefine.CAR_BRAND, carBrand);
+                                avObject.put(CommonDefine.CAR_TYPE, carType);
+                                avObject.put(CommonDefine.CAR_COLOR, carColor);
+                                avObject.put(CommonDefine.CAR_DEFAULT, "0");
+                                avObject.save();
+                            } catch (AVException e1) {
+                                e1.printStackTrace();
+                            }
+                        }
+                    }).start();
+                }
+            }
+        });
+    }
+
+    /**
      * 更新默认汽车
      *
      * @param username
@@ -301,6 +336,32 @@ public class AVOSUtils {
                                     avObject.put(CommonDefine.CAR_DEFAULT, "-1");
                                     avObject.save();
                                 }
+                            } catch (AVException e1) {
+                                e1.printStackTrace();
+                            }
+                        }
+                    }).start();
+                }
+            }
+        });
+    }
+
+    public void deleteCar(String username, String carNumber) {
+        final AVQuery<AVObject> query = new AVQuery<AVObject>("CarInfo");
+        query.whereEqualTo("username", username);
+        query.whereEqualTo(CommonDefine.CAR_NUMBER, carNumber);
+        query.findInBackground(new FindCallback<AVObject>() {
+            @Override
+            public void done(final List<AVObject> list, AVException e) {
+                if (list != null && list.size() != 0) {
+                    final String objectId = list.get(list.size() - 1).getObjectId();
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AVObject avObject = null;
+                            try {
+                                avObject = query.get(objectId);
+                                avObject.deleteInBackground();
                             } catch (AVException e1) {
                                 e1.printStackTrace();
                             }
