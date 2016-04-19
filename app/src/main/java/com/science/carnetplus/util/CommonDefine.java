@@ -52,4 +52,7 @@ public class CommonDefine {
     public static final String CAR_TYPE = "carType";
     public static final String CAR_COLOR = "carColor";
     public static final String CAR_DEFAULT = "carDefault";
+
+    //定位
+    public static final int LOCATION_SPAN_TIME = 4000; //设置发起定位请求的间隔需要大于等于4000ms才是有效的
 }
