@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
 
     //为了解决部分第三方库重复打包了META-INF的问题
-    packagingOptions{
+    packagingOptions {
         exclude 'META-INF/LICENSE.txt'
         exclude 'META-INF/NOTICE.txt'
     }
@@ -24,7 +24,24 @@ android {
     buildTypes {
         release {
             minifyEnabled false
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    signingConfigs {
+        release {
+            storeFile file("${rootDir}/release")
+            storePassword ""
+            keyAlias ""
+            keyPassword ""
+        }
+        debug {
+            storeFile file("E:/keystore/debug.keystore")
+        }
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
         }
     }
 }
@@ -42,4 +59,6 @@ dependencies {
     //avoscloud-push 为推送与实时聊天需要的包
     compile('cn.leancloud.android:avoscloud-push:v3.+@aar') { transitive = true }
     compile 'com.google.code.gson:gson:2.6.2'
+    compile files('libs/BaiduLBS_Android.jar')
+    compile files('libs/httpmime-4.1.2.jar')
 }

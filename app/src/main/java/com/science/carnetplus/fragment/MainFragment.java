@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.baidu.mapapi.map.MapView;
 import com.science.carnetplus.R;
 import com.science.carnetplus.util.CommonUtils;
 import com.science.carnetplus.widget.FABToolbar.FABToolbarLayout;
@@ -28,6 +29,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     private FloatingActionButton mFABToolbarButton;
     private TextView mTextAddOil, mTextCar4s, mTextCarWash, mTextCarPark;
 
+    private MapView mMapView;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -44,6 +47,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         mTextCar4s = (TextView) mRootView.findViewById(R.id.text_car_4s);
         mTextCarWash = (TextView) mRootView.findViewById(R.id.text_car_wash);
         mTextCarPark = (TextView) mRootView.findViewById(R.id.text_car_park);
+        mMapView = (MapView) mRootView.findViewById(R.id.mapView);
         CommonUtils.materialRipple(mTextAddOil, "#ffffff", 0.3f);
         CommonUtils.materialRipple(mTextCar4s, "#ffffff", 0.3f);
         CommonUtils.materialRipple(mTextCarWash, "#ffffff", 0.3f);
@@ -76,5 +80,23 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             case R.id.text_car_park:
                 break;
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mMapView.onDestroy();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mMapView.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mMapView.onPause();
     }
 }

@@ -14,6 +14,12 @@
     app:showDuration="600"
     app:verticalMargin="@dimen/fab_vertical_margin">
 
+    <com.baidu.mapapi.map.MapView
+        android:id="@+id/mapView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"/>
+
     <RelativeLayout
         android:id="@id/fabtoolbar_container"
         android:layout_width="match_parent"

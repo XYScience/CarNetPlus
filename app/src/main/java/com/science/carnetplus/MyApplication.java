@@ -3,6 +3,7 @@ package com.science.carnetplus;
 import android.app.Application;
 
 import com.avos.avoscloud.AVOSCloud;
+import com.baidu.mapapi.SDKInitializer;
 
 /**
  * @author 幸运Science-陈土燊
@@ -22,5 +23,6 @@ public class MyApplication extends Application {
 
     private void init() {
         AVOSCloud.initialize(this, "xRMhJH081RiDNuG3WYsAMGwq-gzGzoHsz", "IfwcLPmeqpyEvhcJWSg0lW2M");
+        SDKInitializer.initialize(getApplicationContext());
     }
 }

@@ -10,8 +10,12 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <!-- 基础模块 END -->
-
     <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
 
     <application
         android:name=".MyApplication"
@@ -30,6 +34,13 @@
             </intent-filter>
         </receiver>
         <!-- 实时通信模块、推送 END -->
+
+        <!-- 百度地图 start -->
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="wpXPC07iswoz0jutjtFjzGbOeGUoxqNt"/>
+
+        <!-- 百度地图 end -->
 
         <activity
             android:name=".MainActivity"
