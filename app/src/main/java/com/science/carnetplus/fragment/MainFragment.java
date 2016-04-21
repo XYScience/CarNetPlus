@@ -46,7 +46,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     private BaiduMap mBaiduMap;
     private LocationClient mLocationClient;
     private MyLocationListener mLocationListener;
-    private volatile boolean isFristLocation = true; //是否是第一次定位
     //最新一次的经纬度
     private double mCurrentLantitude;
     private double mCurrentLongitude;
@@ -56,7 +55,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_main, container, false);
         initView();
-        hideDefaultView();
         initLocation();
         initListener();
         return mRootView;
@@ -75,12 +73,13 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         CommonUtils.materialRipple(mTextCarWash, "#ffffff", 0.3f);
         CommonUtils.materialRipple(mTextCarPark, "#ffffff", 0.3f);
 
+        // 初始化地图
         mMapView = (MapView) mRootView.findViewById(R.id.mapView);
         mBaiduMap = mMapView.getMap();
-        // 初始化地图
         MapStatusUpdate msu = MapStatusUpdateFactory.zoomTo(13.0f);
         mBaiduMap.setMapStatus(msu);
         mBaiduMap.setMyLocationEnabled(true); //开启图层定位 这段代码非常重要
+        hideDefaultView();
     }
 
     /**
@@ -103,7 +102,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         mLocationClient = new LocationClient(getActivity().getApplicationContext());
         mLocationListener = new MyLocationListener();
         mLocationClient.registerLocationListener(mLocationListener);
-        mLocationClient.requestLocation();
 
         LocationClientOption option = new LocationClientOption();
         option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);//可选，默认高精度，设置定位模式，高精度，低功耗，仅设备
@@ -113,10 +111,9 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         option.setOpenGps(true);//可选，默认false,设置是否使用gps
         option.setLocationNotify(true);//可选，默认false，设置是否当gps有效时按照1S1次频率输出GPS结果
         option.setIsNeedLocationDescribe(true);//可选，默认false，设置是否需要位置语义化结果，可以在BDLocation.getLocationDescribe里得到，结果类似于“在北京天安门附近”
-        option.setIsNeedLocationPoiList(true);//可选，默认false，设置是否需要POI结果，可以在BDLocation.getPoiList里得到
-        option.setIgnoreKillProcess(true);//可选，默认true，定位SDK内部是一个SERVICE，并放到了独立进程，设置是否在stop的时候杀死这个进程，默认不杀死
-        option.SetIgnoreCacheException(false);//可选，默认false，设置是否收集CRASH信息，默认收集
-        option.setEnableSimulateGps(false);//可选，默认false，设置是否需要过滤gps仿真结果，默认需要
+        //option.setIsNeedLocationPoiList(true);//可选，默认false，设置是否需要POI结果，可以在BDLocation.getPoiList里得到
+        //option.SetIgnoreCacheException(false);//可选，默认false，设置是否收集CRASH信息，默认收集
+        //option.setEnableSimulateGps(false);//可选，默认false，设置是否需要过滤gps仿真结果，默认需要
         mLocationClient.setLocOption(option);
         mLocationClient.start();
     }
@@ -128,7 +125,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             // map view 销毁后不在处理新接收的位置
             if (bdLocation == null || mMapView == null)
                 return;
-            MyLogger.e(bdLocation.getAddrStr());
+            MyLogger.e(bdLocation.getAddrStr() + ":" + bdLocation.getLocationDescribe());
             // 构造定位数据
             MyLocationData locData = new MyLocationData.Builder().accuracy(bdLocation.getRadius())
                     // 此处设置开发者获取到的方向信息，顺时针0-360
@@ -137,14 +134,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             mBaiduMap.setMyLocationData(locData);
             mCurrentLantitude = bdLocation.getLatitude();
             mCurrentLongitude = bdLocation.getLongitude();
-            // 第一次定位时，将地图位置移动到当前位置
-            if (isFristLocation) {
-                isFristLocation = false;
-                LatLng ll = new LatLng(bdLocation.getLatitude(), bdLocation.getLongitude());
-                MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(ll);
-                mBaiduMap.animateMapStatus(u);
-//                addOverLays(ll, bdLocation.getAddrStr());
-            }
+            refreshLocation();
         }
 
     }
@@ -168,10 +158,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fab_location:
-                // 定位到我的位置
-                LatLng ll = new LatLng(mCurrentLantitude, mCurrentLongitude);
-                MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(ll);
-                mBaiduMap.animateMapStatus(u);
+                refreshLocation();
                 break;
             case R.id.text_add_oil:
                 break;
@@ -182,6 +169,18 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             case R.id.text_car_park:
                 break;
         }
+    }
+
+    /**
+     * 手动刷新地址，或者主页定位界面回到可见前台自动刷新
+     */
+    private void refreshLocation() {
+        // 请求locationclient.requestLocation()函数，会主动触发定位SDK内部定位逻辑，等待定位回调即可
+        mLocationClient.requestLocation();
+        // 定位到我的位置
+        LatLng ll = new LatLng(mCurrentLantitude, mCurrentLongitude);
+        MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(ll);
+        mBaiduMap.animateMapStatus(u);
     }
 
     @Override
@@ -196,6 +195,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     public void onResume() {
         super.onResume();
         mMapView.onResume();
+        refreshLocation();
     }
 
     @Override
