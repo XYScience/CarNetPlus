@@ -25,6 +25,16 @@ public class MusicFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_music, container, false);
+        initVeiw();
+        initListener();
         return mRootView;
+    }
+
+    private void initVeiw() {
+
+    }
+
+    private void initListener() {
+
     }
 }

@@ -8,6 +8,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
+import android.text.TextUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -24,7 +27,7 @@ import java.util.Date;
  * @data 2016/3/9
  */
 
-public class FileUtil {
+public class ImageUtils {
 
     /**
      * 将Bitmap 图片保存到本地路径，并返回路径
@@ -34,13 +37,13 @@ public class FileUtil {
      * @param bitmap   图片
      * @return
      */
-    public static String saveAvatarFile(Context c, String fileName, Bitmap bitmap) {
-        return saveAvatarFile(c, "", fileName, bitmap);
+    public static String saveImageFile(Context c, String fileName, Bitmap bitmap) {
+        return saveImageFile(c, "", fileName, bitmap);
     }
 
-    public static String saveAvatarFile(Context c, String filePath, String fileName, Bitmap bitmap) {
+    public static String saveImageFile(Context c, String filePath, String fileName, Bitmap bitmap) {
         byte[] bytes = bitmapToBytes(bitmap);
-        return saveAvatarFile(c, filePath, fileName, bytes);
+        return saveImageFile(c, filePath, fileName, bytes);
     }
 
     public static byte[] bitmapToBytes(Bitmap bm) {
@@ -49,14 +52,14 @@ public class FileUtil {
         return baos.toByteArray();
     }
 
-    public static String saveAvatarFile(Context c, String strFilePath, String fileName, byte[] bytes) {
+    public static String saveImageFile(Context c, String strFilePath, String fileName, byte[] bytes) {
         String fileFullPath = "";
         FileOutputStream fos = null;
         try {
             if (strFilePath == null || strFilePath.trim().length() == 0) {
-                strFilePath = Environment.getExternalStorageDirectory() + CommonDefine.AVATAR_FILE_DIR;
+                strFilePath = Environment.getExternalStorageDirectory() + CommonDefine.AVATAR_FILE_DIR; // 创建存放头像文件夹
             }
-            File file = new File(strFilePath); // 创建存放头像文件夹
+            File file = new File(strFilePath);
             if (!file.exists()) {
                 file.mkdirs();
             }
@@ -64,7 +67,7 @@ public class FileUtil {
             fos = new FileOutputStream(fullFile);
             fos.write(bytes);
             fileFullPath = fullFile.getPath();
-            saveAvatarFilePath(fileFullPath, c);
+            saveFilePath(fileName, fileFullPath, c);
         } catch (Exception e) {
             fileFullPath = "";
         } finally {
@@ -77,6 +80,49 @@ public class FileUtil {
             }
         }
         return fileFullPath;
+    }
+
+    /**
+     * 获得模糊图片
+     *
+     * @param context
+     * @param fileName
+     * @param bitmap
+     * @param radius
+     * @param listener
+     */
+    public static void getBlurredImage(final Context context, final String fileName, final Bitmap bitmap, final int radius,
+                                       final onBlurEffectListener listener) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String blurredimagePath = getMusicBgFilePath(context, fileName);
+                Bitmap blurredBitmap = null;
+                if (TextUtils.isEmpty(blurredimagePath)) {
+                    saveImageFile(context, CommonDefine.MUSIC_BG_FILE_DIR, CommonDefine.MUSIC_BG_FILE_NAME + "_" + fileName, bitmap);
+                    blurredBitmap = Blur.fastblur(context, bitmap, radius);
+                } else {
+                    blurredBitmap = BitmapFactory.decodeFile(blurredimagePath);
+                }
+                final Bitmap tempBitmap = blurredBitmap;
+                Handler handler = new Handler(Looper.getMainLooper());
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        listener.onDone(tempBitmap);
+                    }
+                });
+
+            }
+        }).start();
+    }
+
+    /**
+     * 获得模糊图片接口
+     */
+    public static interface onBlurEffectListener {
+
+        public void onDone(Bitmap bitmap);
     }
 
     /**
@@ -188,11 +234,18 @@ public class FileUtil {
      * @param path
      * @param context
      */
-    public static void saveAvatarFilePath(String path, Context context) {
-        SharedPreferences sp = context.getSharedPreferences(CommonDefine.AVATAR_FILE, context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putString(CommonDefine.AVATAR_FILE_PATH, path);
-        editor.commit();
+    public static void saveFilePath(String fileName, String path, Context context) {
+        if (CommonDefine.AVATAR_FILE_NAME.equals(fileName)) {
+            SharedPreferences sp = context.getSharedPreferences(CommonDefine.AVATAR_FILE, context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putString(CommonDefine.AVATAR_FILE_PATH, path);
+            editor.commit();
+        } else if (CommonDefine.MUSIC_BG_FILE_NAME.contains(fileName)) {
+            SharedPreferences sp = context.getSharedPreferences(CommonDefine.MUSIC_BG_FILE, context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putString(CommonDefine.MUSIC_BG_FILE_PATH + "_" + fileName, path);
+            editor.commit();
+        }
     }
 
     /**
@@ -203,7 +256,19 @@ public class FileUtil {
      */
     public static String getAvatarFilePath(Context context) {
         SharedPreferences sp = context.getSharedPreferences(CommonDefine.AVATAR_FILE, context.MODE_PRIVATE);
-        String avatarFilePath = sp.getString(CommonDefine.AVATAR_FILE_PATH, "");
+        String avatarFilePath = sp.getString(CommonDefine.AVATAR_FILE_PATH, null);
+        return avatarFilePath;
+    }
+
+    /**
+     * 得到音乐背景图片地址
+     *
+     * @param context
+     * @return
+     */
+    public static String getMusicBgFilePath(Context context, String fileName) {
+        SharedPreferences sp = context.getSharedPreferences(CommonDefine.MUSIC_BG_FILE, context.MODE_PRIVATE);
+        String avatarFilePath = sp.getString(CommonDefine.MUSIC_BG_FILE_PATH + "_" + fileName, "");
         return avatarFilePath;
     }
 

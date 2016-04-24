@@ -24,7 +24,7 @@ import com.science.carnetplus.R;
 import com.science.carnetplus.util.AVOSUtils;
 import com.science.carnetplus.util.CommonDefine;
 import com.science.carnetplus.util.CommonUtils;
-import com.science.carnetplus.util.FileUtil;
+import com.science.carnetplus.util.ImageUtils;
 import com.science.carnetplus.util.StatusBarCompat;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -105,7 +105,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
     @Override
     protected void onResume() {
         super.onResume();
-        mImgUserAvatar.setImageBitmap(FileUtil.getAvatar(FileUtil.getAvatarFilePath(UserInfoActivity.this)));
+        mImgUserAvatar.setImageBitmap(ImageUtils.getAvatar(ImageUtils.getAvatarFilePath(UserInfoActivity.this)));
     }
 
     @Override

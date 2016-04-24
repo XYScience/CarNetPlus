@@ -26,7 +26,7 @@ import com.science.carnetplus.util.AVOSUtils;
 import com.science.carnetplus.util.BottomSheetBehaviorUtils;
 import com.science.carnetplus.util.CommonDefine;
 import com.science.carnetplus.util.CommonUtils;
-import com.science.carnetplus.util.FileUtil;
+import com.science.carnetplus.util.ImageUtils;
 import com.science.carnetplus.util.SnackbarUtils;
 import com.science.carnetplus.widget.wheelview.CityPicker;
 import com.science.carnetplus.widget.wheelview.TimePicker;
@@ -94,7 +94,7 @@ public class AlterUserInfoActivity extends BaseActivity implements View.OnClickL
 
     @Override
     public void initData() {
-        mImgUserAvatar.setImageBitmap(FileUtil.getAvatar(FileUtil.getAvatarFilePath(AlterUserInfoActivity.this)));
+        mImgUserAvatar.setImageBitmap(ImageUtils.getAvatar(ImageUtils.getAvatarFilePath(AlterUserInfoActivity.this)));
         mEditNickname.setText(getIntent().getStringExtra(CommonDefine.NICKNAME));
         mEditUserDescribe.setText(getIntent().getStringExtra(CommonDefine.DESCRIBE));
         mTextSex.setText(getIntent().getStringExtra(CommonDefine.SEX));
@@ -289,7 +289,7 @@ public class AlterUserInfoActivity extends BaseActivity implements View.OnClickL
     private void getAvatarFormCamera() {
         Intent intentTakePhotos = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // 指定调用相机拍照后照片的储存路径
-        intentTakePhotos.putExtra(MediaStore.EXTRA_OUTPUT, FileUtil.getCameraStorageUri());
+        intentTakePhotos.putExtra(MediaStore.EXTRA_OUTPUT, ImageUtils.getCameraStorageUri());
         startActivityForResult(intentTakePhotos, CommonDefine.CAMERA_REQUEST_CODE);
         mSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
     }
@@ -308,14 +308,14 @@ public class AlterUserInfoActivity extends BaseActivity implements View.OnClickL
         // 拍照
         if (requestCode == CommonDefine.CAMERA_REQUEST_CODE) {
 
-            FileUtil.startPhotoZoom(FileUtil.getCameraStorageUri(), AlterUserInfoActivity.this);
+            ImageUtils.startPhotoZoom(ImageUtils.getCameraStorageUri(), AlterUserInfoActivity.this);
         }
         // 图库
         else if (requestCode == CommonDefine.GALLERY_REQUEST_CODE) {
             if (data == null) {
                 return;
             } else {
-                FileUtil.startPhotoZoom(data.getData(), AlterUserInfoActivity.this);
+                ImageUtils.startPhotoZoom(data.getData(), AlterUserInfoActivity.this);
             }
         }
         // 裁剪
@@ -344,7 +344,7 @@ public class AlterUserInfoActivity extends BaseActivity implements View.OnClickL
             return;
         }
         cropBitmap = extras.getParcelable("data"); // 裁剪得到的bitmap
-        cropBitmap = FileUtil.compressImageSec(FileUtil.compressImage(cropBitmap)); // 压缩后得到的bitmap
+        cropBitmap = ImageUtils.compressImageSec(ImageUtils.compressImage(cropBitmap)); // 压缩后得到的bitmap
         mImgUserAvatar.setImageBitmap(cropBitmap);
     }
 
@@ -372,7 +372,7 @@ public class AlterUserInfoActivity extends BaseActivity implements View.OnClickL
 
         if (cropBitmap != null) {
             // 保存头像图标，并返回头像地址url
-            mStrAvatarUrl = FileUtil.saveAvatarFile(AlterUserInfoActivity.this, CommonDefine.AVATAR_FILE_NAME, cropBitmap);
+            mStrAvatarUrl = ImageUtils.saveImageFile(AlterUserInfoActivity.this, CommonDefine.AVATAR_FILE_NAME, cropBitmap);
             mAVOSUtils.resetAvatar(AVUser.getCurrentUser().getUsername(), mStrAvatarUrl);
         }
         mAVOSUtils.updateUserInfo(AVUser.getCurrentUser().getUsername(), nickname, userDescribe, sex, birth, hometown);

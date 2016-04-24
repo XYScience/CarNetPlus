@@ -3,11 +3,14 @@ package com.science.carnetplus;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -31,7 +34,7 @@ import com.science.carnetplus.ui.BaseActivity;
 import com.science.carnetplus.ui.UserInfoActivity;
 import com.science.carnetplus.util.AVOSUtils;
 import com.science.carnetplus.util.CommonDefine;
-import com.science.carnetplus.util.FileUtil;
+import com.science.carnetplus.util.ImageUtils;
 import com.science.carnetplus.util.MyLogger;
 import com.science.carnetplus.util.StatusBarCompat;
 import com.science.carnetplus.util.ToastUtils;
@@ -44,6 +47,8 @@ public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     private Toolbar mToolbar;
+    private AppBarLayout mAppBarLayout;
+    private ImageView mImgMusicBg;
     private DrawerLayout mDrawerLayout;
     private View mHeaderView;
     private CircleImageView mImgAvatar;
@@ -76,6 +81,8 @@ public class MainActivity extends BaseActivity
 
         mToolbar = setToolbar(getString(R.string.app_name));
         mFragmentManager = getFragmentManager();
+        mAppBarLayout = (AppBarLayout) findViewById(R.id.appbar);
+        mImgMusicBg = (ImageView) findViewById(R.id.music_bg);
 
         initDrawerLayout();
         initNavigationView();
@@ -105,13 +112,13 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void initData() {
-//        GlideUtils.getInstance(MainActivity.this).setImage(FileUtil.getAvatarFilePath(MainActivity.this), mImgAvatar);
+//        GlideUtils.getInstance(MainActivity.this).setImage(ImageUtils.getAvatarFilePath(MainActivity.this), mImgAvatar);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mImgAvatar.setImageBitmap(FileUtil.getAvatar(FileUtil.getAvatarFilePath(MainActivity.this)));
+        mImgAvatar.setImageBitmap(ImageUtils.getAvatar(ImageUtils.getAvatarFilePath(MainActivity.this)));
         AVOSUtils.getInstance().getUserInfo(AVUser.getCurrentUser().getUsername().toString(), new AVOSUtils.OnAVOSCallback() {
             @Override
             public void getAvaterListener(byte[] avatarBytes) {
@@ -265,6 +272,7 @@ public class MainActivity extends BaseActivity
                 } else {
                     ft.show(mFragmentMain);
                 }
+                mAppBarLayout.setBackgroundResource(R.color.colorPrimary);
                 break;
             case CommonDefine.FRAGMENT_MUSIC:
                 if (mFragmentMusic == null) {
@@ -273,6 +281,7 @@ public class MainActivity extends BaseActivity
                 } else {
                     ft.show(mFragmentMusic);
                 }
+                initMusicBg();
                 break;
             case CommonDefine.FRAGMENT_CAR_MAINTAIN:
                 if (mFragmentCarMaintain == null) {
@@ -281,6 +290,7 @@ public class MainActivity extends BaseActivity
                 } else {
                     ft.show(mFragmentCarMaintain);
                 }
+                mAppBarLayout.setBackgroundResource(R.color.colorPrimary);
                 break;
             case CommonDefine.FRAGMENT_ORDERS:
                 if (mFragmentOrders == null) {
@@ -289,6 +299,7 @@ public class MainActivity extends BaseActivity
                 } else {
                     ft.show(mFragmentOrders);
                 }
+                mAppBarLayout.setBackgroundResource(R.color.colorPrimary);
                 break;
             case CommonDefine.FRAGMENT_CAR_ILLEGALLY:
                 if (mFragmentCarIllegally == null) {
@@ -297,9 +308,21 @@ public class MainActivity extends BaseActivity
                 } else {
                     ft.show(mFragmentCarIllegally);
                 }
+                mAppBarLayout.setBackgroundResource(R.color.colorPrimary);
                 break;
         }
         ft.commit();
+    }
+
+    private void initMusicBg() {
+        mAppBarLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.traveling_light);
+        ImageUtils.getBlurredImage(this, "traveling_light", bitmap, 20, new ImageUtils.onBlurEffectListener() {
+            @Override
+            public void onDone(Bitmap bitmap) {
+                mImgMusicBg.setImageBitmap(bitmap);
+            }
+        });
     }
 
     private void hideFragment(FragmentTransaction ft) {

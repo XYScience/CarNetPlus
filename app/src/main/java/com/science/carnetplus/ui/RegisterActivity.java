@@ -37,7 +37,7 @@ import com.science.carnetplus.util.AVOSUtils;
 import com.science.carnetplus.util.BottomSheetBehaviorUtils;
 import com.science.carnetplus.util.CommonDefine;
 import com.science.carnetplus.util.CommonUtils;
-import com.science.carnetplus.util.FileUtil;
+import com.science.carnetplus.util.ImageUtils;
 import com.science.carnetplus.util.SnackbarUtils;
 import com.science.carnetplus.widget.materialProgress.LoadingView;
 
@@ -381,7 +381,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     private void getAvaterFormCamera() {
         Intent intentTakePhotos = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // 指定调用相机拍照后照片的储存路径
-        intentTakePhotos.putExtra(MediaStore.EXTRA_OUTPUT, FileUtil.getCameraStorageUri());
+        intentTakePhotos.putExtra(MediaStore.EXTRA_OUTPUT, ImageUtils.getCameraStorageUri());
         startActivityForResult(intentTakePhotos, CommonDefine.CAMERA_REQUEST_CODE);
         mSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
     }
@@ -400,14 +400,14 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         // 拍照
         if (requestCode == CommonDefine.CAMERA_REQUEST_CODE) {
 
-            FileUtil.startPhotoZoom(FileUtil.getCameraStorageUri(), RegisterActivity.this);
+            ImageUtils.startPhotoZoom(ImageUtils.getCameraStorageUri(), RegisterActivity.this);
         }
         // 图库
         else if (requestCode == CommonDefine.GALLERY_REQUEST_CODE) {
             if (data == null) {
                 return;
             } else {
-                FileUtil.startPhotoZoom(data.getData(), RegisterActivity.this);
+                ImageUtils.startPhotoZoom(data.getData(), RegisterActivity.this);
             }
         }
         // 裁剪
@@ -434,10 +434,10 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             return;
         }
         Bitmap cropBitmap = extras.getParcelable("data"); // 裁剪得到的bitmap
-        cropBitmap = FileUtil.compressImageSec(FileUtil.compressImage(cropBitmap)); // 压缩后得到的bitmap
+        cropBitmap = ImageUtils.compressImageSec(ImageUtils.compressImage(cropBitmap)); // 压缩后得到的bitmap
         mImgUserAvatar.setImageBitmap(cropBitmap);
         // 保存头像图标，并返回头像地址url
-        mStrAvatarUrl = FileUtil.saveAvatarFile(RegisterActivity.this, CommonDefine.AVATAR_FILE_NAME, cropBitmap);
+        mStrAvatarUrl = ImageUtils.saveImageFile(RegisterActivity.this, CommonDefine.AVATAR_FILE_NAME, cropBitmap);
         isTakeAvatar = true;
 
         String splitStr[] = mStrAvatarUrl.split("0");

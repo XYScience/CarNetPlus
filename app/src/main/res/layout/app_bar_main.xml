@@ -7,7 +7,14 @@
     android:layout_height="match_parent"
     tools:context="com.science.carnetplus.MainActivity">
 
+    <ImageView
+        android:id="@+id/music_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"/>
+
     <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
@@ -16,7 +23,6 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/colorPrimary"
             android:fitsSystemWindows="true"
             app:popupTheme="@style/AppTheme.PopupOverlay"/>
 
