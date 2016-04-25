@@ -26,7 +26,7 @@ public class CommonDefine {
     public static final String AVATAR_FILE_DIR = "/CarNetPlus/avatar/";// 头像文件夹
     public static final String AVATAR_FILE = "avatar_file"; // SharedPreferences 头像
     public static final String AVATAR_FILE_PATH = "avatar_file_path"; //  SharedPreferences key:头像路径
-    public static final String MUSIC_BG_FILE_NAME = "music_bg.jpg";// 头像文件名称
+    public static final String MUSIC_BG_FILE_NAME = "music_bg";// 头像文件名称
     public static final String MUSIC_BG_FILE_DIR = "/CarNetPlus/music/bg/";// 音乐背景文件夹
     public static final String MUSIC_BG_FILE = "music_bg_file"; // SharedPreferences 音乐背景
     public static final String MUSIC_BG_FILE_PATH = "music_bg_file_path"; //  SharedPreferences key:音乐背景路径

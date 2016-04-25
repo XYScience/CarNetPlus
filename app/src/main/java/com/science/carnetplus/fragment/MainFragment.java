@@ -22,7 +22,6 @@ import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
 import com.science.carnetplus.R;
-import com.science.carnetplus.util.CommonDefine;
 import com.science.carnetplus.util.CommonUtils;
 import com.science.carnetplus.util.MyLogger;
 import com.science.carnetplus.widget.FABToolbar.FABToolbarLayout;
@@ -49,6 +48,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     //最新一次的经纬度
     private double mCurrentLantitude;
     private double mCurrentLongitude;
+    private boolean isFirstLocation = true;
 
     @Nullable
     @Override
@@ -106,7 +106,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         LocationClientOption option = new LocationClientOption();
         option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);//可选，默认高精度，设置定位模式，高精度，低功耗，仅设备
         option.setCoorType("bd09ll");//可选，默认gcj02，设置返回的定位结果坐标系
-        option.setScanSpan(CommonDefine.LOCATION_SPAN_TIME);//可选，默认0，即仅定位一次，设置发起定位请求的间隔需要大于等于4000ms才是有效的
+//        option.setScanSpan(CommonDefine.LOCATION_SPAN_TIME);//可选，默认0，即仅定位一次，设置发起定位请求的间隔需要大于等于4000ms才是有效的
         option.setIsNeedAddress(true);//可选，设置是否需要地址信息，默认不需要
         option.setOpenGps(true);//可选，默认false,设置是否使用gps
         option.setLocationNotify(true);//可选，默认false，设置是否当gps有效时按照1S1次频率输出GPS结果
@@ -134,7 +134,10 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             mBaiduMap.setMyLocationData(locData);
             mCurrentLantitude = bdLocation.getLatitude();
             mCurrentLongitude = bdLocation.getLongitude();
-            refreshLocation();
+            if (isFirstLocation) {
+                refreshLocation();
+                isFirstLocation = false;
+            }
         }
 
     }

@@ -58,6 +58,8 @@ public class ImageUtils {
         try {
             if (strFilePath == null || strFilePath.trim().length() == 0) {
                 strFilePath = Environment.getExternalStorageDirectory() + CommonDefine.AVATAR_FILE_DIR; // 创建存放头像文件夹
+            } else {
+                strFilePath = Environment.getExternalStorageDirectory() + strFilePath;
             }
             File file = new File(strFilePath);
             if (!file.exists()) {
@@ -70,6 +72,7 @@ public class ImageUtils {
             saveFilePath(fileName, fileFullPath, c);
         } catch (Exception e) {
             fileFullPath = "";
+            MyLogger.e(e.toString());
         } finally {
             if (fos != null) {
                 try {
@@ -96,13 +99,20 @@ public class ImageUtils {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                String blurredimagePath = getMusicBgFilePath(context, fileName);
+                String blurredImagePath = getMusicBgFilePath(context, fileName);
                 Bitmap blurredBitmap = null;
-                if (TextUtils.isEmpty(blurredimagePath)) {
-                    saveImageFile(context, CommonDefine.MUSIC_BG_FILE_DIR, CommonDefine.MUSIC_BG_FILE_NAME + "_" + fileName, bitmap);
-                    blurredBitmap = Blur.fastblur(context, bitmap, radius);
+                if (TextUtils.isEmpty(blurredImagePath)) {
+                    int scaleRatio = 6;
+                    int blurRadius = 8;
+                    Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap,
+                            bitmap.getWidth() / scaleRatio,
+                            bitmap.getHeight() / scaleRatio,
+                            false);
+                    blurredBitmap = FastBlur.doBlur(scaledBitmap, blurRadius, true);
+                    saveImageFile(context, CommonDefine.MUSIC_BG_FILE_DIR,
+                            CommonDefine.MUSIC_BG_FILE_NAME + "_" + fileName + ".jpg", blurredBitmap);
                 } else {
-                    blurredBitmap = BitmapFactory.decodeFile(blurredimagePath);
+                    blurredBitmap = BitmapFactory.decodeFile(blurredImagePath);
                 }
                 final Bitmap tempBitmap = blurredBitmap;
                 Handler handler = new Handler(Looper.getMainLooper());
@@ -229,7 +239,7 @@ public class ImageUtils {
     }
 
     /**
-     * 保存头像地址
+     * 保存文件地址
      *
      * @param path
      * @param context
