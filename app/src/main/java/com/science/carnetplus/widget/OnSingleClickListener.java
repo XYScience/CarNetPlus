@@ -1,5 +1,6 @@
 package com.science.carnetplus.widget;
 
+import android.os.SystemClock;
 import android.view.View;
 
 /**
@@ -10,26 +11,32 @@ import android.view.View;
  */
 public abstract class OnSingleClickListener implements View.OnClickListener {
 
-    private static long lastTime;
+    /**
+     * 最短click事件的时间间隔
+     */
+    private static final long MIN_CLICK_INTERVAL = 600;
+    /**
+     * 上次click的时间
+     */
+    private long mLastClickTime;
 
+    /**
+     * click响应函数
+     *
+     * @param v
+     * The view that was clicked.
+     */
     public abstract void onSingleClick(View v);
 
     @Override
-    public void onClick(View v) {
+    public final void onClick(View view){
+        long currentClickTime = SystemClock.uptimeMillis();
+        long elapsedTime = currentClickTime - mLastClickTime;
+        // 有可能2次连击，也有可能3连击，保证mLastClickTime记录的总是上次click的时间
+        mLastClickTime = currentClickTime;
 
-        if (isDoubleClick()) {
+        if (elapsedTime <= MIN_CLICK_INTERVAL)
             return;
-        }
-        onSingleClick(v);
-    }
-
-    private boolean isDoubleClick() {
-        boolean flag = false;
-        long time = System.currentTimeMillis() - lastTime;
-        if (time > 500) {
-            return true;
-        }
-        lastTime = System.currentTimeMillis();
-        return flag;
+        onSingleClick(view);
     }
 }

@@ -91,10 +91,10 @@ public class ImageUtils {
      * @param context
      * @param fileName
      * @param bitmap
-     * @param radius
+     * @param blurRadius
      * @param listener
      */
-    public static void getBlurredImage(final Context context, final String fileName, final Bitmap bitmap, final int radius,
+    public static void getBlurredImage(final Context context, final String fileName, final Bitmap bitmap, final int blurRadius,
                                        final onBlurEffectListener listener) {
         new Thread(new Runnable() {
             @Override
@@ -102,8 +102,7 @@ public class ImageUtils {
                 String blurredImagePath = getMusicBgFilePath(context, fileName);
                 Bitmap blurredBitmap = null;
                 if (TextUtils.isEmpty(blurredImagePath)) {
-                    int scaleRatio = 6;
-                    int blurRadius = 8;
+                    int scaleRatio = 8;
                     Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap,
                             bitmap.getWidth() / scaleRatio,
                             bitmap.getHeight() / scaleRatio,

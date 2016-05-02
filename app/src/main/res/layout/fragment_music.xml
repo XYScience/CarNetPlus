@@ -15,6 +15,7 @@
         <FrameLayout
             android:id="@+id/headerView"
             android:layout_width="match_parent"
+            android:layout_height="match_parent"
             app:layout_heightPercent="75%">
 
             <LinearLayout
@@ -56,41 +57,15 @@
                     android:layout_gravity="center_horizontal|center_vertical"
                     android:orientation="horizontal">
 
-                    <FrameLayout
+                    <com.science.carnetplus.widget.playerview.CircleImageRotateView
+                        android:id="@+id/mpv"
+                        android:layout_width="500dp"
+                        android:layout_height="500dp"
                         android:layout_centerInParent="true"
                         android:layout_gravity="center"
-                        android:background="@android:color/transparent"
-                        app:layout_heightPercent="65%"
-                        app:layout_widthPercent="65%">
-
-                        <de.hdodenhof.circleimageview.CircleImageView
-                            android:id="@+id/album_art"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_centerInParent="true"
-                            android:layout_gravity="center"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/traveling_light"/>
-
-                    </FrameLayout>
-
-                    <com.science.carnetplus.widget.CircularSeekBar
-                        android:id="@+id/song_progress_circular"
-                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                        android:layout_centerInParent="true"
-                        android:layout_gravity="center"
-                        android:background="@android:color/transparent"
-                        android:maxHeight="1dp"
-                        android:progress="30"
-                        app:circle_color="#33000000"
-                        app:circle_progress_color="@color/colorAccent"
-                        app:circle_stroke_width="2dp"
-                        app:layout_heightPercent="80%"
-                        app:layout_widthPercent="80%"
-                        app:pointer_color="@color/colorAccent"
-                        app:pointer_halo_border_width="1.5dp"
-                        app:pointer_halo_color="@color/colorAccent"
-                        app:pointer_halo_width="0.5dp"/>
+                        app:cover="@drawable/traveling_light"
+                        app:layout_heightPercent="75%"
+                        app:layout_widthPercent="75%"/>
 
                 </android.support.percent.PercentRelativeLayout>
             </LinearLayout>
@@ -113,6 +88,11 @@
                 android:layout_marginLeft="30dp"
                 android:layout_weight="0.6"
                 android:src="@drawable/ic_skip_previous"/>
+
+            <com.science.carnetplus.widget.playerview.PlayPauseView
+                android:id="@+id/playPauseView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
             <ImageView
                 android:id="@+id/next"

@@ -8,6 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.science.carnetplus.R;
+import com.science.carnetplus.widget.OnSingleClickListener;
+import com.science.carnetplus.widget.playerview.CircleImageRotateView;
+import com.science.carnetplus.widget.playerview.PlayPauseView;
 
 /**
  * @author 幸运Science-陈土燊
@@ -20,6 +23,8 @@ import com.science.carnetplus.R;
 public class MusicFragment extends Fragment {
 
     private View mRootView;
+    private CircleImageRotateView mCircleImageRotateView;
+    private PlayPauseView mPlayPauseView;
 
     @Nullable
     @Override
@@ -31,10 +36,26 @@ public class MusicFragment extends Fragment {
     }
 
     private void initVeiw() {
-
+        //圆形图片旋转
+        mCircleImageRotateView = (CircleImageRotateView) mRootView.findViewById(R.id.mpv);
+        //开关控制按钮（继承fab）
+        mPlayPauseView = (PlayPauseView) mRootView.findViewById(R.id.playPauseView);
+        mPlayPauseView.initCircleImageRotateView(mCircleImageRotateView);
+        mCircleImageRotateView.setMax(100);
     }
 
     private void initListener() {
 
+        mPlayPauseView.setOnClickListener(new OnSingleClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                if (mCircleImageRotateView.isRotating()) {
+                    mPlayPauseView.playPauseStop();
+                } else {
+                    mPlayPauseView.playPauseStart();
+                }
+            }
+        });
     }
+
 }

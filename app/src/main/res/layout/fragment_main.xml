@@ -8,8 +8,8 @@
     app:containerId="@+id/fabtoolbar_container"
     app:fabId="@+id/fabtoolbar_fab"
     app:fabToolbarId="@+id/fabtoolbar_toolbar"
-    app:fadeInFraction="0.3"
-    app:hideDuration="300"
+    app:fadeInFraction="0.2"
+    app:hideDuration="200"
     app:horizontalMargin="@dimen/fab_horizontal_margin"
     app:showDuration="600"
     app:verticalMargin="@dimen/fab_vertical_margin">

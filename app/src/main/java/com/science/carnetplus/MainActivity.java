@@ -66,7 +66,7 @@ public class MainActivity extends BaseActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        MyLogger.e("程序启动");
+        MyLogger.line("程序启动");
         StatusBarCompat.compat(MainActivity.this, Color.TRANSPARENT, false);
     }
 
@@ -317,7 +317,7 @@ public class MainActivity extends BaseActivity
     private void initMusicBg() {
         mAppBarLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.traveling_light);
-        ImageUtils.getBlurredImage(this, "traveling_light", bitmap, 20, new ImageUtils.onBlurEffectListener() {
+        ImageUtils.getBlurredImage(this, "traveling_light", bitmap, 8, new ImageUtils.onBlurEffectListener() {
             @Override
             public void onDone(Bitmap bitmap) {
                 mImgMusicBg.setImageBitmap(bitmap);
