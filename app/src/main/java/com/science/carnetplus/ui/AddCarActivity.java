@@ -284,37 +284,37 @@ public class AddCarActivity extends BaseActivity implements View.OnClickListener
         String carBrand = mTextCarBrand.getText().toString();
         String carType = mTextCarType.getText().toString();
         String carColor = mTextCarColor.getText().toString();
-        if (CommonUtils.isCarnumberNO(carNumber)) {
-            if (!TextUtils.isEmpty(carOilNumber)) {
-                if (!TextUtils.isEmpty(carBrand)) {
-                    if (!TextUtils.isEmpty(carType)) {
-                        if (!TextUtils.isEmpty(carColor)) {
-                            int intentExtra = getIntent().getIntExtra(CommonDefine.INTENT_ACTIVITY, 1);
-                            if (intentExtra == CommonDefine.INTENT_REQUSET) {
-                                saveCarInfo(carNumber, carOilNumber, carBrand, carType, carColor);
-                            } else if (intentExtra == CommonDefine.INTENT_REQUSET_2) {
-                                mHandler.sendEmptyMessageDelayed(0, 0);
-                                Message message = new Message();
-                                message.what = 2;
-                                Bundle bundle = new Bundle();
-                                bundle.putStringArray("car", new String[]{carNumber, carOilNumber, carBrand, carType, carColor});
-                                message.setData(bundle);
-                                mHandler.sendMessageDelayed(message, 500);
-                            }
-                        } else {
-                            SnackbarUtils.showSnackbar(mCoordinatorSnackBar, getString(R.string.car_color_please_select));
-                        }
-                    } else {
-                        SnackbarUtils.showSnackbar(mCoordinatorSnackBar, getString(R.string.car_type_please_select));
-                    }
-                } else {
-                    SnackbarUtils.showSnackbar(mCoordinatorSnackBar, getString(R.string.car_brand_please_select));
-                }
-            } else {
-                SnackbarUtils.showSnackbar(mCoordinatorSnackBar, getString(R.string.car_oil_number_please_select));
-            }
-        } else {
+        if (!CommonUtils.isCarnumberNO(carNumber)) {
             SnackbarUtils.showSnackbar(mCoordinatorSnackBar, getString(R.string.car_number_please_enter_correct));
+            return;
+        }
+        if (TextUtils.isEmpty(carOilNumber)) {
+            SnackbarUtils.showSnackbar(mCoordinatorSnackBar, getString(R.string.car_oil_number_please_select));
+            return;
+        }
+        if (TextUtils.isEmpty(carBrand)) {
+            SnackbarUtils.showSnackbar(mCoordinatorSnackBar, getString(R.string.car_brand_please_select));
+            return;
+        }
+        if (TextUtils.isEmpty(carType)) {
+            SnackbarUtils.showSnackbar(mCoordinatorSnackBar, getString(R.string.car_type_please_select));
+            return;
+        }
+        if (TextUtils.isEmpty(carColor)) {
+            SnackbarUtils.showSnackbar(mCoordinatorSnackBar, getString(R.string.car_color_please_select));
+            return;
+        }
+        int intentExtra = getIntent().getIntExtra(CommonDefine.INTENT_ACTIVITY, 1);
+        if (intentExtra == CommonDefine.INTENT_REQUSET) {
+            saveCarInfo(carNumber, carOilNumber, carBrand, carType, carColor);
+        } else if (intentExtra == CommonDefine.INTENT_REQUSET_2) {
+            mHandler.sendEmptyMessageDelayed(0, 0);
+            Message message = new Message();
+            message.what = 2;
+            Bundle bundle = new Bundle();
+            bundle.putStringArray("car", new String[]{carNumber, carOilNumber, carBrand, carType, carColor});
+            message.setData(bundle);
+            mHandler.sendMessageDelayed(message, 500);
         }
     }
 

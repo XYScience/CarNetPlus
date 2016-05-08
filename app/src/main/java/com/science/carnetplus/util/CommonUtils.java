@@ -16,6 +16,8 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.balysv.materialripple.MaterialRippleLayout;
 
+import java.text.SimpleDateFormat;
+
 /**
  * @author 幸运Science-陈土燊
  * @description 通用工具类
@@ -257,6 +259,18 @@ public class CommonUtils {
         String carnumRegex = "[\u4e00-\u9fa5]{1}[A-Z]{1}[A-Z_0-9]{5}";
         if (TextUtils.isEmpty(carnumber)) return false;
         else return carnumber.matches(carnumRegex);
+    }
+
+    /**
+     * 将时间换算为00:00
+     *
+     * @param time
+     * @return
+     */
+    public static String Format(long time) {
+        SimpleDateFormat format = new SimpleDateFormat("mm:ss");
+        String hmsString = format.format(time);
+        return hmsString;
     }
 
     /**

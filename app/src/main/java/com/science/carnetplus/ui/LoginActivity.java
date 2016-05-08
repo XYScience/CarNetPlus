@@ -206,15 +206,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         editor.putString(CommonDefine.MOBILE_PHONE, account);
         editor.putString(CommonDefine.PASSWORD, password);
         editor.commit();
-        if (!TextUtils.isEmpty(account)) {
-            if (!TextUtils.isEmpty(password)) {
-                loginAVOS(account, password);
-            } else {
-                SnackbarUtils.showSnackbar(mCoordinatorSnackbar, getString(R.string.error_register_password_null));
-            }
-        } else {
+        if (TextUtils.isEmpty(account)) {
             SnackbarUtils.showSnackbar(mCoordinatorSnackbar, getString(R.string.error_mobile_phone));
+            return;
         }
+        if (TextUtils.isEmpty(password)) {
+            SnackbarUtils.showSnackbar(mCoordinatorSnackbar, getString(R.string.error_register_password_null));
+            return;
+        }
+        loginAVOS(account, password);
     }
 
     private void loginAVOS(String account, String password) {

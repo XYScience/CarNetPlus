@@ -200,37 +200,38 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         password = mEditPassword.getText().toString().trim();
         verify = mEditVerify.getText().toString().trim();
         if (CommonUtils.isMobilePhone(mobilePhone)) {
-            if (!TextUtils.isEmpty(password)) {
-                if (CommonUtils.passwordVerify(password)) {
-                    // 获取验证码
-                    if (type == 0) {
-                        getVerify();
-                    }
-                    // 注册
-                    else {
-                        if (!TextUtils.isEmpty(verify)) {
-                            if (CommonUtils.isSMSCodeValid(verify)) {
-                                if (isTakeAvatar) {
-                                    // 点击"注册"按钮
-                                    register();
-                                } else {
-                                    SnackbarUtils.showSnackbar(mCoordinatorSnackbar, getString(R.string.error_register_take_gender_null));
-                                }
-                            } else {
-                                SnackbarUtils.showSnackbar(mCoordinatorSnackbar, getString(R.string.verify_code_limited_6_number));
-                            }
-                        } else {
-                            SnackbarUtils.showSnackbar(mCoordinatorSnackbar, getString(R.string.error_register_verify_address_null));
-                        }
-                    }
-                } else {
-                    SnackbarUtils.showSnackbar(mCoordinatorSnackbar, getString(R.string.error_register_password));
-                }
-            } else {
-                SnackbarUtils.showSnackbar(mCoordinatorSnackbar, getString(R.string.error_register_password_null));
-            }
-        } else {
             SnackbarUtils.showSnackbar(mCoordinatorSnackbar, getString(R.string.error_mobile_phone));
+            return;
+        }
+        if (!TextUtils.isEmpty(password)) {
+            SnackbarUtils.showSnackbar(mCoordinatorSnackbar, getString(R.string.error_register_password_null));
+            return;
+        }
+        if (CommonUtils.passwordVerify(password)) {
+            SnackbarUtils.showSnackbar(mCoordinatorSnackbar, getString(R.string.error_register_password));
+            return;
+        }
+
+        // 获取验证码
+        if (type == 0) {
+            getVerify();
+        }
+        // 注册
+        else {
+            if (!TextUtils.isEmpty(verify)) {
+                SnackbarUtils.showSnackbar(mCoordinatorSnackbar, getString(R.string.error_register_verify_address_null));
+                return;
+            }
+            if (CommonUtils.isSMSCodeValid(verify)) {
+                SnackbarUtils.showSnackbar(mCoordinatorSnackbar, getString(R.string.verify_code_limited_6_number));
+                return;
+            }
+            if (isTakeAvatar) {
+                SnackbarUtils.showSnackbar(mCoordinatorSnackbar, getString(R.string.error_register_take_gender_null));
+                return;
+            }
+            // 点击"注册"按钮
+            register();
         }
     }
 
@@ -243,19 +244,18 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             public void done(AVException e) {
                 if (e == null) {
                     SnackbarUtils.showSnackbar(mCoordinatorLayout, getString(R.string.please_receive_verify_code));
-                } else {
-                    Log.e("RegisterActivity>>>>>>>", ">>>>>>>>>>>getVerify()" + e.toString());
-                    switch (e.getCode()) {
-                        case 124: // TIMEOUT
-                            SnackbarUtils.showSnackbar(mCoordinatorSnackbar, getString(R.string.time_out));
-                            break;
-                        case 601:
-                            SnackbarUtils.showSnackbar(mCoordinatorSnackbar, getString(R.string.double_get_verify_code));
-                            break;
-                        default:
-                            SnackbarUtils.showSnackbar(mCoordinatorSnackbar, getString(R.string.network_not_connected));
-                            break;
-                    }
+                    return;
+                }
+                switch (e.getCode()) {
+                    case 124: // TIMEOUT
+                        SnackbarUtils.showSnackbar(mCoordinatorSnackbar, getString(R.string.time_out));
+                        break;
+                    case 601:
+                        SnackbarUtils.showSnackbar(mCoordinatorSnackbar, getString(R.string.double_get_verify_code));
+                        break;
+                    default:
+                        SnackbarUtils.showSnackbar(mCoordinatorSnackbar, getString(R.string.network_not_connected));
+                        break;
                 }
             }
         });
@@ -280,7 +280,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     saveInstallation(avUser);
                     upLoadUserAvatar();
                 } else {
-                    Log.e("RegisterActivity>>>>>>>", ">>>>>>>>>>>register()" + e.toString());
                     switch (e.getCode()) {
                         case 603: //无效的短信验证码
                             SnackbarUtils.showSnackbar(mCoordinatorSnackbar, getString(R.string.please_get_verify_code_again));

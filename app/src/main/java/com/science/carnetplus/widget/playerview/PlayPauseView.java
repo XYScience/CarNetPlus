@@ -49,7 +49,7 @@ public class PlayPauseView extends FloatingActionButton implements PlayPauseDraw
         mPlayPauseDrawable.setCallback(callback);
         mPlayPauseDrawable.setToggleListener(this);
         if (mFirstDraw) {
-            toggle();
+//            toggle();
             mFirstDraw = false;
         }
     }

@@ -35,6 +35,7 @@ import com.science.carnetplus.ui.UserInfoActivity;
 import com.science.carnetplus.util.AVOSUtils;
 import com.science.carnetplus.util.CommonDefine;
 import com.science.carnetplus.util.ImageUtils;
+import com.science.carnetplus.util.MusicPlayer;
 import com.science.carnetplus.util.MyLogger;
 import com.science.carnetplus.util.StatusBarCompat;
 import com.science.carnetplus.util.ToastUtils;
@@ -113,6 +114,8 @@ public class MainActivity extends BaseActivity
     @Override
     public void initData() {
 //        GlideUtils.getInstance(MainActivity.this).setImage(ImageUtils.getAvatarFilePath(MainActivity.this), mImgAvatar);
+        MusicPlayer musicPlayer = MusicPlayer.getMusicPlayer(this);
+        musicPlayer.startMusicService();
     }
 
     @Override

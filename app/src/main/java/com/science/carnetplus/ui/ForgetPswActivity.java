@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -103,19 +102,19 @@ public class ForgetPswActivity extends BaseActivity implements View.OnClickListe
                 // 点击"验证码"按钮
                 requestVerify();
             } else {
-                if (!TextUtils.isEmpty(verifyCode)) {
-                    if (!TextUtils.isEmpty(newPassword)) {
-                        if (CommonUtils.passwordVerify(newPassword)) {
-                            resetPassword(); // 确认重置密码
-                        } else {
-                            SnackbarUtils.showSnackbar(mCoordinatorSnackbar, getString(R.string.error_register_password));
-                        }
-                    } else {
-                        SnackbarUtils.showSnackbar(mCoordinatorSnackbar, getString(R.string.error_register_password_null));
-                    }
-                } else {
+                if (TextUtils.isEmpty(verifyCode)) {
                     SnackbarUtils.showSnackbar(mCoordinatorSnackbar, getString(R.string.error_register_verify_address_null));
+                    return;
                 }
+                if (TextUtils.isEmpty(newPassword)) {
+                    SnackbarUtils.showSnackbar(mCoordinatorSnackbar, getString(R.string.error_register_password_null));
+                    return;
+                }
+                if (!CommonUtils.passwordVerify(newPassword)) {
+                    SnackbarUtils.showSnackbar(mCoordinatorSnackbar, getString(R.string.error_register_password));
+                    return;
+                }
+                resetPassword(); // 确认重置密码
             }
 
         } else {
@@ -135,7 +134,6 @@ public class ForgetPswActivity extends BaseActivity implements View.OnClickListe
                     //发送成功了
                     SnackbarUtils.showSnackbar(mCoordinatorSnackbar, getString(R.string.please_receive_verify_code));
                 } else {
-                    Log.e("ForgetActivity>>>", ">>>>>>>>>>requestVerify:" + e.toString());
                     switch (e.getCode()) {
                         case 124: // TIMEOUT
                             SnackbarUtils.showSnackbar(mCoordinatorSnackbar, getString(R.string.time_out));
@@ -194,7 +192,6 @@ public class ForgetPswActivity extends BaseActivity implements View.OnClickListe
                         public void run() {
                             loadingView.stopAnimation();
                             dialog.dismiss();
-                            Log.e("ForgetPswActivity>>>", ">>>>>>>>>>resetPassword:" + e.toString());
                             switch (e.getCode()) {
                                 case 603: //无效的短信验证码
                                     SnackbarUtils.showSnackbar(mCoordinatorSnackbar, getString(R.string.please_get_verify_code_again));
