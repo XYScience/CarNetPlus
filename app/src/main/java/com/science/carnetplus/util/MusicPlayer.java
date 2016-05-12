@@ -84,6 +84,12 @@ public class MusicPlayer {
         }
     }
 
+    public void startMusic(String path) {
+        if (mMusicService != null) {
+            mMusicService.startMusic(path);
+        }
+    }
+
     public void nextMusic() {
         if (mMusicService != null) {
             mMusicService.nextMusic();

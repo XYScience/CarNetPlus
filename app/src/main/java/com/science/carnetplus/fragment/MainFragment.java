@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -49,6 +51,13 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     private double mCurrentLantitude;
     private double mCurrentLongitude;
     private boolean isFirstLocation = true;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //想让Fragment中的onCreateOptionsMenu生效必须先调用setHasOptionsMenu方法
+        setHasOptionsMenu(true);
+    }
 
     @Nullable
     @Override
@@ -207,4 +216,9 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         mMapView.onPause();
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.main, menu);
+    }
 }

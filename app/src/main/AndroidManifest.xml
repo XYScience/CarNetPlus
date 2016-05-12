@@ -108,6 +108,11 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"/>
 
+        <activity
+            android:name=".ui.MusicListActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"/>
+
         <service android:name=".service.MusicService">
             <intent-filter>
                 <action android:name="com.science.carnetplus.MUSIC_ACTION"/>

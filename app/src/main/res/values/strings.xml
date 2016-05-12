@@ -134,4 +134,7 @@
     <!-- CarBrandActivity -->
     <string name="cars_brand">汽车品牌</string>
 
+    <!-- MusicFragment -->
+    <string name="more_vertical">更多</string>
+
 </resources>
